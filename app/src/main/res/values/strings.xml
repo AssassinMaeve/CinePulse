@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">CinePulse</string>
+    <string name="background">Background</string>
+    <string name="cinepulsewhitelogo">CinePulseWhiteLogo</string>
+    <string name="cinepluswhitelogo">cinepluswhitelogo</string>
+    <string name="maincinepulsewhitelogo">MainCinePulseWhiteLogo</string>
+    <string name="backgroundimage">BackgroundImage</string>
+    <string name="thecinelogo">TheCineLogo</string>
+    <string name="swipe">SWIPE</string>
+    <string name="swipelogo">SwipeLogo</string>
+    <string name="backgroundlogin">BackgroundLogin</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="not_a_member_sign_up">Not a member? <u>Sign Up</u></string>
+    <string name="email">Email</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="already_a_member_log_in">Already a member? <u>Log in</u></string>
+    <string name="create_account">Create Account</string>
+
+
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+
+</resources>
