@@ -2,7 +2,7 @@ package com.example.cinepulse.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MovieDetails {
+public class MovieDetail {
 
     @SerializedName("title")
     private String title;

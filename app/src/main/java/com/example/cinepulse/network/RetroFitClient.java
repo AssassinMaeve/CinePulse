@@ -1,5 +1,4 @@
-package com.example.cinepulse;
-import com.example.cinepulse.network.TMDbApiService;
+package com.example.cinepulse.network;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
