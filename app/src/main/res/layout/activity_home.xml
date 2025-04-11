@@ -60,6 +60,18 @@
                 android:overScrollMode="never"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp" />
+
+            <Button
+                android:id="@+id/btnMovieList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
+                android:backgroundTint="@color/primary_button"
+                android:text="Movies and TV Shows Genres"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/roboto_bold" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

@@ -3,6 +3,7 @@ package com.example.cinepulse;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -100,6 +101,13 @@ public class Home extends AppCompatActivity {
             }
 
         });
+
+        Button btnMovieList = findViewById(R.id.btnMovieList);
+        btnMovieList.setOnClickListener(v -> {
+            Intent intent = new Intent(Home.this, GenreListActivity.class);
+            startActivity(intent);
+        });
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
