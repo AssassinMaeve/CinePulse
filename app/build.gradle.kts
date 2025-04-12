@@ -53,6 +53,8 @@ dependencies {
     // YouTube Trailer
     implementation (libs.core)
 
+    implementation (libs.cardview)
+
 
 
     testImplementation(libs.junit)

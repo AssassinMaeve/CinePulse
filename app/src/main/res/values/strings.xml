@@ -19,10 +19,14 @@
     <string name="already_a_member_log_in">Already a member? <u>Log in</u></string>
     <string name="create_account">Create Account</string>
 
+    <string name="api_key">580b03ff6e8e1d2881e7ecf2dccaf4c3</string>
+
 
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowNoTitle">true</item>
+
+
     </style>
 
 

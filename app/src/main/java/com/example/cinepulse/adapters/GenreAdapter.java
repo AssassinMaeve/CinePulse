@@ -1,3 +1,5 @@
+// GenreAdapter.java
+
 package com.example.cinepulse.adapters;
 
 import android.content.Context;
@@ -5,7 +7,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,28 +18,28 @@ import com.example.cinepulse.models.Genre;
 
 import java.util.List;
 
-public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder> {
-    private final Context context;
-    private final List<Genre> genres;
+public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
 
-    public GenreAdapter(Context context, List<Genre> genres) {
+    private Context context;
+    private List<Genre> genreList;
+
+    public GenreAdapter(Context context, List<Genre> genreList) {
         this.context = context;
-        this.genres = genres;
+        this.genreList = genreList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GenreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_genre, parent, false);
-        return new ViewHolder(view);
+        return new GenreViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Genre genre = genres.get(position);
-        holder.genreText.setText(genre.getName());
-
-        holder.itemView.setOnClickListener(v -> {
+    public void onBindViewHolder(@NonNull GenreViewHolder holder, int position) {
+        Genre genre = genreList.get(position);
+        holder.button.setText(genre.getName());
+        holder.button.setOnClickListener(v -> {
             Intent intent = new Intent(context, GenreMoviesActivity.class);
             intent.putExtra("genre_id", genre.getId());
             intent.putExtra("genre_name", genre.getName());
@@ -47,15 +49,15 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return genres.size();
+        return genreList.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView genreText;
+    public static class GenreViewHolder extends RecyclerView.ViewHolder {
+        Button button;
 
-        ViewHolder(View itemView) {
+        public GenreViewHolder(@NonNull View itemView) {
             super(itemView);
-            genreText = itemView.findViewById(R.id.textGenreName);
+            button = itemView.findViewById(R.id.textGenreName);  // Make sure this ID is a Button in XML
         }
     }
 }

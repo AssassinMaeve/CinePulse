@@ -24,7 +24,6 @@ public class GenreListActivity extends AppCompatActivity {
         recyclerAllGenres = findViewById(R.id.recyclerAllGenres);
         recyclerAllGenres.setLayoutManager(new GridLayoutManager(this, 2));
 
-        // Static genres (or use TMDb API for all)
         List<Genre> allGenres = Arrays.asList(
                 new Genre(28, "Action"),
                 new Genre(35, "Comedy"),

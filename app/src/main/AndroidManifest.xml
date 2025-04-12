@@ -14,30 +14,46 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CinePulse"
         tools:targetApi="31">
-
+        <activity
+            android:name=".TVDetailActivity"
+            android:exported="false" />
         <!-- Activities -->
-        <activity android:name=".GenreMoviesActivity" android:exported="false" />
-        <activity android:name=".GenreListActivity" android:exported="false" />
-        <activity android:name=".MovieDetails" android:exported="false" />
-        <activity android:name=".Profile" android:exported="false" />
-        <activity android:name=".Search" android:exported="false" />
-        <activity android:name=".Home" android:exported="false" />
-        <activity android:name=".SignUp" android:exported="false" />
-        <activity android:name=".Login" android:exported="false" />
-
-        <!-- Launcher Activity -->
-        <activity android:name=".MainActivity" android:exported="true">
+        <activity
+            android:name=".GenreMoviesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GenreListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MovieDetails"
+            android:exported="false" />
+        <activity
+            android:name=".Profile"
+            android:exported="false" />
+        <activity
+            android:name=".Search"
+            android:exported="false" />
+        <activity
+            android:name=".Home"
+            android:exported="false" />
+        <activity
+            android:name=".SignUp"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="false" /> <!-- Launcher Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Font Preload Metadata -->
+        </activity> <!-- Font Preload Metadata -->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
 
 </manifest>

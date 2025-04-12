@@ -15,52 +15,68 @@ import com.bumptech.glide.Glide;
 import com.example.cinepulse.MovieDetails;
 import com.example.cinepulse.R;
 import com.example.cinepulse.models.Movie;
+import com.example.cinepulse.models.TvShow;
 
 import java.util.List;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int VIEW_TYPE_MOVIE = 1;
+    private static final int VIEW_TYPE_TV_SHOW = 2;
+
     private Context context;
-    private List<Movie> movieList;
+    private List<Object> itemList; // Unified list to hold both Movies and TV Shows
     private String type; // "movie" or "tv"
 
-    public MovieAdapter(Context context, List<Movie> movies, String type) {
+    public MovieAdapter(Context context, List<Object> items, String type) {
         this.context = context;
-        this.movieList = movies;
+        this.itemList = items;
         this.type = type;
     }
 
     @NonNull
     @Override
-    public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
-        return new MovieViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_MOVIE) {
+            View view = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+            return new MovieViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(context).inflate(R.layout.item_tv_show, parent, false);
+            return new TvShowViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        Movie movie = movieList.get(position);
-
-        // Title: use name if title is null (TV shows)
-        String displayTitle = movie.getTitle() != null ? movie.getTitle() : "";
-        holder.title.setText(displayTitle);
-
-        String posterUrl = "https://image.tmdb.org/t/p/w500" + movie.getPosterPath();
-        Glide.with(context).load(posterUrl).into(holder.poster);
-
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, MovieDetails.class);
-            intent.putExtra("movie_id", movie.getId());
-            intent.putExtra("type", type); // this fixes the issue
-            context.startActivity(intent);
-        });
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == VIEW_TYPE_MOVIE) {
+            Movie movie = (Movie) itemList.get(position);
+            MovieViewHolder movieHolder = (MovieViewHolder) holder;
+            movieHolder.bind(movie);
+        } else {
+            TvShow tvShow = (TvShow) itemList.get(position);
+            TvShowViewHolder tvShowHolder = (TvShowViewHolder) holder;
+            tvShowHolder.bind(tvShow);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return movieList.size();
+        return itemList.size();
     }
 
-    public static class MovieViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        // Checking the type of the item at the position
+        if (itemList.get(position) instanceof Movie) {
+            return VIEW_TYPE_MOVIE;
+        } else if (itemList.get(position) instanceof TvShow) {
+            return VIEW_TYPE_TV_SHOW;
+        }
+        return super.getItemViewType(position);
+    }
+
+    // Movie ViewHolder
+    class MovieViewHolder extends RecyclerView.ViewHolder {
         ImageView poster;
         TextView title;
 
@@ -69,5 +85,58 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             poster = itemView.findViewById(R.id.imagePoster);
             title = itemView.findViewById(R.id.textTitle);
         }
+
+        public void bind(Movie movie) {
+            // Setting the title and poster for the movie item
+            String displayTitle = movie.getTitle() != null ? movie.getTitle() : "";
+            title.setText(displayTitle);
+
+            String posterUrl = "https://image.tmdb.org/t/p/w500" + movie.getPosterPath();
+            Glide.with(context).load(posterUrl).into(poster);
+
+            itemView.setOnClickListener(v -> {
+                // Launching MovieDetails activity with movie data
+                Intent intent = new Intent(context, MovieDetails.class);
+                intent.putExtra("movie_id", movie.getId());
+                intent.putExtra("type", "movie");
+                context.startActivity(intent);
+            });
+        }
+    }
+
+    // TV Show ViewHolder
+    class TvShowViewHolder extends RecyclerView.ViewHolder {
+        ImageView poster;
+        TextView title;
+
+        public TvShowViewHolder(@NonNull View itemView) {
+            super(itemView);
+            poster = itemView.findViewById(R.id.imagePoster);
+            title = itemView.findViewById(R.id.textTitle);
+        }
+
+        public void bind(TvShow tvShow) {
+            // Setting the title and poster for the TV show item
+            String displayTitle = tvShow.getName() != null ? tvShow.getName() : "";
+            title.setText(displayTitle);
+
+            String posterUrl = "https://image.tmdb.org/t/p/w500" + tvShow.getPosterPath();
+            Glide.with(context).load(posterUrl).into(poster);
+
+            itemView.setOnClickListener(v -> {
+                // Launching MovieDetails activity with TV show data
+                Intent intent = new Intent(context, MovieDetails.class);
+                intent.putExtra("tv_show_id", tvShow.getId()); // Pass TV Show ID
+                intent.putExtra("type", "tv"); // Specify TV Show type
+                context.startActivity(intent);
+            });
+        }
+    }
+
+    // Method to update data
+    public void updateData(List<Object> newItems) {
+        itemList.clear();
+        itemList.addAll(newItems);
+        notifyDataSetChanged();
     }
 }

@@ -6,6 +6,7 @@ import com.example.cinepulse.models.MovieResponse;
 import com.example.cinepulse.models.MultiSearchResponse;
 import com.example.cinepulse.models.TVDetail;
 import com.example.cinepulse.models.TrailerResponse;
+import com.example.cinepulse.models.TvShowResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -25,7 +26,7 @@ public interface TMDbApiService {
     Call<MovieResponse> getTrendingMovies(@Query("api_key") String apiKey);
 
     @GET("trending/tv/week")
-    Call<MovieResponse> getTrendingTVShows(@Query("api_key") String apiKey);
+    Call<TvShowResponse> getTrendingTVShows(@Query("api_key") String apiKey);
 
     @GET("search/movie")
     Call<MovieResponse> searchMovies(
@@ -66,6 +67,19 @@ public interface TMDbApiService {
             @Query("api_key") String apiKey,
             @Query("query") String query
     );
+
+    @GET("discover/movie")
+     Call<MovieResponse> getMoviesByGenre(
+            @Query("with_genres") int genreId,
+            @Query("api_key") String apiKey
+    );
+
+    @GET("discover/tv")
+    Call<TvShowResponse> getTVByGenre(
+            @Query("with_genres") int genreId,
+            @Query("api_key") String apiKey
+    );
+
 
 
 

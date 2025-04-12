@@ -7,18 +7,26 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/textGenreTitle"
+        android:id="@+id/genreTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Genre Movies"
+        android:text="Genre - Movies"
+        android:textColor="#fff"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <ToggleButton
+        android:id="@+id/toggleMovieTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="TV Shows"
+        android:textOff="Movies"
         android:layout_marginBottom="12dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerGenreMovies"
+        android:id="@+id/recyclerByGenre"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
 </LinearLayout>
