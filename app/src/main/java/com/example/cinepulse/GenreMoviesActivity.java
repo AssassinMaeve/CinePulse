@@ -65,7 +65,7 @@ public class GenreMoviesActivity extends AppCompatActivity {
 
         // Set up the adapters
         movieAdapter = new MovieAdapter(this, new ArrayList<Object>(movieList), "movie");
-        tvShowAdapter = new TvShowAdapter(this, tvShowList, "tv");
+        tvShowAdapter = new TvShowAdapter(this, tvShowList);
 
         // Set default adapter to MovieAdapter
         recyclerView.setAdapter(movieAdapter);

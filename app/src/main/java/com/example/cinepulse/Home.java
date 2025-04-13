@@ -123,8 +123,8 @@ public class Home extends AppCompatActivity {
                     List<TvShow> shows = response.body().getResults();
                     Log.d("API", "Fetched " + shows.size() + " TV shows.");
 
-                    // Use TvShowAdapter instead of MovieAdapter
-                    tvShowAdapter = new TvShowAdapter(Home.this, shows,"tv");
+                    // Initialize the adapter without the "tv" type parameter
+                    tvShowAdapter = new TvShowAdapter(Home.this, shows);
                     recyclerTrendingTV.setAdapter(tvShowAdapter);
                 } else {
                     Log.e("API", "TV Error: " + response.code());

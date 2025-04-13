@@ -2,20 +2,34 @@ package com.example.cinepulse;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.cinepulse.adapters.CastAdapter;
+import com.example.cinepulse.models.Cast;
+import com.example.cinepulse.models.CastResponse;
 import com.example.cinepulse.models.Genre;
 import com.example.cinepulse.models.TVDetail;
+import com.example.cinepulse.models.Trailer;
+import com.example.cinepulse.models.TrailerResponse;
 import com.example.cinepulse.network.RetroFitClient;
 import com.example.cinepulse.network.TMDbApiService;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,14 +38,40 @@ import retrofit2.Response;
 public class TVDetailActivity extends AppCompatActivity {
     private static final String TAG = "TVDetailActivity";
 
+    // Views
+    private ImageView imagePoster;
+    private TextView textTitle;
+    private TextView textReleaseDate;
+    private TextView textOverview;
+    private RecyclerView recyclerCast;
+    private TextView textNoCast;
+    private RecyclerView recyclerStreaming;
+    private YouTubePlayerView youtubePlayerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tvdetail);
 
+        // Initialize views
+        imagePoster = findViewById(R.id.imagePoster);
+        textTitle = findViewById(R.id.textTitle);
+        textReleaseDate = findViewById(R.id.textReleaseDate);
+        textOverview = findViewById(R.id.textOverview);
+        recyclerCast = findViewById(R.id.recyclerCast);
+        textNoCast = findViewById(R.id.textNoCast);
+        recyclerStreaming = findViewById(R.id.recyclerStreaming);
+        youtubePlayerView = findViewById(R.id.youtubePlayerView);
+
+        // Initialize YouTube Player
+        getLifecycle().addObserver(youtubePlayerView);
+
         int tvId = getIntent().getIntExtra("tv_id", -1);
         if (tvId != -1) {
             fetchTVShowDetails(tvId);
+            fetchTVCast(tvId);
+            fetchTVTrailers(tvId);
+            // Add streaming platforms API call if available
         }
     }
 
@@ -43,50 +83,95 @@ public class TVDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<TVDetail> call, Response<TVDetail> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    updateUI(response.body());
-                } else {
-                    Log.e(TAG, "Error response: " + response.code());
-                    // Show error to user
+                    updateTVShowUI(response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<TVDetail> call, Throwable t) {
-                Log.e(TAG, "API call failed", t);
-                // Show error to user
+                Log.e(TAG, "Error fetching TV details", t);
             }
         });
     }
 
-    private void updateUI(TVDetail tvDetail) {
-        TextView title = findViewById(R.id.tv_title);
-        TextView overview = findViewById(R.id.tv_overview);
-        TextView firstAirDate = findViewById(R.id.tv_first_air_date);
-        TextView rating = findViewById(R.id.tv_rating);
-        ImageView poster = findViewById(R.id.iv_poster);
-
+    private void updateTVShowUI(TVDetail tvDetail) {
         // Set basic info
-        title.setText(tvDetail.getName());
-        overview.setText(tvDetail.getOverview());
-        firstAirDate.setText(tvDetail.getFirstAirDate());
-        rating.setText(String.format("%.1f", tvDetail.getVoteAverage()));
+        textTitle.setText(tvDetail.getName());
+        textReleaseDate.setText(tvDetail.getFirstAirDate());
+        textOverview.setText(tvDetail.getOverview());
 
         // Load poster image
-        if (tvDetail.getPosterPath() != null) {
-            Glide.with(this)
-                    .load("https://image.tmdb.org/t/p/w500" + tvDetail.getPosterPath())
-                    .into(poster);
-        }
+        Glide.with(this)
+                .load("https://image.tmdb.org/t/p/w500" + tvDetail.getPosterPath())
+                .into(imagePoster);
+    }
 
-        // Handle genres if available
-        if (tvDetail.getGenres() != null && !tvDetail.getGenres().isEmpty()) {
-            TextView genres = findViewById(R.id.tv_genres);
-            StringBuilder genresText = new StringBuilder();
-            for (Genre genre : tvDetail.getGenres()) {
-                if (genresText.length() > 0) genresText.append(", ");
-                genresText.append(genre.getName());
+    private void fetchTVCast(int tvId) {
+        TMDbApiService apiService = RetroFitClient.getApiService();
+        Call<CastResponse> call = apiService.getTVCredits(tvId, "your_api_key");
+
+        call.enqueue(new Callback<CastResponse>() {
+            @Override
+            public void onResponse(Call<CastResponse> call, Response<CastResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Cast> castList = response.body().getCast();
+                    if (castList != null && !castList.isEmpty()) {
+                        setupCastRecycler(castList);
+                    } else {
+                        textNoCast.setVisibility(View.VISIBLE);
+                    }
+                }
             }
-            genres.setText(genresText.toString());
-        }
+
+            @Override
+            public void onFailure(Call<CastResponse> call, Throwable t) {
+                Log.e(TAG, "Error fetching TV cast", t);
+            }
+        });
+    }
+
+    private void setupCastRecycler(List<Cast> castList) {
+        recyclerCast.setLayoutManager(new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false));
+        CastAdapter castAdapter = new CastAdapter(this, castList);
+        recyclerCast.setAdapter(castAdapter);
+    }
+
+    private void fetchTVTrailers(int tvId) {
+        TMDbApiService apiService = RetroFitClient.getApiService();
+        Call<TrailerResponse> call = apiService.getTVTrailers(tvId, "your_api_key");
+
+        call.enqueue(new Callback<TrailerResponse>() {
+            @Override
+            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Trailer> trailers = response.body().getResults();
+                    if (trailers != null && !trailers.isEmpty()) {
+                        setupYouTubePlayer(trailers.get(0).getKey()); // Play first trailer
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TrailerResponse> call, Throwable t) {
+                Log.e(TAG, "Error fetching TV trailers", t);
+            }
+        });
+    }
+
+    private void setupYouTubePlayer(String videoId) {
+        youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                youTubePlayer.loadVideo(videoId, 0);
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        youtubePlayerView.release();
     }
 }
+
