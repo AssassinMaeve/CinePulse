@@ -1,24 +1,25 @@
 package com.example.cinepulse;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cinepulse.adapters.TvShowAdapter;
-import com.example.cinepulse.models.TvShow;
 import com.example.cinepulse.adapters.MovieAdapter;
+import com.example.cinepulse.adapters.TvShowAdapter;
 import com.example.cinepulse.models.Movie;
 import com.example.cinepulse.models.MovieResponse;
+import com.example.cinepulse.models.TvShow;
 import com.example.cinepulse.models.TvShowResponse;
 import com.example.cinepulse.network.RetroFitClient;
 import com.example.cinepulse.network.TMDbApiService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,8 +38,8 @@ public class GenreMoviesActivity extends AppCompatActivity {
     private MovieAdapter movieAdapter;
     private TvShowAdapter tvShowAdapter;
 
-    private List<Movie> movieList = new ArrayList<>(); // list for movies
-    private List<TvShow> tvShowList = new ArrayList<>(); // list for TV shows
+    private List<Movie> movieList = new ArrayList<>();
+    private List<TvShow> tvShowList = new ArrayList<>();
 
     private String apiKey;
 
@@ -47,32 +48,26 @@ public class GenreMoviesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_genre_movies);
 
-        // Get API key from strings.xml
         apiKey = getString(R.string.api_key);
 
-        // Get intent data
         genreId = getIntent().getIntExtra("genre_id", -1);
         genreName = getIntent().getStringExtra("genre_name");
 
-        // Bind views
+        Log.d("GenreMoviesActivity", "Received Genre ID: " + genreId + ", Name: " + genreName);
+
         title = findViewById(R.id.genreTitle);
         toggle = findViewById(R.id.toggleMovieTv);
         recyclerView = findViewById(R.id.recyclerByGenre);
 
-        // Set title and layout manager
         title.setText(genreName + " - Movies");
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        // Set up the adapters
-        movieAdapter = new MovieAdapter(this, new ArrayList<Object>(movieList), "movie");
+        movieAdapter = new MovieAdapter(this, new ArrayList<>(movieList), "movie");
         tvShowAdapter = new TvShowAdapter(this, tvShowList);
 
-        // Set default adapter to MovieAdapter
         recyclerView.setAdapter(movieAdapter);
 
-        // Fetch the movies by default
         fetchGenreMovies(genreId);
-
 
         toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -96,13 +91,21 @@ public class GenreMoviesActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     movieList.clear();
                     movieList.addAll(response.body().getResults());
-                    movieAdapter.notifyDataSetChanged();
+                    movieAdapter.updateData(new ArrayList<>(movieList));
+                    Log.d("GenreMoviesActivity", "Movies fetched: " + movieList.size());
+                    if (movieList.isEmpty()) {
+                        Toast.makeText(GenreMoviesActivity.this, "No movies found in this genre", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Log.e("GenreMoviesActivity", "Failed to fetch movies. Code: " + response.code());
+                    Toast.makeText(GenreMoviesActivity.this, "Failed to load movies", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<MovieResponse> call, Throwable t) {
-                // Handle failure
+                Log.e("GenreMoviesActivity", "Movie fetch error: " + t.getMessage());
+                Toast.makeText(GenreMoviesActivity.this, "Error fetching movies", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -117,12 +120,20 @@ public class GenreMoviesActivity extends AppCompatActivity {
                     tvShowList.clear();
                     tvShowList.addAll(response.body().getResults());
                     tvShowAdapter.notifyDataSetChanged();
+                    Log.d("GenreMoviesActivity", "TV shows fetched: " + tvShowList.size());
+                    if (tvShowList.isEmpty()) {
+                        Toast.makeText(GenreMoviesActivity.this, "No TV shows found in this genre", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Log.e("GenreMoviesActivity", "Failed to fetch TV shows. Code: " + response.code());
+                    Toast.makeText(GenreMoviesActivity.this, "Failed to load TV shows", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TvShowResponse> call, Throwable t) {
-                // Handle failure
+                Log.e("GenreMoviesActivity", "TV show fetch error: " + t.getMessage());
+                Toast.makeText(GenreMoviesActivity.this, "Error fetching TV shows", Toast.LENGTH_SHORT).show();
             }
         });
     }
