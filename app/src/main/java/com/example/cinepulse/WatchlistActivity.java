@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -17,7 +18,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class WatchlistActivity extends AppCompatActivity {
+public class WatchlistActivity extends AppCompatActivity
+        implements WatchlistAdapter.OnWatchlistChangeListener {
 
     private RecyclerView recyclerView;
     private WatchlistAdapter adapter;
@@ -30,20 +32,24 @@ public class WatchlistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watchlist);
 
+        initializeViews();
+        setupWatchlist();
+        setupBottomNavigation();
+        setupClearAllButton();
+    }
+
+    private void initializeViews() {
         recyclerView = findViewById(R.id.recyclerWatchlist);
         textNoWatchlist = findViewById(R.id.textNoWatchlist);
         btnClearAll = findViewById(R.id.btnClearAll);
-
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+    }
+
+    private void setupWatchlist() {
         watchlist = WatchlistManager.getWatchlist(this);
-
-        adapter = new WatchlistAdapter(this, watchlist);
+        adapter = new WatchlistAdapter(this, watchlist, this);
         recyclerView.setAdapter(adapter);
-
         updateUI();
-
-        setupBottomNavigation();
-        setupClearAllButton();
     }
 
     private void setupBottomNavigation() {
@@ -54,14 +60,17 @@ public class WatchlistActivity extends AppCompatActivity {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_home) {
                 startActivity(new Intent(this, Home.class));
+                finish();
                 return true;
             } else if (itemId == R.id.nav_search) {
                 startActivity(new Intent(this, Search.class));
+                finish();
                 return true;
             } else if (itemId == R.id.nav_watchlist) {
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 startActivity(new Intent(this, Profile.class));
+                finish();
                 return true;
             }
             return false;
@@ -74,16 +83,36 @@ public class WatchlistActivity extends AppCompatActivity {
             watchlist.clear();
             adapter.notifyDataSetChanged();
             updateUI();
+            Toast.makeText(this, "Watchlist cleared", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void updateUI() {
-        if (watchlist == null || watchlist.isEmpty()) {
+        if (watchlist.isEmpty()) {
             textNoWatchlist.setVisibility(View.VISIBLE);
             btnClearAll.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
         } else {
             textNoWatchlist.setVisibility(View.GONE);
             btnClearAll.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onWatchlistChanged() {
+        // Refresh the watchlist data
+        watchlist = WatchlistManager.getWatchlist(this);
+        adapter.updateData(watchlist);
+        updateUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh data when returning to activity
+        watchlist = WatchlistManager.getWatchlist(this);
+        adapter.updateData(watchlist);
+        updateUI();
     }
 }
