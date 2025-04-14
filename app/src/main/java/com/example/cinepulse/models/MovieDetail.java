@@ -38,4 +38,11 @@ public class MovieDetail {
     public String getPosterPath() {
         return posterPath;
     }
+    @SerializedName("id")
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
 }

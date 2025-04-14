@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +21,10 @@ import com.example.cinepulse.models.MovieDetail;
 import com.example.cinepulse.models.TVDetail;
 import com.example.cinepulse.models.Trailer;
 import com.example.cinepulse.models.TrailerResponse;
+import com.example.cinepulse.models.WatchlistItem;
 import com.example.cinepulse.network.RetroFitClient;
 import com.example.cinepulse.network.TMDbApiService;
+import com.example.cinepulse.utils.WatchlistManager;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -37,18 +41,18 @@ public class MovieDetails extends AppCompatActivity {
     private ImageView posterImage;
     private YouTubePlayerView youTubePlayerView;
     private RecyclerView recyclerCast, recyclerStreaming;
+    private TextView textNoCast;
+    private Button btnAddToWatchlist;
 
     private String trailerKey = "";
     private static final String API_KEY = "580b03ff6e8e1d2881e7ecf2dccaf4c3";
-
-    private TextView textNoCast;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
+        // Initialize UI components
         titleText = findViewById(R.id.textTitle);
         overviewText = findViewById(R.id.textOverview);
         releaseDateText = findViewById(R.id.textReleaseDate);
@@ -57,7 +61,7 @@ public class MovieDetails extends AppCompatActivity {
         recyclerCast = findViewById(R.id.recyclerCast);
         recyclerStreaming = findViewById(R.id.recyclerStreaming);
         textNoCast = findViewById(R.id.textNoCast);
-
+        btnAddToWatchlist = findViewById(R.id.btnAddToWatchlist);
 
         recyclerCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerStreaming.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -90,6 +94,7 @@ public class MovieDetails extends AppCompatActivity {
             public void onResponse(Call<MovieDetail> call, Response<MovieDetail> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     MovieDetail details = response.body();
+
                     titleText.setText(details.getTitle());
                     overviewText.setText(details.getOverview());
                     releaseDateText.setText("Release Date: " + details.getReleaseDate());
@@ -97,12 +102,69 @@ public class MovieDetails extends AppCompatActivity {
                     Glide.with(MovieDetails.this)
                             .load("https://image.tmdb.org/t/p/w500/" + details.getPosterPath())
                             .into(posterImage);
+
+                    btnAddToWatchlist.setOnClickListener(v -> {
+                        WatchlistItem item = new WatchlistItem(
+                                details.getId(),
+                                details.getTitle(),
+                                details.getPosterPath(),
+                                "movie"
+                        );
+                        if (WatchlistManager.addToWatchlist(MovieDetails.this, item)) {
+                            Toast.makeText(MovieDetails.this, "Added to watchlist!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MovieDetails.this, "Already in watchlist!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
             }
 
             @Override
             public void onFailure(Call<MovieDetail> call, Throwable t) {
                 Log.e("MOVIE_DETAILS", "Failed to fetch movie details", t);
+            }
+        });
+    }
+
+    private void fetchTVDetails(int tvId) {
+        TMDbApiService apiService = RetroFitClient.getApiService();
+        Call<TVDetail> call = apiService.getTVDetail(tvId, API_KEY);
+
+        call.enqueue(new Callback<TVDetail>() {
+            @Override
+            public void onResponse(Call<TVDetail> call, Response<TVDetail> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    TVDetail details = response.body();
+
+                    titleText.setText(details.getName());
+                    overviewText.setText(details.getOverview());
+                    releaseDateText.setText("First Air Date: " + details.getFirstAirDate());
+
+                    Glide.with(MovieDetails.this)
+                            .load("https://image.tmdb.org/t/p/w500/" + details.getPosterPath())
+                            .into(posterImage);
+
+                    btnAddToWatchlist.setOnClickListener(v -> {
+                        WatchlistItem item = new WatchlistItem(
+                                details.getId(),
+                                details.getName(),
+                                details.getPosterPath(),
+                                "tv"
+                        );
+                        if (WatchlistManager.addToWatchlist(MovieDetails.this, item)) {
+                            Toast.makeText(MovieDetails.this, "Added to watchlist!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MovieDetails.this, "Already in watchlist!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TVDetail> call, Throwable t) {
+                Log.e("TV_DETAILS", "Failed to fetch TV details", t);
             }
         });
     }
@@ -122,57 +184,6 @@ public class MovieDetails extends AppCompatActivity {
             @Override
             public void onFailure(Call<CastResponse> call, Throwable t) {
                 Log.e("CAST", "Failed to load cast", t);
-            }
-        });
-    }
-
-    private void fetchTrailer(int movieId) {
-        TMDbApiService apiService = RetroFitClient.getApiService();
-        Call<TrailerResponse> call = apiService.getMovieTrailers(movieId, API_KEY);
-
-        call.enqueue(new Callback<TrailerResponse>() {
-            @Override
-            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    for (Trailer trailer : response.body().getResults()) {
-                        if ("Trailer".equalsIgnoreCase(trailer.getType())) {
-                            trailerKey = trailer.getKey();
-                            playTrailer();
-                            break;
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TrailerResponse> call, Throwable t) {
-                Log.e("TRAILER", "Failed to load trailer", t);
-            }
-        });
-    }
-
-    private void fetchTVDetails(int tvId) {
-        TMDbApiService apiService = RetroFitClient.getApiService();
-        Call<TVDetail> call = apiService.getTVDetail(tvId, API_KEY);
-
-        call.enqueue(new Callback<TVDetail>() {
-            @Override
-            public void onResponse(Call<TVDetail> call, Response<TVDetail> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    TVDetail details = response.body();
-                    titleText.setText(details.getName());
-                    overviewText.setText(details.getOverview());
-                    releaseDateText.setText("First Air Date: " + details.getFirstAirDate());
-
-                    Glide.with(MovieDetails.this)
-                            .load("https://image.tmdb.org/t/p/w500/" + details.getPosterPath())
-                            .into(posterImage);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TVDetail> call, Throwable t) {
-                Log.e("TV_DETAILS", "Failed to fetch TV details", t);
             }
         });
     }
@@ -207,8 +218,30 @@ public class MovieDetails extends AppCompatActivity {
         });
     }
 
+    private void fetchTrailer(int movieId) {
+        TMDbApiService apiService = RetroFitClient.getApiService();
+        Call<TrailerResponse> call = apiService.getMovieTrailers(movieId, API_KEY);
 
+        call.enqueue(new Callback<TrailerResponse>() {
+            @Override
+            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    for (Trailer trailer : response.body().getResults()) {
+                        if ("Trailer".equalsIgnoreCase(trailer.getType())) {
+                            trailerKey = trailer.getKey();
+                            playTrailer();
+                            break;
+                        }
+                    }
+                }
+            }
 
+            @Override
+            public void onFailure(Call<TrailerResponse> call, Throwable t) {
+                Log.e("TRAILER", "Failed to load trailer", t);
+            }
+        });
+    }
 
     private void fetchTVTrailer(int tvId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
@@ -244,5 +277,4 @@ public class MovieDetails extends AppCompatActivity {
             }
         });
     }
-
 }

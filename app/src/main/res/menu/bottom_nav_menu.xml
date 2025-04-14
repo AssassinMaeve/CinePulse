@@ -1,4 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
@@ -10,7 +11,13 @@
         android:title="Search" />
 
     <item
+        android:id="@+id/nav_watchlist"
+        android:icon="@drawable/ic_wishlist"
+        android:title="Wishlist" />
+
+    <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/profile_user"
         android:title="Profile" />
+
 </menu>

@@ -79,6 +79,9 @@ public class Home extends AppCompatActivity {
             } else if (itemId == R.id.nav_search) {
                 startActivity(new Intent(Home.this, Search.class));
                 return true;
+            } else if (itemId == R.id.nav_watchlist) {  // ✅ Add this
+                startActivity(new Intent(Home.this, WatchlistActivity.class));
+                return true;
             } else if (itemId == R.id.nav_profile) {
                 startActivity(new Intent(Home.this, Profile.class));
                 return true;
@@ -86,6 +89,7 @@ public class Home extends AppCompatActivity {
             return false;
         });
     }
+
 
     private void fetchTrendingMovies() {
         TMDbApiService apiService = RetroFitClient.getApiService();

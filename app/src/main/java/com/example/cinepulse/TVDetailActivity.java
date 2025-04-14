@@ -5,13 +5,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,12 +16,13 @@ import com.bumptech.glide.Glide;
 import com.example.cinepulse.adapters.CastAdapter;
 import com.example.cinepulse.models.Cast;
 import com.example.cinepulse.models.CastResponse;
-import com.example.cinepulse.models.Genre;
 import com.example.cinepulse.models.TVDetail;
 import com.example.cinepulse.models.Trailer;
 import com.example.cinepulse.models.TrailerResponse;
+import com.example.cinepulse.models.WatchlistItem;
 import com.example.cinepulse.network.RetroFitClient;
 import com.example.cinepulse.network.TMDbApiService;
+import com.example.cinepulse.utils.WatchlistManager;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -47,6 +45,8 @@ public class TVDetailActivity extends AppCompatActivity {
     private TextView textNoCast;
     private RecyclerView recyclerStreaming;
     private YouTubePlayerView youtubePlayerView;
+    private View btnAddToWatchlist;
+    private TVDetail currentTVDetail; // Hold the fetched TV details for watchlist use
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +62,9 @@ public class TVDetailActivity extends AppCompatActivity {
         textNoCast = findViewById(R.id.textNoCast);
         recyclerStreaming = findViewById(R.id.recyclerStreaming);
         youtubePlayerView = findViewById(R.id.youtubePlayerView);
+        btnAddToWatchlist = findViewById(R.id.btnAddToWatchlist);
 
-        // Initialize YouTube Player
+        // YouTube lifecycle
         getLifecycle().addObserver(youtubePlayerView);
 
         int tvId = getIntent().getIntExtra("tv_id", -1);
@@ -71,7 +72,6 @@ public class TVDetailActivity extends AppCompatActivity {
             fetchTVShowDetails(tvId);
             fetchTVCast(tvId);
             fetchTVTrailers(tvId);
-            // Add streaming platforms API call if available
         }
     }
 
@@ -83,7 +83,20 @@ public class TVDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<TVDetail> call, Response<TVDetail> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    updateTVShowUI(response.body());
+                    currentTVDetail = response.body();
+                    updateTVShowUI(currentTVDetail);
+
+                    // Set up watchlist button
+                    btnAddToWatchlist.setOnClickListener(v -> {
+                        WatchlistItem item = new WatchlistItem(
+                                currentTVDetail.getId(),
+                                currentTVDetail.getName(),
+                                currentTVDetail.getPosterPath(),
+                                "tv"
+                        );
+                        WatchlistManager.addToWatchlist(TVDetailActivity.this, item);
+                        Toast.makeText(TVDetailActivity.this, "Added to watchlist!", Toast.LENGTH_SHORT).show();
+                    });
                 }
             }
 
@@ -95,12 +108,10 @@ public class TVDetailActivity extends AppCompatActivity {
     }
 
     private void updateTVShowUI(TVDetail tvDetail) {
-        // Set basic info
         textTitle.setText(tvDetail.getName());
         textReleaseDate.setText(tvDetail.getFirstAirDate());
         textOverview.setText(tvDetail.getOverview());
 
-        // Load poster image
         Glide.with(this)
                 .load("https://image.tmdb.org/t/p/w500" + tvDetail.getPosterPath())
                 .into(imagePoster);
@@ -108,7 +119,7 @@ public class TVDetailActivity extends AppCompatActivity {
 
     private void fetchTVCast(int tvId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        Call<CastResponse> call = apiService.getTVCredits(tvId, "your_api_key");
+        Call<CastResponse> call = apiService.getTVCredits(tvId, "580b03ff6e8e1d2881e7ecf2dccaf4c3");
 
         call.enqueue(new Callback<CastResponse>() {
             @Override
@@ -131,15 +142,14 @@ public class TVDetailActivity extends AppCompatActivity {
     }
 
     private void setupCastRecycler(List<Cast> castList) {
-        recyclerCast.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false));
+        recyclerCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         CastAdapter castAdapter = new CastAdapter(this, castList);
         recyclerCast.setAdapter(castAdapter);
     }
 
     private void fetchTVTrailers(int tvId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        Call<TrailerResponse> call = apiService.getTVTrailers(tvId, "your_api_key");
+        Call<TrailerResponse> call = apiService.getTVTrailers(tvId, "580b03ff6e8e1d2881e7ecf2dccaf4c3");
 
         call.enqueue(new Callback<TrailerResponse>() {
             @Override
@@ -147,7 +157,7 @@ public class TVDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Trailer> trailers = response.body().getResults();
                     if (trailers != null && !trailers.isEmpty()) {
-                        setupYouTubePlayer(trailers.get(0).getKey()); // Play first trailer
+                        setupYouTubePlayer(trailers.get(0).getKey());
                     }
                 }
             }
@@ -174,4 +184,3 @@ public class TVDetailActivity extends AppCompatActivity {
         youtubePlayerView.release();
     }
 }
-
