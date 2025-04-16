@@ -15,9 +15,11 @@
         android:theme="@style/Theme.CinePulse"
         tools:targetApi="31">
         <activity
-            android:name=".WatchlistActivity"
+            android:name=".ScheduleActivity"
             android:exported="false" />
-        <!-- Activities -->
+        <activity
+            android:name=".WatchlistActivity"
+            android:exported="false" /> <!-- Activities -->
         <activity
             android:name=".TVDetailActivity"
             android:exported="false" />
@@ -45,8 +47,6 @@
         <activity
             android:name=".Login"
             android:exported="false" /> <!-- Launcher Activity -->
-
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -59,7 +59,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
 
 </manifest>

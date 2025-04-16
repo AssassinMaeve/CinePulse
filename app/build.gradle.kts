@@ -7,6 +7,11 @@ android {
     namespace = "com.example.cinepulse"
     compileSdk = 35
 
+    // Add this block to enable BuildConfig generation
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.example.cinepulse"
         minSdk = 25
@@ -14,6 +19,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "TMDB_API_KEY", "\"580b03ff6e8e1d2881e7ecf2dccaf4c3\"")
     }
 
     buildTypes {
@@ -40,28 +46,23 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
 
-    // ✅ Retrofit and Gson (Kotlin DSL)
+    // Retrofit and Gson
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
-    // ✅ Glide for image loading
+    // Glide for image loading
     implementation(libs.glide)
+    implementation(libs.recyclerview)
     annotationProcessor(libs.compiler)
 
-    implementation (libs.material.v1110)
+    implementation(libs.material.v1110)
 
     // YouTube Trailer
-    implementation (libs.core)
+    implementation(libs.core)
 
-    implementation (libs.cardview)
-
-
+    implementation(libs.cardview)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
-
-
 }
-

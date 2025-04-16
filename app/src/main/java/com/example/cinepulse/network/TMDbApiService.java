@@ -7,6 +7,7 @@ import com.example.cinepulse.models.MultiSearchResponse;
 import com.example.cinepulse.models.TVDetail;
 import com.example.cinepulse.models.TrailerResponse;
 import com.example.cinepulse.models.TvShowResponse;
+import com.example.cinepulse.models.UpcomingResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -79,6 +80,20 @@ public interface TMDbApiService {
             @Query("with_genres") int genreId,
             @Query("api_key") String apiKey
     );
+
+    @GET("movie/upcoming")
+    Call<UpcomingResponse> getUpcomingMovies(@Query("api_key") String apiKey);
+
+    @GET("tv/on_the_air")
+    Call<UpcomingResponse> getUpcomingTV(@Query("api_key") String apiKey);
+
+    @GET("tv/airing_today")
+    Call<UpcomingResponse> getAiringTodayTV(
+            @Query("api_key") String apiKey
+    );
+
+
+
 
 
 
