@@ -55,7 +55,11 @@ public class Search extends AppCompatActivity {
             } else if (itemId == R.id.nav_watchlist) {  // ✅ Add this
                 startActivity(new Intent(Search.this, WatchlistActivity.class));
                 return true;
-            } else if (itemId == R.id.nav_profile) {
+            } else if (itemId == R.id.nav_schedule) {
+                startActivity(new Intent(Search.this, ScheduleActivity.class));
+                return true;
+            }
+            else if (itemId == R.id.nav_profile) {
                 startActivity(new Intent(Search.this, Profile.class));
                 return true;
             }

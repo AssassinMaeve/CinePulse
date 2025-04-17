@@ -18,12 +18,18 @@ import java.util.List;
 
 public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHolder> {
 
+    public interface OnItemClickListener {
+        void onItemClick(MediaItem item);
+    }
+
     private Context context;
     private List<MediaItem> itemList;
+    private OnItemClickListener listener;
 
-    public UpcomingAdapter(Context context, List<MediaItem> itemList) {
+    public UpcomingAdapter(Context context, List<MediaItem> itemList, OnItemClickListener listener) {
         this.context = context;
         this.itemList = itemList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -37,9 +43,17 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MediaItem item = itemList.get(position);
         holder.title.setText(item.getDisplayTitle());
+
         Glide.with(context)
                 .load("https://image.tmdb.org/t/p/w500" + item.getPosterPath())
                 .into(holder.poster);
+
+        // Set click listener here
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(item);
+            }
+        });
     }
 
     @Override
@@ -58,3 +72,4 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         }
     }
 }
+

@@ -68,6 +68,11 @@ public class WatchlistActivity extends AppCompatActivity
                 return true;
             } else if (itemId == R.id.nav_watchlist) {
                 return true;
+
+            }else if (itemId == R.id.nav_schedule) {
+                startActivity(new Intent(this, ScheduleActivity.class));
+                return true;
+
             } else if (itemId == R.id.nav_profile) {
                 startActivity(new Intent(this, Profile.class));
                 finish();
