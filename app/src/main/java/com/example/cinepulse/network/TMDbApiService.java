@@ -92,6 +92,12 @@ public interface TMDbApiService {
             @Query("api_key") String apiKey
     );
 
+    @GET("movie/popular")
+    Call<UpcomingResponse> getPopularMovies(@Query("api_key") String apiKey);
+
+    @GET("tv/popular")
+    Call<UpcomingResponse> getPopularTV(@Query("api_key") String apiKey);
+
 
 
 

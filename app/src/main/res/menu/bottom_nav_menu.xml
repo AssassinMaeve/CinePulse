@@ -16,9 +16,9 @@
         android:title="Wishlist" />
 
     <item
-        android:id="@+id/nav_schedule"
-        android:icon="@drawable/ic_calendar"
-        android:title="Schedule"/>
+        android:id="@+id/nav_populartrailer"
+        android:icon="@drawable/ic_populartrailer"
+        android:title="Trailer"/>
 
     <item
         android:id="@+id/nav_profile"

@@ -18,6 +18,12 @@ public class MediaItem {
     @SerializedName("poster_path")
     private String posterPath;
 
+    @SerializedName("release_date")
+    private String releaseDate; // for movies
+
+    @SerializedName("first_air_date")
+    private String firstAirDate; // for TV shows
+
     public int getId() {
         return id;
     }
@@ -33,4 +39,13 @@ public class MediaItem {
     public String getPosterPath() {
         return posterPath;
     }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public String getFirstAirDate() {
+        return firstAirDate;
+    }
+
 }

@@ -53,6 +53,7 @@ dependencies {
     // Glide for image loading
     implementation(libs.glide)
     implementation(libs.recyclerview)
+    implementation(libs.media3.exoplayer)
     annotationProcessor(libs.compiler)
 
     implementation(libs.material.v1110)
@@ -65,4 +66,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation (libs.recyclerview.v121)
+    // ExoPlayer Core
+    implementation (libs.google.exoplayer.core)
+// ExoPlayer UI
+    implementation (libs.exoplayer.ui.v2181)
+
 }

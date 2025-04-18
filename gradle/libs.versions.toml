@@ -1,8 +1,13 @@
 [versions]
 agp = "8.8.0"
+appcompatVersion = "1.4.0"
 cardview = "1.0.0"
 compiler = "4.15.1"
 core = "11.1.0"
+exoplayerCore = "2.18.0"
+exoplayerUi = "2.19.1"
+exoplayerUiVersion = "2.18.1"
+googleMaterial = "1.4.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -14,15 +19,24 @@ googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.2.0"
 firebaseFirestore = "25.1.3"
 materialVersion = "1.11.0"
+recyclerviewVersion = "1.2.1"
 retrofit = "2.9.0"
 recyclerview = "1.4.0"
+media3Exoplayer = "1.6.1"
+youtubeAndroidPlayerApi = "1.2.2"
 
 [libraries]
+appcompat-v140 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
 cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "core" }
+exoplayer-core = { module = "com.google.android.exoplayer2:exoplayer-core", version.ref = "exoplayerCore" }
+exoplayer-ui = { module = "com.google.android.exoplayer2:exoplayer-ui", version.ref = "exoplayerCore" }
+exoplayer-ui-v2181 = { module = "com.google.android.exoplayer:exoplayer-ui", version.ref = "exoplayerUiVersion" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "compiler" }
+google-exoplayer-core = { module = "com.google.android.exoplayer:exoplayer-core", version.ref = "exoplayerUi" }
+google-exoplayer-ui = { module = "com.google.android.exoplayer:exoplayer-ui", version.ref = "exoplayerUi" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -33,8 +47,12 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 material-v1110 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+material-v140 = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
+recyclerview-v121 = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerviewVersion" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3Exoplayer" }
+youtube-android-player-api = { module = "com.google.android.youtube:youtube-android-player-api", version.ref = "youtubeAndroidPlayerApi" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -15,7 +15,7 @@
         android:theme="@style/Theme.CinePulse"
         tools:targetApi="31">
         <activity
-            android:name=".ScheduleActivity"
+            android:name=".PopularTrailerActivity"
             android:exported="false" />
         <activity
             android:name=".WatchlistActivity"

@@ -14,4 +14,5 @@ public class MovieResponse {
     public void setResults(List<Movie> results) {
         this.results = results;
     }
+
 }
