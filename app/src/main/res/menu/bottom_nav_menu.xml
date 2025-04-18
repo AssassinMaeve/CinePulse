@@ -18,7 +18,7 @@
     <item
         android:id="@+id/nav_populartrailer"
         android:icon="@drawable/ic_populartrailer"
-        android:title="Trailer"/>
+        android:title="Trailer / Clips"/>
 
     <item
         android:id="@+id/nav_profile"
