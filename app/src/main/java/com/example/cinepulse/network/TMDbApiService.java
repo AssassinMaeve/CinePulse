@@ -4,6 +4,7 @@ import com.example.cinepulse.models.CastResponse;
 import com.example.cinepulse.models.MovieDetail;
 import com.example.cinepulse.models.MovieResponse;
 import com.example.cinepulse.models.MultiSearchResponse;
+import com.example.cinepulse.models.ReviewResponse;
 import com.example.cinepulse.models.TVDetail;
 import com.example.cinepulse.models.TrailerResponse;
 import com.example.cinepulse.models.TvShowResponse;
@@ -57,7 +58,7 @@ public interface TMDbApiService {
     );
 
     /* TV Show Endpoints */
-    @GET("tv/popular")  // Fixed typo (was "tv/pular")
+    @GET("tv/popular")
     Call<TvShowResponse> getPopularTV(@Query("api_key") String apiKey);
 
     @GET("tv/on_the_air")
@@ -99,4 +100,24 @@ public interface TMDbApiService {
             @Query("api_key") String apiKey,
             @Query("query") String query
     );
+
+    @GET("movie/{movie_id}/reviews")
+    Call<ReviewResponse> getMovieReviews(
+            @Path("movie_id") int movieId,
+            @Query("api_key") String apiKey
+    );
+
+    @GET("tv/{tv_id}/reviews")
+    Call<ReviewResponse> getTVReviews(
+            @Path("tv_id") int tvId,
+            @Query("api_key") String apiKey
+    );
+
+    @GET("{type}/{id}/reviews")
+    Call<ReviewResponse> getReviews(
+            @Path("type") String type,  // must be either "movie" or "tv"
+            @Path("id") int id,
+            @Query("api_key") String apiKey
+    );
+
 }

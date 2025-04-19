@@ -10,14 +10,14 @@
         android:layout_width="160dp"
         android:layout_height="220dp"
         android:scaleType="centerCrop"
-        android:contentDescription="Tv Show Poster"
+        android:contentDescription="@string/tv_show_poster"
         android:background="#222" />
 
     <TextView
         android:id="@+id/textTitle"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="Tv Show Title"
+        android:text="@string/tv_show_title"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:maxLines="3"

@@ -9,7 +9,7 @@
         android:id="@+id/textGenreName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Genre"
+        android:text="@string/genre"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"

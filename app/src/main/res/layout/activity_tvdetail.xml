@@ -52,7 +52,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cast"
+            android:text="@string/cast"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -75,7 +75,7 @@
             android:id="@+id/textNoCast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cast information is not available for this title."
+            android:text="@string/cast_information_is_not_available_for_this_title"
             android:textColor="#AAAAAA"
             android:textSize="14sp"
             android:paddingStart="20dp"
@@ -88,7 +88,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Available On"
+            android:text="@string/available_on"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -126,10 +126,26 @@
             android:background="@drawable/genre_button_background"
             android:backgroundTint="#E50914"
             android:fontFamily="@font/roboto_black"
-            android:text="Add to Watchlist"
+            android:text="@string/add_to_watchlist"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             tools:layout_marginBottom="10dp" />
+
+        <Button
+            android:id="@+id/btnViewReviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/genre_button_background"
+            android:layout_marginBottom="24dp"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/roboto_black"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            tools:layout_marginBottom="10dp"
+            android:text="View Reviews" />
 
     </LinearLayout>
 </ScrollView>

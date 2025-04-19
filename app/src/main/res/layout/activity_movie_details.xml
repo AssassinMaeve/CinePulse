@@ -132,6 +132,20 @@
             android:textSize="16sp"
             tools:layout_marginBottom="10dp" />
 
+        <Button
+            android:id="@+id/btnViewReviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/genre_button_background"
+            android:layout_marginBottom="24dp"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/roboto_black"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            tools:layout_marginBottom="10dp"
+            android:text="@string/view_reviews" />
 
 
     </LinearLayout>

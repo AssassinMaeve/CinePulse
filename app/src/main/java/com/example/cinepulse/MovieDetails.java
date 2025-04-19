@@ -34,7 +34,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 public class MovieDetails extends AppCompatActivity {
 
     private TextView titleText, overviewText, releaseDateText;
@@ -43,14 +42,16 @@ public class MovieDetails extends AppCompatActivity {
     private RecyclerView recyclerCast, recyclerStreaming;
     private TextView textNoCast;
     private Button btnAddToWatchlist;
+    private static final String API_KEY = "580b03ff6e8e1d2881e7ecf2dccaf4c3";
 
     private String trailerKey = "";
-    private static final String API_KEY = "580b03ff6e8e1d2881e7ecf2dccaf4c3";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+        int itemId = getIntent().getIntExtra("movie_id", -1);
+        String type = getIntent().getStringExtra("type");
 
         // Initialize UI components
         titleText = findViewById(R.id.textTitle);
@@ -62,15 +63,26 @@ public class MovieDetails extends AppCompatActivity {
         recyclerStreaming = findViewById(R.id.recyclerStreaming);
         textNoCast = findViewById(R.id.textNoCast);
         btnAddToWatchlist = findViewById(R.id.btnAddToWatchlist);
+        Button btnViewReviews = findViewById(R.id.btnViewReviews);
+
 
         recyclerCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerStreaming.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        Intent intent = getIntent();
-        int itemId = intent.getIntExtra("movie_id", -1);
-        String type = intent.getStringExtra("type");
 
-        if (itemId != -1) {
+
+
+
+
+        if (itemId != -1 && type != null) {
+            btnViewReviews.setOnClickListener(v -> {
+                // Navigate to ReviewActivity with the movie/show ID and type
+                Intent reviewIntent = new Intent(MovieDetails.this, ReviewActivity.class);
+                reviewIntent.putExtra("movie_id", itemId);
+                reviewIntent.putExtra("type", type); // "movie" or "tv"
+                startActivity(reviewIntent);
+            });
+
             if ("tv".equalsIgnoreCase(type)) {
                 fetchTVDetails(itemId);
                 fetchTVTrailer(itemId);
@@ -81,10 +93,13 @@ public class MovieDetails extends AppCompatActivity {
                 fetchCast(itemId);
             }
         } else {
-            Log.e("MOVIE_DETAILS", "Invalid ID");
+            Log.e("MOVIE_DETAILS", "Invalid ID or Type");
+            Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+            finish();
         }
-    }
+}
 
+        // Fetch movie details
     private void fetchMovieDetails(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<MovieDetail> call = apiService.getMovieDetail(movieId, API_KEY);
@@ -110,13 +125,8 @@ public class MovieDetails extends AppCompatActivity {
                                 details.getPosterPath(),
                                 "movie"
                         );
-                        if (WatchlistManager.addToWatchlist(MovieDetails.this, item)) {
-                            Toast.makeText(MovieDetails.this, "Added to watchlist!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MovieDetails.this, "Already in watchlist!", Toast.LENGTH_SHORT).show();
-                        }
+                        handleWatchlist(item);
                     });
-
                 }
             }
 
@@ -127,6 +137,7 @@ public class MovieDetails extends AppCompatActivity {
         });
     }
 
+    // Fetch TV details
     private void fetchTVDetails(int tvId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<TVDetail> call = apiService.getTVDetail(tvId, API_KEY);
@@ -152,13 +163,8 @@ public class MovieDetails extends AppCompatActivity {
                                 details.getPosterPath(),
                                 "tv"
                         );
-                        if (WatchlistManager.addToWatchlist(MovieDetails.this, item)) {
-                            Toast.makeText(MovieDetails.this, "Added to watchlist!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MovieDetails.this, "Already in watchlist!", Toast.LENGTH_SHORT).show();
-                        }
+                        handleWatchlist(item);
                     });
-
                 }
             }
 
@@ -169,6 +175,7 @@ public class MovieDetails extends AppCompatActivity {
         });
     }
 
+    // Fetch cast for movies
     private void fetchCast(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<CastResponse> call = apiService.getMovieCredits(movieId, API_KEY);
@@ -188,6 +195,7 @@ public class MovieDetails extends AppCompatActivity {
         });
     }
 
+    // Fetch cast for TV shows
     private void fetchTVCast(int tvId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<CastResponse> call = apiService.getTVCredits(tvId, API_KEY);
@@ -197,16 +205,12 @@ public class MovieDetails extends AppCompatActivity {
             public void onResponse(Call<CastResponse> call, Response<CastResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Cast> castList = response.body().getCast();
-
                     if (castList != null && !castList.isEmpty()) {
                         recyclerCast.setAdapter(new CastAdapter(MovieDetails.this, castList));
                         textNoCast.setVisibility(TextView.GONE);
                     } else {
                         textNoCast.setVisibility(TextView.VISIBLE);
                     }
-                } else {
-                    Log.e("TV_CAST", "Response error: " + response.message());
-                    textNoCast.setVisibility(TextView.VISIBLE);
                 }
             }
 
@@ -218,6 +222,7 @@ public class MovieDetails extends AppCompatActivity {
         });
     }
 
+    // Fetch trailer for movies
     private void fetchTrailer(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<TrailerResponse> call = apiService.getMovieTrailers(movieId, API_KEY);
@@ -243,6 +248,7 @@ public class MovieDetails extends AppCompatActivity {
         });
     }
 
+    // Fetch trailer for TV shows
     private void fetchTVTrailer(int tvId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<TrailerResponse> call = apiService.getTVTrailers(tvId, API_KEY);
@@ -268,6 +274,7 @@ public class MovieDetails extends AppCompatActivity {
         });
     }
 
+    // Play the trailer
     private void playTrailer() {
         getLifecycle().addObserver(youTubePlayerView);
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
@@ -276,5 +283,14 @@ public class MovieDetails extends AppCompatActivity {
                 youTubePlayer.loadVideo(trailerKey, 0);
             }
         });
+    }
+
+    // Handle adding to watchlist
+    private void handleWatchlist(WatchlistItem item) {
+        if (WatchlistManager.addToWatchlist(MovieDetails.this, item)) {
+            Toast.makeText(MovieDetails.this, "Added to watchlist!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MovieDetails.this, "Already in watchlist!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

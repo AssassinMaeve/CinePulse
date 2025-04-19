@@ -31,6 +31,24 @@
     </style>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="trailer_thumbnail">Trailer thumbnail</string>
+    <string name="tv_show_title">Tv Show Title</string>
+    <string name="tv_show_poster">Tv Show Poster</string>
+    <string name="movie_poster">Movie Poster</string>
+    <string name="movie_title">Movie Title</string>
+    <string name="remove">Remove</string>
+    <string name="genre">Genre</string>
+    <string name="castimage">castimage</string>
+    <string name="watchlist">Watchlist</string>
+    <string name="your_watchlist_is_empty">Your watchlist is empty!</string>
+    <string name="clear_all">Clear All</string>
+    <string name="cast">Cast</string>
+    <string name="cast_information_is_not_available_for_this_title">Cast information is not available for this title.</string>
+    <string name="available_on">Available On</string>
+    <string name="add_to_watchlist">Add to Watchlist</string>
+    <string name="search_by_movie_title_or_actor">Search by movie title or actor</string>
+    <string name="view_reviews">View Reviews</string>
+    <string name="reviews">Reviews</string>
 
 
 </resources>

@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -10,7 +11,7 @@
         android:layout_width="160dp"
         android:layout_height="220dp"
         android:scaleType="centerCrop"
-        android:contentDescription="Movie Poster"
+        android:contentDescription="@string/movie_poster"
         android:background="#222" />
 
     <!-- Play Button ImageView -->
@@ -26,7 +27,7 @@
         android:id="@+id/textTitle"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="Movie Title"
+        android:text="@string/movie_title"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:maxLines="3"
@@ -38,7 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="end"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/removeButton"
@@ -46,7 +48,7 @@
             android:layout_height="24dp"
             android:layout_margin="8dp"
             android:src="@drawable/ic_remove"
-            android:contentDescription="Remove"
+            android:contentDescription="@string/remove"
             android:visibility="gone"
             app:tint="@android:color/holo_red_light" />
 
