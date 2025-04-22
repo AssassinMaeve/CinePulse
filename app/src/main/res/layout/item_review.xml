@@ -1,23 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/review_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#121212"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:id="@+id/review_container">
+    android:padding="35dp">
 
+    <!-- Author TextView for review -->
     <TextView
         android:id="@+id/author_text_view"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Author"
-    android:textSize="14sp"
-    android:textStyle="bold" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_black"
+        android:text="By: MovieGuys"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
+    <!-- Content TextView for review content -->
     <TextView
         android:id="@+id/content_text_view"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Review content goes here..."
-    android:textSize="12sp" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/roboto_thin"
+        android:text="Review content goes here..."
+        android:textColor="#DDDDDD"
+        android:textSize="12sp" />
+
 </LinearLayout>

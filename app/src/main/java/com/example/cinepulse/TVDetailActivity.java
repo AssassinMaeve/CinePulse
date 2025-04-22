@@ -1,5 +1,6 @@
 package com.example.cinepulse;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -63,6 +64,18 @@ public class TVDetailActivity extends AppCompatActivity {
         recyclerStreaming = findViewById(R.id.recyclerStreaming);
         youtubePlayerView = findViewById(R.id.youtubePlayerView);
         btnAddToWatchlist = findViewById(R.id.btnAddToWatchlist);
+        View btnReview = findViewById(R.id.btnViewReviews);
+
+        btnReview.setOnClickListener(v -> {
+            if (currentTVDetail != null) {
+                Intent intent = new Intent(TVDetailActivity.this, ReviewActivity.class);
+                intent.putExtra("MOVIE_ID", currentTVDetail.getId()); // Use the same key as ReviewActivity expects
+                intent.putExtra("TYPE", "tv");
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "TV details not loaded yet", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // YouTube lifecycle
         getLifecycle().addObserver(youtubePlayerView);
