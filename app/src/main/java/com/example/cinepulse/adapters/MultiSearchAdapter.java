@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.cinepulse.MovieDetails;
 import com.example.cinepulse.R;
+import com.example.cinepulse.TVDetailActivity; // Add this import
 import com.example.cinepulse.models.MediaItem;
 
 import java.util.List;
@@ -45,16 +46,25 @@ public class MultiSearchAdapter extends RecyclerView.Adapter<MultiSearchAdapter.
                 .placeholder(R.drawable.profile_user)
                 .into(holder.posterImageView);
 
-        // 🚀 Click listener to launch details activity
+        // 🚀 Click listener to launch the appropriate details activity
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, MovieDetails.class);
-            intent.putExtra("movie_id", item.getId());
-            intent.putExtra("type", item.getMediaType());
+            Intent intent;
+            if ("movie".equals(item.getMediaType())) {
+                // If it's a movie, navigate to MovieDetails
+                intent = new Intent(context, MovieDetails.class);
+                intent.putExtra("movie_id", item.getId());
+            } else if ("tv".equals(item.getMediaType())) {
+                // If it's a TV show, navigate to TVDetailActivity
+                intent = new Intent(context, TVDetailActivity.class);
+                intent.putExtra("tv_id", item.getId()); // Pass TV show ID to TVDetailActivity
+            } else {
+                return; // Handle other media types if necessary
+            }
 
+            intent.putExtra("type", item.getMediaType());
             context.startActivity(intent);
         });
     }
-
 
     @Override
     public int getItemCount() {
