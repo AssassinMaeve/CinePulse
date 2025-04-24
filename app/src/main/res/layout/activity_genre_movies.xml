@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/roboto_bold"
 
-            android:text="Genre - Movies"
+            android:text="@string/genre_movies"
             android:textColor="#fff"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -36,8 +36,8 @@
             android:backgroundTint="#6200EE"
             android:fontFamily="@font/roboto_bold"
             android:textColor="#FFFFFF"
-            android:textOff="Movies"
-            android:textOn="TV Shows" />
+            android:textOff="@string/movies"
+            android:textOn="@string/tv_shows" />
     </LinearLayout>
 
     <!-- RecyclerView -->

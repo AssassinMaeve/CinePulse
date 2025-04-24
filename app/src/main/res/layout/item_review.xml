@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_black"
-        android:text="By: MovieGuys"
+        android:text="@string/by_movieguys"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:fontFamily="@font/roboto_thin"
-        android:text="Review content goes here..."
+        android:text="@string/review_content_goes_here"
         android:textColor="#DDDDDD"
         android:textSize="12sp" />
 

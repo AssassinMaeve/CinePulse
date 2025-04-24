@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="All Genres"
+        android:text="@string/all_genres"
         android:textColor="#FFFFFF"
         android:textSize="34sp" />
 

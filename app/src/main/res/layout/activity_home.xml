@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Trending Movies"
+                android:text="@string/trending_movies"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
 
@@ -46,7 +46,7 @@
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/roboto_bold"
                 android:paddingTop="10dp"
-                android:text="Trending TV Shows"
+                android:text="@string/trending_tv_shows"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
 
@@ -68,7 +68,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="32dp"
                 android:backgroundTint="@color/primary_button"
-                android:text="Movies and TV Shows Genres"
+                android:text="@string/movies_and_tv_shows_genres"
                 android:textColor="#FFFFFF"
                 android:fontFamily="@font/roboto_bold" />
 

@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="No reviews available"
+        android:text="@string/no_reviews_available"
         android:textColor="#FF0000"
         android:textSize="16sp"
         android:visibility="gone"

@@ -52,7 +52,7 @@
             android:backgroundTint="#253690"
             android:enabled="true"
             android:padding="5dp"
-            android:text="Logout"
+            android:text="@string/logout"
             android:textColor="#FFFFFF" />
 
         <Button
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:backgroundTint="#253690"
-            android:text="Settings"
+            android:text="@string/settings"
             android:textColor="#FFFFFF" />
 
         <TextView
@@ -71,7 +71,7 @@
             android:layout_marginTop="16dp"
             android:autoLink="web"
             android:linksClickable="true"
-            android:text="Need help? Visit Support"
+            android:text="@string/need_help_visit_support"
             android:textColor="#03A9F4"
             android:textSize="14sp" />
     </LinearLayout>
