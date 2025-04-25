@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    android:background="#121212"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        app:srcCompat="@drawable/cinepulsewhitelogo" />
+
     <EditText
         android:id="@+id/editUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="5dp"
         android:background="@drawable/edittext_border"
         android:hint="New Username"
         android:inputType="text"
+        android:padding="10dp"
         android:textColor="#FFFFFF"
         android:textColorHint="#DDDDDD"
-        android:textSize="16sp"
-        tools:padding="10dp" />
-
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/editEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/edittext_border"
         android:hint="New Email"
         android:inputType="textEmailAddress"
@@ -35,13 +41,11 @@
         android:textColorHint="#DDDDDD"
         android:textSize="16sp" />
 
-    <!-- Old Password input -->
     <EditText
         android:id="@+id/editOldPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/edittext_border"
         android:hint="Current Password"
         android:inputType="textPassword"
@@ -50,12 +54,11 @@
         android:textColorHint="#DDDDDD"
         android:textSize="16sp" />
 
-    <!-- New Password input -->
     <EditText
         android:id="@+id/editNewPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/edittext_border"
         android:hint="New Password"
         android:inputType="textPassword"
@@ -64,13 +67,21 @@
         android:textColorHint="#DDDDDD"
         android:textSize="16sp" />
 
-    <!-- Save Changes button -->
     <Button
         android:id="@+id/buttonSaveChanges"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#4CAF50"
         android:text="Save Changes"
         android:textColor="#FFFFFF" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/buttonToggleTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#FF9800"
+        android:text="Toggle Theme"
+        android:textColor="#FFFFFF" />
+</LinearLayout>
