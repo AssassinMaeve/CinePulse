@@ -20,6 +20,7 @@ public class Profile extends AppCompatActivity {
     private ImageView imageProfile;
     private TextView textUsername, textEmail;
     private Button buttonLogout;
+    private Button buttonSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class Profile extends AppCompatActivity {
         textUsername = findViewById(R.id.textUsername);
         textEmail = findViewById(R.id.textEmail);
         buttonLogout = findViewById(R.id.buttonLogout);
+        buttonSetting = findViewById(R.id.buttonSettings);
 
         // Load user info
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -43,6 +45,11 @@ public class Profile extends AppCompatActivity {
                 imageProfile.setImageResource(R.drawable.profile_user);
             }
         }
+
+        buttonSetting.setOnClickListener(v ->{
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        });
 
         // Logout
         buttonLogout.setOnClickListener(v -> {
