@@ -2,7 +2,6 @@
     android:id="@+id/review_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#121212"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:padding="35dp">
@@ -14,7 +13,6 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_black"
         android:text="@string/by_movieguys"
-        android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -24,9 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:fontFamily="@font/roboto_thin"
+        android:fontFamily="sans-serif-medium"
         android:text="@string/review_content_goes_here"
-        android:textColor="#DDDDDD"
         android:textSize="12sp" />
 
 </LinearLayout>

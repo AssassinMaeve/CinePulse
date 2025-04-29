@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.MovieAdapter;
 import com.example.cinepulse.adapters.TvShowAdapter;
 import com.example.cinepulse.models.Movie;
@@ -26,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GenreMoviesActivity extends AppCompatActivity {
+public class GenreMoviesActivity extends BaseActivity {
 
     private int genreId;
     private String genreName;

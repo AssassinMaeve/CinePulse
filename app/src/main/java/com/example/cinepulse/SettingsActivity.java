@@ -1,10 +1,13 @@
 package com.example.cinepulse;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -21,6 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button buttonSaveChanges, buttonToggleTheme;
     private boolean isDarkMode = false; // Flag for theme mode
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +36,25 @@ public class SettingsActivity extends AppCompatActivity {
         editNewPassword = findViewById(R.id.editNewPassword);
         buttonSaveChanges = findViewById(R.id.buttonSaveChanges);
         buttonToggleTheme = findViewById(R.id.buttonToggleTheme);
+
+
+        SharedPreferences prefs = getSharedPreferences("SettingsPrefs", MODE_PRIVATE);
+        isDarkMode = prefs.getBoolean("isDarkMode", false);
+
+        AppCompatDelegate.setDefaultNightMode(
+                isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
+
+
+        ImageView logo = findViewById(R.id.imageView2);
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+            logo.setImageResource(R.drawable.cinepulsewhitelogo);
+        } else {
+            logo.setImageResource(R.drawable.cinepulseblacklogo);
+        }
+
+
 
         buttonSaveChanges.setOnClickListener(v -> {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -53,7 +76,12 @@ public class SettingsActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(
                     isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
             );
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("isDarkMode", isDarkMode);
+            editor.apply();
+            buttonToggleTheme.postDelayed(() -> recreate(), 100);
         });
+
     }
 
     private void updateUsername(FirebaseUser user, String newUsername) {

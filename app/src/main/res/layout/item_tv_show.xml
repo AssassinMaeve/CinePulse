@@ -18,7 +18,6 @@
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:text="@string/tv_show_title"
-        android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:maxLines="3"
         android:ellipsize="end"

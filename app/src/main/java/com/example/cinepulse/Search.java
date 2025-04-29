@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.MultiSearchAdapter;
 import com.example.cinepulse.models.MediaItem;
 import com.example.cinepulse.models.MultiSearchResponse;
@@ -26,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Search extends AppCompatActivity {
+public class Search extends BaseActivity {
 
     private EditText editTextSearch;
     private RecyclerView recyclerSearchResults;

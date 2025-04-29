@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.CastAdapter;
 import com.example.cinepulse.models.CastResponse;
 import com.example.cinepulse.models.MovieDetail;
@@ -31,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieDetails extends AppCompatActivity {
+public class MovieDetails extends BaseActivity {
 
     private TextView titleText, overviewText, releaseDateText;
     private ImageView posterImage;

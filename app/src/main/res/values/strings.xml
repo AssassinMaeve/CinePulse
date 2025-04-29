@@ -62,6 +62,7 @@
     <string name="movies">Movies</string>
     <string name="tv_shows">TV Shows</string>
     <string name="all_genres">All Genres</string>
+    <string name="confirm_password">Confirm Password</string>
 
 
 </resources>

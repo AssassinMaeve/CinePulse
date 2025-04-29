@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.WatchlistAdapter;
 import com.example.cinepulse.models.WatchlistItem;
 import com.example.cinepulse.utils.WatchlistManager;
@@ -18,7 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class WatchlistActivity extends AppCompatActivity
+public class WatchlistActivity extends BaseActivity
         implements WatchlistAdapter.OnWatchlistChangeListener {
 
     private RecyclerView recyclerView;

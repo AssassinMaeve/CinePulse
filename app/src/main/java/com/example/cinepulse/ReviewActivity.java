@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.ReviewAdapter;
 import com.example.cinepulse.models.Review;
 import com.example.cinepulse.models.ReviewResponse;
@@ -27,7 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReviewActivity extends AppCompatActivity {
+public class ReviewActivity extends BaseActivity {
 
     private RecyclerView recyclerView;
     private ReviewAdapter reviewAdapter;

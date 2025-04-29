@@ -8,6 +8,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.TrailerAdapter;
 import com.example.cinepulse.models.Movie;
 import com.example.cinepulse.models.MovieResponse;
@@ -22,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PopularTrailerActivity extends AppCompatActivity {
+public class PopularTrailerActivity extends BaseActivity {
 
     private static final String TAG = "PopularTrailerActivity";
     private RecyclerView recyclerTrailers;

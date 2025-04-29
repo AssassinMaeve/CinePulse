@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#121212"
     android:fillViewport="true">
 
     <LinearLayout
@@ -29,7 +28,6 @@
                 android:id="@+id/textTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -37,15 +35,13 @@
                 android:id="@+id/textReleaseDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#AAAAAA"
                 android:layout_marginTop="4dp" />
 
             <TextView
                 android:id="@+id/textOverview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:textColor="#FFFFFF" />
+                android:layout_marginTop="12dp" />
         </LinearLayout>
 
         <!-- Cast Section -->
@@ -53,7 +49,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/cast"
-            android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
             android:paddingStart="20dp"
@@ -76,7 +71,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/cast_information_is_not_available_for_this_title"
-            android:textColor="#AAAAAA"
             android:textSize="14sp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
@@ -89,7 +83,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/available_on"
-            android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
             android:paddingStart="20dp"

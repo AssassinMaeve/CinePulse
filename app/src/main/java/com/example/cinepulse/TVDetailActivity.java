@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.CastAdapter;
 import com.example.cinepulse.models.Cast;
 import com.example.cinepulse.models.CastResponse;
@@ -34,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TVDetailActivity extends AppCompatActivity {
+public class TVDetailActivity extends BaseActivity {
     private static final String TAG = "TVDetailActivity";
 
     // Views

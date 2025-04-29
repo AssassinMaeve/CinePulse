@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
     android:fillViewport="true">
 
     <LinearLayout
@@ -28,7 +27,6 @@
                 android:id="@+id/textTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -36,7 +34,6 @@
                 android:id="@+id/textReleaseDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#AAAAAA"
                 android:layout_marginTop="4dp" />
 
             <TextView
@@ -44,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:textColor="#FFFFFF" />
+                 />
         </LinearLayout>
 
         <!-- Cast Section -->
@@ -52,7 +49,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cast"
-            android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
             android:paddingStart="20dp"
@@ -75,7 +71,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cast information is not available for this title."
-            android:textColor="#AAAAAA"
             android:textSize="14sp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
@@ -89,7 +84,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Available On"
-            android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
             android:paddingStart="20dp"

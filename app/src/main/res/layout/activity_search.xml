@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
     android:orientation="vertical">
 
     <EditText
@@ -12,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="35dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/edittext_border"
@@ -21,7 +20,6 @@
         android:hint="@string/search_by_movie_title_or_actor"
         android:inputType="text"
         android:paddingHorizontal="16dp"
-        android:textColor="#FFFFFF"
         android:textColorHint="#AAAAAA" />
 
     <androidx.recyclerview.widget.RecyclerView

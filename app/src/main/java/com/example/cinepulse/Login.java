@@ -61,7 +61,8 @@ public class Login extends AppCompatActivity {
         // Enable login button only when both fields are filled
         TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -78,7 +79,8 @@ public class Login extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         };
 
         username.addTextChangedListener(textWatcher);
@@ -92,11 +94,15 @@ public class Login extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-            db.collection("users").document(user).get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            String email = documentSnapshot.getString("email");
+            db.collection("users")
+                    .whereEqualTo("username", user)  // Query by username field
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            // Retrieve the email from the first document in the query result
+                            String email = queryDocumentSnapshots.getDocuments().get(0).getString("email");
 
+                            assert email != null;
                             mAuth.signInWithEmailAndPassword(email, pass)
                                     .addOnCompleteListener(task -> {
                                         if (task.isSuccessful()) {
@@ -107,7 +113,6 @@ public class Login extends AppCompatActivity {
                                             Toast.makeText(Login.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
-
                         } else {
                             Toast.makeText(Login.this, "User not found", Toast.LENGTH_SHORT).show();
                         }
@@ -116,12 +121,9 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(Login.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
-
-        // Initialize GestureDetector
-        gestureDetector = new GestureDetector(this, new SwipeGestureDetector());
     }
 
-    @Override
+        @Override
     public boolean onTouchEvent(MotionEvent event) {
         return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
     }

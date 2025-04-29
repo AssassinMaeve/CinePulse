@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.MovieAdapter;
 import com.example.cinepulse.models.Movie;
 import com.example.cinepulse.models.MovieResponse;
@@ -28,7 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import com.example.cinepulse.adapters.TvShowAdapter;
 
-public class Home extends AppCompatActivity {
+public class Home extends BaseActivity {
     private RecyclerView recyclerTrendingMovies, recyclerTrendingTV;
     private MovieAdapter movieAdapter;
     private TvShowAdapter tvShowAdapter; // Add this line

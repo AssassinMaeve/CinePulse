@@ -6,13 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.GenreAdapter;
 import com.example.cinepulse.models.Genre;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class GenreListActivity extends AppCompatActivity {
+public class GenreListActivity extends BaseActivity {
 
     private RecyclerView recyclerAllGenres;
 

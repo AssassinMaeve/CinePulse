@@ -3,7 +3,6 @@
     android:id="@+id/genreMoviesLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -24,7 +23,6 @@
             android:fontFamily="@font/roboto_bold"
 
             android:text="@string/genre_movies"
-            android:textColor="#fff"
             android:textSize="20sp"
             android:textStyle="bold" />
 

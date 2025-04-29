@@ -11,11 +11,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
 
-public class Profile extends AppCompatActivity {
+public class Profile extends BaseActivity {
 
     private ImageView imageProfile;
     private TextView textUsername, textEmail;
@@ -37,8 +40,29 @@ public class Profile extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             textEmail.setText(user.getEmail());
-            textUsername.setText(user.getDisplayName() != null ? user.getDisplayName() : "User");
 
+            // Check if displayName is available, if not, fetch from Firestore
+            if (user.getDisplayName() != null) {
+                textUsername.setText(user.getDisplayName());
+            } else {
+                // Fetch username from Firestore if displayName is null
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("users").document(user.getUid()).get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                String username = documentSnapshot.getString("username");
+                                textUsername.setText(username != null ? username : "User");
+                            } else {
+                                textUsername.setText("User");
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            textUsername.setText("User");
+                            Log.e("Profile", "Error fetching username", e);
+                        });
+            }
+
+            // Load profile picture
             if (user.getPhotoUrl() != null) {
                 Glide.with(this).load(user.getPhotoUrl()).into(imageProfile);
             } else {
@@ -46,7 +70,7 @@ public class Profile extends AppCompatActivity {
             }
         }
 
-        buttonSetting.setOnClickListener(v ->{
+        buttonSetting.setOnClickListener(v -> {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         });

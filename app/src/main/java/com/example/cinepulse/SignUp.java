@@ -10,30 +10,30 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.firebase.firestore.FirebaseFirestore;
-import java.util.HashMap;
-import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUp extends AppCompatActivity {
 
-    EditText username, password, email;
+    EditText username, password, confirmPassword, email;
     Button signUpButton;
     TextView loginLink;
 
     FirebaseAuth mAuth;
     FirebaseFirestore db;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        // Enable immersive fullscreen
+        // Immersive fullscreen
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -48,25 +48,28 @@ public class SignUp extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
 
-        // Initialize Firebase
+        // Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
 
         // Bind Views
         username = findViewById(R.id.usernameSignup);
         password = findViewById(R.id.passwordSignup);
+        confirmPassword = findViewById(R.id.confirmPasswordSignup); // <-- New field
         email = findViewById(R.id.emailAddress);
         signUpButton = findViewById(R.id.signUp);
-        loginLink = findViewById(R.id.alreadymember); // make sure this ID exists in your XML
+        loginLink = findViewById(R.id.alreadymember);
 
-        // Enable signup button only when all fields are filled
+        // Enable button only when all fields filled
         TextWatcher textWatcher = new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 boolean allFilled = !username.getText().toString().trim().isEmpty()
                         && !password.getText().toString().trim().isEmpty()
+                        && !confirmPassword.getText().toString().trim().isEmpty()
                         && !email.getText().toString().trim().isEmpty();
 
                 signUpButton.setEnabled(allFilled);
@@ -74,48 +77,80 @@ public class SignUp extends AppCompatActivity {
                         allFilled ? R.color.primary_button : R.color.grey
                 ));
             }
-            @Override public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {}
         };
 
         username.addTextChangedListener(textWatcher);
         password.addTextChangedListener(textWatcher);
+        confirmPassword.addTextChangedListener(textWatcher);
         email.addTextChangedListener(textWatcher);
 
-        // Redirect to Login Activity
         loginLink.setOnClickListener(v -> {
-            Intent intent = new Intent(SignUp.this, Login.class);
-            startActivity(intent);
+            startActivity(new Intent(SignUp.this, Login.class));
         });
 
-        // Sign up logic
         signUpButton.setOnClickListener(v -> {
             String user = username.getText().toString().trim();
             String userEmail = email.getText().toString().trim();
             String userPassword = password.getText().toString().trim();
+            String userConfirmPassword = confirmPassword.getText().toString().trim();
 
-            mAuth.createUserWithEmailAndPassword(userEmail, userPassword)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Store username → email in Firestore
-                            Map<String, Object> userMap = new HashMap<>();
-                            userMap.put("username", user);
-                            userMap.put("email", userEmail);
+            if (!userPassword.equals(userConfirmPassword)) {
+                Toast.makeText(SignUp.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                            db.collection("users")
-                                    .document(user) // use username as document ID
-                                    .set(userMap)
-                                    .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(SignUp.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(SignUp.this, Login.class));
-                                        finish();
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(SignUp.this, "Failed to save user info: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    });
+            if (!isPasswordStrong(userPassword)) {
+                Toast.makeText(SignUp.this, "Password is too weak. It must contain at least one lowercase, one uppercase, one number, one special character, and be at least 8 characters long.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            db.collection("users")
+                    .document(user)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            Toast.makeText(SignUp.this, "Username already taken", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(SignUp.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            mAuth.createUserWithEmailAndPassword(userEmail, userPassword)
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            String uid = mAuth.getCurrentUser().getUid();
+                                            Map<String, Object> userMap = new HashMap<>();
+                                            userMap.put("username", user);
+                                            userMap.put("email", userEmail);
+                                            userMap.put("uid", uid);
+
+                                            db.collection("users").document(user)
+                                                    .set(userMap)
+                                                    .addOnSuccessListener(aVoid -> {
+                                                        Toast.makeText(SignUp.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                                                        startActivity(new Intent(SignUp.this, Login.class));
+                                                        finish();
+                                                    })
+                                                    .addOnFailureListener(e -> {
+                                                        Toast.makeText(SignUp.this, "Failed to save user info: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    });
+                                        } else {
+                                            Toast.makeText(SignUp.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                         }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(SignUp.this, "Failed to check username: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
+    }
+
+    private boolean isPasswordStrong(String password) {
+        if (password.length() < 8) return false;
+        if (!password.matches(".*[a-z].*")) return false;
+        if (!password.matches(".*[A-Z].*")) return false;
+        if (!password.matches(".*[0-9].*")) return false;
+        if (!password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) return false;
+        return true;
     }
 }
