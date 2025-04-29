@@ -1,11 +1,13 @@
 package com.example.cinepulse;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,8 +20,10 @@ import com.example.cinepulse.models.TrailerResponse;
 import com.example.cinepulse.network.RetroFitClient;
 import com.example.cinepulse.network.TMDbApiService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,6 +34,7 @@ public class PopularTrailerActivity extends BaseActivity {
     private RecyclerView recyclerTrailers;
     private TrailerAdapter trailerAdapter;
     private List<Trailer> popularTrailers = new ArrayList<>();
+    private boolean hasShownDialog = false; // Ensures dialog is shown once per launch
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +42,8 @@ public class PopularTrailerActivity extends BaseActivity {
         setContentView(R.layout.activity_populartraileractivity);
 
         initializeViews();
-        setupBottomNavigation(); // Initialize bottom navigation
-        fetchPopularTrailers();
+        setupBottomNavigation();
+        showSpoilerWarningDialog(); // Show dialog before fetching trailers
     }
 
     private void initializeViews() {
@@ -48,9 +53,26 @@ public class PopularTrailerActivity extends BaseActivity {
         recyclerTrailers.setAdapter(trailerAdapter);
     }
 
+    private void showSpoilerWarningDialog() {
+        if (!hasShownDialog) {
+            hasShownDialog = true;
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Spoiler Warning")
+                    .setMessage("Trailers may contain spoilers. Do you want to continue?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes, show me", (dialog, which) -> fetchPopularTrailers())
+                    .setNegativeButton("Cancel", (dialog, which) -> {
+                        dialog.dismiss();
+                        finish(); // Close the activity if the user cancels
+                    })
+                    .show();
+        }
+    }
+
     private void setupBottomNavigation() {
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
-        bottomNav.setSelectedItemId(R.id.nav_populartrailer); // Highlight current tab
+        bottomNav.setSelectedItemId(R.id.nav_populartrailer);
 
         bottomNav.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -68,7 +90,6 @@ public class PopularTrailerActivity extends BaseActivity {
                 finish();
                 return true;
             } else if (itemId == R.id.nav_populartrailer) {
-                // Already on this screen
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 startActivity(new Intent(this, Profile.class));
@@ -89,7 +110,6 @@ public class PopularTrailerActivity extends BaseActivity {
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
             } else {
-                // Fallback to browser if YouTube app not installed
                 intent.setPackage(null);
                 startActivity(intent);
             }
