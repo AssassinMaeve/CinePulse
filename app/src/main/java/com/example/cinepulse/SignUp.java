@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -63,7 +64,8 @@ public class SignUp extends AppCompatActivity {
         // Enable button only when all fields filled
         TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -79,7 +81,8 @@ public class SignUp extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         };
 
         username.addTextChangedListener(textWatcher);
@@ -117,7 +120,28 @@ public class SignUp extends AppCompatActivity {
                             mAuth.createUserWithEmailAndPassword(userEmail, userPassword)
                                     .addOnCompleteListener(task -> {
                                         if (task.isSuccessful()) {
-                                            String uid = mAuth.getCurrentUser().getUid();
+                                            // User is created successfully
+                                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                            if (firebaseUser != null) {
+                                                // Send email verification
+                                                firebaseUser.sendEmailVerification()
+                                                        .addOnSuccessListener(aVoid -> {
+                                                            // Email verification sent
+                                                            Toast.makeText(SignUp.this, "Verification email sent. Please check your inbox.", Toast.LENGTH_SHORT).show();
+                                                            // Optionally log out the user after sending the verification email
+                                                            mAuth.signOut();
+                                                            // Redirect to login page after verification email is sent
+                                                            startActivity(new Intent(SignUp.this, Login.class));
+                                                            finish(); // Close SignUp activity
+                                                        })
+                                                        .addOnFailureListener(e -> {
+                                                            // Failed to send verification email
+                                                            Toast.makeText(SignUp.this, "Failed to send verification email: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        });
+                                            }
+
+                                            // Save user info to Firestore
+                                            String uid = firebaseUser.getUid();
                                             Map<String, Object> userMap = new HashMap<>();
                                             userMap.put("username", user);
                                             userMap.put("email", userEmail);
@@ -126,9 +150,7 @@ public class SignUp extends AppCompatActivity {
                                             db.collection("users").document(user)
                                                     .set(userMap)
                                                     .addOnSuccessListener(aVoid -> {
-                                                        Toast.makeText(SignUp.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                                                        startActivity(new Intent(SignUp.this, Login.class));
-                                                        finish();
+                                                        // Save user info successful
                                                     })
                                                     .addOnFailureListener(e -> {
                                                         Toast.makeText(SignUp.this, "Failed to save user info: " + e.getMessage(), Toast.LENGTH_SHORT).show();

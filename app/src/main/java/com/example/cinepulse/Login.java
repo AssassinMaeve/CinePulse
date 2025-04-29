@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Login extends AppCompatActivity {
@@ -106,9 +107,16 @@ public class Login extends AppCompatActivity {
                             mAuth.signInWithEmailAndPassword(email, pass)
                                     .addOnCompleteListener(task -> {
                                         if (task.isSuccessful()) {
-                                            Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(Login.this, Home.class));
-                                            finish();
+                                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                            if (firebaseUser != null && firebaseUser.isEmailVerified()) {
+                                                // Proceed to the Home activity if email is verified
+                                                Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(Login.this, Home.class));
+                                                finish();
+                                            } else {
+                                                // If the email is not verified
+                                                Toast.makeText(Login.this, "Please verify your email address before logging in.", Toast.LENGTH_SHORT).show();
+                                            }
                                         } else {
                                             Toast.makeText(Login.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                         }
@@ -123,7 +131,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
-        @Override
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
     }

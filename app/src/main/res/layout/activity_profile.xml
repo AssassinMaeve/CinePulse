@@ -83,6 +83,5 @@
         android:paddingTop="5dp"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
-        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
 </RelativeLayout>
