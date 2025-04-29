@@ -41,17 +41,19 @@ public class Profile extends BaseActivity {
         if (user != null) {
             textEmail.setText(user.getEmail());
 
-            // Check if displayName is available, if not, fetch from Firestore
+            // Check if displayName is available, if not, fetch username (document ID) from Firestore
             if (user.getDisplayName() != null) {
                 textUsername.setText(user.getDisplayName());
             } else {
-                // Fetch username from Firestore if displayName is null
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("users").document(user.getUid()).get()
-                        .addOnSuccessListener(documentSnapshot -> {
-                            if (documentSnapshot.exists()) {
-                                String username = documentSnapshot.getString("username");
-                                textUsername.setText(username != null ? username : "User");
+                db.collection("users")
+                        .whereEqualTo("uid", user.getUid())
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
+                                String username = document.getId(); // Document ID is username
+                                textUsername.setText(username);
                             } else {
                                 textUsername.setText("User");
                             }
