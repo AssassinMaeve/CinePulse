@@ -16,75 +16,81 @@ import java.util.List;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
 
-    private Context context;
+    private final Context context;
     private List<Review> reviewList;
 
+    // Constructor to initialize context and review list
     public ReviewAdapter(Context context, List<Review> reviewList) {
         this.context = context;
         this.reviewList = reviewList;
     }
 
+    // Create a new ViewHolder for each review item
     @Override
     public ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // Inflate the item_review layout for each review
+        // Inflate the item_review layout to create a new view
         View view = LayoutInflater.from(context).inflate(R.layout.item_review, parent, false);
         return new ReviewViewHolder(view);
     }
 
+    // Bind data to the ViewHolder
     @Override
     public void onBindViewHolder(ReviewViewHolder holder, int position) {
-        // Check if the list is empty and display the "No reviews available" text
+        // Check if the review list is empty
         if (reviewList.isEmpty()) {
+            // Display "No reviews available" message if the list is empty
             holder.authorTextView.setVisibility(View.GONE);
             holder.contentTextView.setText("No reviews available");
             holder.contentTextView.setVisibility(View.VISIBLE);
         } else {
-            // Get the review object at the specified position
+            // Get the review at the current position
             Review review = reviewList.get(position);
+
+            // Show the author and content if the review list is not empty
             holder.authorTextView.setVisibility(View.VISIBLE);
             holder.contentTextView.setVisibility(View.VISIBLE);
 
+            // Display the review author and content
             holder.authorTextView.setText("By: " + review.getAuthor());
             holder.contentTextView.setText(review.getContent());
 
-            // Limit content length to avoid overflow (optional)
+            // Optional: Limit content length to avoid overflow
             if (review.getContent().length() > 500) {
                 holder.contentTextView.setText(review.getContent().substring(0, 500) + "...");
             }
         }
     }
 
+    // Return the total number of reviews or 1 if the list is empty (to show "No reviews available")
     @Override
     public int getItemCount() {
-        // Return the count based on the review list size
-        return reviewList.isEmpty() ? 1 : reviewList.size(); // Ensure at least 1 item is displayed for "No reviews available"
+        return reviewList.isEmpty() ? 1 : reviewList.size();
     }
 
-    // ViewHolder class to hold the views for each review
+    // ViewHolder class for holding references to the views in each review item
     public static class ReviewViewHolder extends RecyclerView.ViewHolder {
-        TextView authorTextView;
-        TextView contentTextView;
-        LinearLayout reviewContainer;
+        TextView authorTextView;  // For displaying the review author
+        TextView contentTextView; // For displaying the review content
+        LinearLayout reviewContainer; // Container for review items
 
+        // Constructor to initialize the views
         public ReviewViewHolder(View itemView) {
             super(itemView);
-            // Initialize the TextViews for author and content
             authorTextView = itemView.findViewById(R.id.author_text_view);
             contentTextView = itemView.findViewById(R.id.content_text_view);
             reviewContainer = itemView.findViewById(R.id.review_container);
         }
     }
 
-    // Method to update the review list and refresh the adapter
+    // Method to update the review list and notify the adapter
     public void setReviews(List<Review> reviews) {
-        this.reviewList = reviews; // Update the list
-        notifyDataSetChanged();
+        this.reviewList = reviews; // Update the review list
+        notifyDataSetChanged();    // Refresh the adapter
     }
 
-    // Optional: Add a method to handle when no reviews are available
+    // Method to handle the scenario when no reviews are available
     public void setNoReviewsAvailable() {
-        // Clear the reviews and notify the adapter that there's no data to show
-        this.reviewList.clear();
-        notifyDataSetChanged();
+        this.reviewList.clear();  // Clear the review list
+        notifyDataSetChanged();   // Refresh the adapter
     }
 }

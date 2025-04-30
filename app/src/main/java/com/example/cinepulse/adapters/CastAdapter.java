@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.cinepulse.R;
 import com.example.cinepulse.models.Cast;
 
@@ -18,8 +19,8 @@ import java.util.List;
 
 public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder> {
 
-    private Context context;
-    private List<Cast> castList;
+    private final Context context;
+    private final List<Cast> castList;
 
     public CastAdapter(Context context, List<Cast> castList) {
         this.context = context;
@@ -29,6 +30,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder
     @NonNull
     @Override
     public CastViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Use a constant for layout inflation
         View view = LayoutInflater.from(context).inflate(R.layout.item_cast, parent, false);
         return new CastViewHolder(view);
     }
@@ -39,11 +41,23 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder
         holder.nameText.setText(cast.getName());
         holder.characterText.setText(cast.getCharacter());
 
-        Glide.with(context)
-                .load("https://image.tmdb.org/t/p/w185" + cast.getProfilePath())
-                .circleCrop()
-                .placeholder(R.drawable.profile_user) // your drawable placeholder
-                .into(holder.imageView);
+        String profilePath = cast.getProfilePath();
+
+        // Load the image using Glide
+        if (profilePath != null) {
+            Glide.with(context)
+                    .load("https://image.tmdb.org/t/p/w185" + profilePath)
+                    .circleCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache all versions of the image
+                    .placeholder(R.drawable.profile_user) // Placeholder
+                    .into(holder.imageView);
+        } else {
+            Glide.with(context)
+                    .load(R.drawable.profile_user) // Default profile image
+                    .circleCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.imageView);
+        }
     }
 
     @Override
@@ -52,8 +66,9 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder
     }
 
     public static class CastViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView nameText, characterText;
+        final ImageView imageView;
+        final TextView nameText;
+        final TextView characterText;
 
         public CastViewHolder(@NonNull View itemView) {
             super(itemView);

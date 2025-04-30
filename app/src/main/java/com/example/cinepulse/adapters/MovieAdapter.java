@@ -25,8 +25,8 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int VIEW_TYPE_TV_SHOW = 2;
 
     private Context context;
-    private List<Object> itemList; // Unified list to hold both Movies and TV Shows
-    private String type; // "movie" or "tv"
+    private List<Object> itemList;
+    private String type;
 
     public MovieAdapter(Context context, List<Object> items, String type) {
         this.context = context;
@@ -37,11 +37,12 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view;
         if (viewType == VIEW_TYPE_MOVIE) {
-            View view = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
             return new MovieViewHolder(view);
         } else {
-            View view = LayoutInflater.from(context).inflate(R.layout.item_tv_show, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.item_tv_show, parent, false);
             return new TvShowViewHolder(view);
         }
     }
@@ -50,12 +51,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == VIEW_TYPE_MOVIE) {
             Movie movie = (Movie) itemList.get(position);
-            MovieViewHolder movieHolder = (MovieViewHolder) holder;
-            movieHolder.bind(movie);
+            ((MovieViewHolder) holder).bindData(movie);
         } else {
             TvShow tvShow = (TvShow) itemList.get(position);
-            TvShowViewHolder tvShowHolder = (TvShowViewHolder) holder;
-            tvShowHolder.bind(tvShow);
+            ((TvShowViewHolder) holder).bindData(tvShow);
         }
     }
 
@@ -66,13 +65,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        // Checking the type of the item at the position
-        if (itemList.get(position) instanceof Movie) {
-            return VIEW_TYPE_MOVIE;
-        } else if (itemList.get(position) instanceof TvShow) {
-            return VIEW_TYPE_TV_SHOW;
-        }
-        return super.getItemViewType(position);
+        return itemList.get(position) instanceof Movie ? VIEW_TYPE_MOVIE : VIEW_TYPE_TV_SHOW;
     }
 
     // Movie ViewHolder
@@ -86,16 +79,14 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             title = itemView.findViewById(R.id.textTitle);
         }
 
-        public void bind(Movie movie) {
-            // Setting the title and poster for the movie item
-            String displayTitle = movie.getTitle() != null ? movie.getTitle() : "";
-            title.setText(displayTitle);
+        public void bindData(Movie movie) {
+            title.setText(movie.getTitle() != null ? movie.getTitle() : "");
 
-            String posterUrl = "https://image.tmdb.org/t/p/w500" + movie.getPosterPath();
-            Glide.with(context).load(posterUrl).into(poster);
+            Glide.with(context)
+                    .load("https://image.tmdb.org/t/p/w500" + movie.getPosterPath())
+                    .into(poster);
 
             itemView.setOnClickListener(v -> {
-                // Launching MovieDetails activity with movie data
                 Intent intent = new Intent(context, MovieDetails.class);
                 intent.putExtra("movie_id", movie.getId());
                 intent.putExtra("type", "movie");
@@ -115,19 +106,17 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             title = itemView.findViewById(R.id.textTitle);
         }
 
-        public void bind(TvShow tvShow) {
-            // Setting the title and poster for the TV show item
-            String displayTitle = tvShow.getName() != null ? tvShow.getName() : "";
-            title.setText(displayTitle);
+        public void bindData(TvShow tvShow) {
+            title.setText(tvShow.getName() != null ? tvShow.getName() : "");
 
-            String posterUrl = "https://image.tmdb.org/t/p/w500" + tvShow.getPosterPath();
-            Glide.with(context).load(posterUrl).into(poster);
+            Glide.with(context)
+                    .load("https://image.tmdb.org/t/p/w500" + tvShow.getPosterPath())
+                    .into(poster);
 
             itemView.setOnClickListener(v -> {
-                // Launching MovieDetails activity with TV show data
                 Intent intent = new Intent(context, MovieDetails.class);
-                intent.putExtra("tv_show_id", tvShow.getId()); // Pass TV Show ID
-                intent.putExtra("type", "tv"); // Specify TV Show type
+                intent.putExtra("tv_show_id", tvShow.getId());
+                intent.putExtra("type", "tv");
                 context.startActivity(intent);
             });
         }
@@ -137,6 +126,6 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void updateData(List<Object> newItems) {
         itemList.clear();
         itemList.addAll(newItems);
-        notifyDataSetChanged();
+        notifyDataSetChanged();  // Can consider DiffUtil for more efficient updates
     }
 }

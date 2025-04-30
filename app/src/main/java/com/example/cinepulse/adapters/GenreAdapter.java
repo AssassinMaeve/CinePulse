@@ -1,5 +1,3 @@
-// GenreAdapter.java
-
 package com.example.cinepulse.adapters;
 
 import android.content.Context;
@@ -20,8 +18,8 @@ import java.util.List;
 
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
 
-    private Context context;
-    private List<Genre> genreList;
+    private final Context context;
+    private final List<Genre> genreList;
 
     public GenreAdapter(Context context, List<Genre> genreList) {
         this.context = context;
@@ -31,15 +29,21 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
     @NonNull
     @Override
     public GenreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate layout for the individual genre item
         View view = LayoutInflater.from(context).inflate(R.layout.item_genre, parent, false);
         return new GenreViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GenreViewHolder holder, int position) {
+        // Get the current genre
         Genre genre = genreList.get(position);
-        holder.button.setText(genre.getName());
-        holder.button.setOnClickListener(v -> {
+
+        // Set the genre name to the button
+        holder.genreButton.setText(genre.getName());
+
+        // Set click listener to navigate to GenreMoviesActivity with the genre data
+        holder.genreButton.setOnClickListener(v -> {
             Intent intent = new Intent(context, GenreMoviesActivity.class);
             intent.putExtra("genre_id", genre.getId());
             intent.putExtra("genre_name", genre.getName());
@@ -53,11 +57,12 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
     }
 
     public static class GenreViewHolder extends RecyclerView.ViewHolder {
-        Button button;
+        final Button genreButton;
 
         public GenreViewHolder(@NonNull View itemView) {
             super(itemView);
-            button = itemView.findViewById(R.id.textGenreName);  // Make sure this ID is a Button in XML
+            // Initialize the button in the ViewHolder
+            genreButton = itemView.findViewById(R.id.textGenreName);  // Ensure this is a Button in XML
         }
     }
 }
