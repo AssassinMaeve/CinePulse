@@ -63,6 +63,13 @@
     <string name="tv_shows">TV Shows</string>
     <string name="all_genres">All Genres</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="swipeSplash">SWIPE →</string>
+    <string name="castMovieDetails">Cast</string>
+    <string name="available_onMovieDetails">Available On</string>
+    <string name="cast_information_is_not_available_for_this_titleMovieDetails">Cast information is not available for this title.</string>
+    <string name="add_to_watchlistMovieDetails">Add to Watchlist</string>
+    <string name="posterimages">PosterImages</string>
 
 
 </resources>
