@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -63,14 +65,14 @@ public class Cast {
      *
      * @return A string representation of the Cast object.
      */
+    @NonNull
     @Override
     public String toString() {
         // StringBuilder is more efficient than string concatenation in a loop or frequent calls
-        return new StringBuilder("Cast{")
-                .append("name='").append(name).append('\'')
-                .append(", profilePath='").append(profilePath).append('\'')
-                .append(", character='").append(character).append('\'')
-                .append('}')
-                .toString();
+        return "Cast{" +
+                "name='" + name + '\'' +
+                ", profilePath='" + profilePath + '\'' +
+                ", character='" + character + '\'' +
+                '}';
     }
 }

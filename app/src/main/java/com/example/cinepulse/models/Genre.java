@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 /**
  * Represents a genre in the system.
  * The Genre class is immutable to ensure data consistency.
@@ -51,6 +53,7 @@ public final class Genre {
      *
      * @return A string representation of the genre.
      */
+    @NonNull
     @Override
     public String toString() {
         return "Genre{id=" + id + ", name='" + name + "'}";

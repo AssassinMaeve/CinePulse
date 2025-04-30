@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -122,6 +124,7 @@ public final class MediaItem {
      *
      * @return A string representation of the media item.
      */
+    @NonNull
     @Override
     public String toString() {
         return "MediaItem{" +

@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -113,6 +115,7 @@ public final class MovieDetail {
      *
      * @return A string representation of the MovieDetail object.
      */
+    @NonNull
     @Override
     public String toString() {
         return "MovieDetail{" +
