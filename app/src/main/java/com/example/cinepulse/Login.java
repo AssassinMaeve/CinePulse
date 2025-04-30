@@ -1,8 +1,10 @@
 package com.example.cinepulse;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -10,10 +12,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -129,6 +134,83 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(Login.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
+
+        TextView forgotPassword = findViewById(R.id.forgotPassword);
+
+        forgotPassword.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+            builder.setTitle("Reset Password");
+
+            // Create a vertical layout container
+            LinearLayout container = new LinearLayout(Login.this);
+            container.setOrientation(LinearLayout.VERTICAL);
+            container.setPadding(50, 40, 50, 10); // Equal padding to match the dialog title
+
+            final EditText input = new EditText(Login.this);
+            input.setHint("Enter your registered email");
+            input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            input.setBackground(ContextCompat.getDrawable(Login.this, R.drawable.edittext_border));
+            input.setTextColor(Color.WHITE);
+            input.setHintTextColor(Color.LTGRAY);
+
+            // Set layout parameters with top margin for spacing
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(0, 20, 0, 10); // Top and bottom margin for better spacing
+            input.setLayoutParams(params);
+
+            container.addView(input);
+            builder.setView(container);
+
+            builder.setPositiveButton("Send", null); // Override later
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+            AlertDialog dialog = builder.create();
+
+            dialog.setOnShowListener(dlg -> {
+                Button sendButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                sendButton.setOnClickListener(view -> {
+                    String email = input.getText().toString().trim();
+
+                    if (email.isEmpty()) {
+                        input.setError("Email is required");
+                        return;
+                    }
+
+                    FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    boolean emailExists = task.getResult().getSignInMethods() != null &&
+                                            !task.getResult().getSignInMethods().isEmpty();
+
+                                    if (emailExists) {
+                                        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                                                .addOnCompleteListener(sendTask -> {
+                                                    if (sendTask.isSuccessful()) {
+                                                        Toast.makeText(Login.this,
+                                                                "Reset link sent to your email.", Toast.LENGTH_LONG).show();
+                                                        dialog.dismiss();
+                                                    } else {
+                                                        Toast.makeText(Login.this,
+                                                                "Failed to send reset email.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                    } else {
+                                        input.setError("No account found with this email");
+                                    }
+                                } else {
+                                    Toast.makeText(Login.this,
+                                            "Error checking email. Try again.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                });
+            });
+
+            dialog.show();
+        });
+
     }
 
     @Override
@@ -156,4 +238,6 @@ public class Login extends AppCompatActivity {
             return false;
         }
     }
+
+
 }

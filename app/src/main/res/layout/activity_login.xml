@@ -25,15 +25,17 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="45dp"
         android:gravity="bottom"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
 
-    <TextView
+        <TextView
             android:id="@+id/welcomeBack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,10 +76,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:backgroundTint="#232322"
-            android:text="@string/login"
-            android:textColor="#FFFFFF"
+            android:enabled="false"
             android:fontFamily="@font/roboto_bold"
-            android:enabled="false" />
+            android:text="@string/login"
+            android:textColor="#FFFFFF" />
 
         <TextView
             android:id="@+id/signup"
@@ -92,6 +94,22 @@
             android:textColor="#DDDDDD"
             android:textSize="15sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/forgotPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:text="Forgot Password?"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:gravity="center" />
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
