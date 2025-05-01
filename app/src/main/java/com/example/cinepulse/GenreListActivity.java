@@ -3,20 +3,24 @@ package com.example.cinepulse;
 import android.os.Bundle;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.GenreAdapter;
 import com.example.cinepulse.models.Genre;
+
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity to display a list of genres in a grid layout.
+ */
 public class GenreListActivity extends BaseActivity {
 
-    private static final int SPAN_COUNT = 2;
+    private static final int SPAN_COUNT = 2; // Grid columns
     private RecyclerView recyclerAllGenres;
-    private GenreAdapter genreAdapter;
 
-    // Static list of genres to avoid recreation
-    private static final List<Genre> GENRES = new ArrayList<Genre>() {{
+    // Static genre list for performance (avoids recreation on config changes)
+    private static final List<Genre> GENRES = new ArrayList<>() {{
         add(new Genre(28, "Action"));
         add(new Genre(35, "Comedy"));
         add(new Genre(27, "Horror"));
@@ -45,15 +49,15 @@ public class GenreListActivity extends BaseActivity {
     }
 
     private void setupRecyclerView() {
-        // Reuse the same layout manager
+        // Set up grid layout with 2 columns
         GridLayoutManager layoutManager = new GridLayoutManager(this, SPAN_COUNT);
         recyclerAllGenres.setLayoutManager(layoutManager);
 
-        // Initialize adapter once and reuse
-        genreAdapter = new GenreAdapter(this, GENRES);
+        // Use pre-initialized static genre list
+        GenreAdapter genreAdapter = new GenreAdapter(this, GENRES);
         recyclerAllGenres.setAdapter(genreAdapter);
 
-        // Optional: Set fixed size if all items have consistent dimensions
+        // Optimization if item sizes are consistent
         recyclerAllGenres.setHasFixedSize(true);
     }
 }

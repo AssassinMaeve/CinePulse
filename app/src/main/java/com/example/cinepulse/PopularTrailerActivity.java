@@ -110,7 +110,7 @@ public class PopularTrailerActivity extends BaseActivity {
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
             } else {
-                intent.setPackage(null);
+                intent.setPackage(null); // Use the default browser if YouTube is not installed
                 startActivity(intent);
             }
         } catch (Exception e) {
@@ -130,7 +130,9 @@ public class PopularTrailerActivity extends BaseActivity {
                         if (response.isSuccessful() && response.body() != null) {
                             List<Movie> movies = response.body().getResults();
                             Log.d(TAG, "Got " + movies.size() + " popular movies");
+
                             if (movies != null && !movies.isEmpty()) {
+                                // Fetch trailers for the top 5 movies
                                 fetchTrailersForMovies(movies.subList(0, Math.min(5, movies.size())));
                             } else {
                                 showEmptyState();

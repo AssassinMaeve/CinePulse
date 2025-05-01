@@ -83,10 +83,20 @@
 
         <!-- Streaming Platforms -->
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/available_on"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="4dp" />
+
+        <TextView
             android:id="@+id/textNoStreamingProviders"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="No Streaming Providers Available"
+            android:text="@string/no_streaming_providers_availableMovieDetails"
             android:textSize="14sp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"

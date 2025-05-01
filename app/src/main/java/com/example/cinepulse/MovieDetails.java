@@ -48,7 +48,7 @@ public class MovieDetails extends BaseActivity {
     private RecyclerView recyclerCast, recyclerStreamingProviders;
     private TextView textNoCast, textNoStreamingProviders;
     private Button btnAddToWatchlist;
-    private static final String API_KEY = "580b03ff6e8e1d2881e7ecf2dccaf4c3";
+    private static final String API_KEY = BuildConfig.TMDB_API_KEY; // Fetch API key securely from build config
 
     private String trailerKey = "";
     private MovieDetail currentMovieDetails;
@@ -66,26 +66,28 @@ public class MovieDetails extends BaseActivity {
             return;
         }
 
-        // Init UI
+        // Initialize UI components
         titleText = findViewById(R.id.textTitle);
         overviewText = findViewById(R.id.textOverview);
         releaseDateText = findViewById(R.id.textReleaseDate);
         posterImage = findViewById(R.id.imagePoster);
         youTubePlayerView = findViewById(R.id.youtubePlayerView);
         recyclerCast = findViewById(R.id.recyclerCast);
-        recyclerStreamingProviders = findViewById(R.id.recyclerStreamingProviders);  // Recycler view for streaming providers
+        recyclerStreamingProviders = findViewById(R.id.recyclerStreamingProviders);
         textNoCast = findViewById(R.id.textNoCast);
-        textNoStreamingProviders = findViewById(R.id.textNoStreamingProviders);  // TextView for no streaming providers
+        textNoStreamingProviders = findViewById(R.id.textNoStreamingProviders);
         btnAddToWatchlist = findViewById(R.id.btnAddToWatchlist);
         Button btnViewReviews = findViewById(R.id.btnViewReviews);
 
+        // Set up layouts
         recyclerCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerStreamingProviders.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));  // Setup layout for streaming providers
+        recyclerStreamingProviders.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+        // Review button click listener
         btnViewReviews.setOnClickListener(v -> {
             if (currentMovieDetails != null) {
                 Intent intent = new Intent(MovieDetails.this, ReviewActivity.class);
-                intent.putExtra("MOVIE_ID", currentMovieDetails.getId()); // Use the same key as ReviewActivity expects
+                intent.putExtra("MOVIE_ID", currentMovieDetails.getId());
                 intent.putExtra("TYPE", "movie");
                 startActivity(intent);
             } else {
@@ -93,12 +95,11 @@ public class MovieDetails extends BaseActivity {
             }
         });
 
-        // Fetch everything for the movie
+        // Fetch movie details and related data
         fetchMovieDetails(movieId);
         fetchTrailer(movieId);
         fetchCast(movieId);
-        fetchStreamingProviders(movieId);  // Fetch streaming providers
-
+        fetchStreamingProviders(movieId);
     }
 
     private void fetchMovieDetails(int movieId) {
@@ -117,6 +118,7 @@ public class MovieDetails extends BaseActivity {
                             .load("https://image.tmdb.org/t/p/w500/" + details.getPosterPath())
                             .into(posterImage);
 
+                    // Add to watchlist
                     btnAddToWatchlist.setOnClickListener(v -> {
                         WatchlistItem item = new WatchlistItem(
                                 details.getId(),
@@ -126,6 +128,8 @@ public class MovieDetails extends BaseActivity {
                         );
                         handleWatchlist(item);
                     });
+                } else {
+                    Log.e("MOVIE_DETAILS", "Failed to load movie details.");
                 }
             }
 
@@ -149,6 +153,8 @@ public class MovieDetails extends BaseActivity {
                             break;
                         }
                     }
+                } else {
+                    Log.e("TRAILER", "Failed to fetch trailer.");
                 }
             }
 
@@ -182,17 +188,15 @@ public class MovieDetails extends BaseActivity {
 
     private void fetchStreamingProviders(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getMovieStreamingProviders(movieId, API_KEY).enqueue(new Callback<WatchProviderResponse>() {
+        apiService.getMovieWatchProviders(movieId, API_KEY).enqueue(new Callback<WatchProviderResponse>() {
             @Override
             public void onResponse(Call<WatchProviderResponse> call, Response<WatchProviderResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     WatchProviderResponse watchProviderResponse = response.body();
                     Map<String, CountryProvider> countryProviders = watchProviderResponse.getResults();
 
-                    Log.d("StreamingProviders", "Received country providers: " + countryProviders);
-
                     if (countryProviders != null && !countryProviders.isEmpty()) {
-                        CountryProvider countryProvider = countryProviders.get("IN"); // Use "IN" or change as needed
+                        CountryProvider countryProvider = countryProviders.get("IN"); // You can adjust country code as needed
                         if (countryProvider != null && countryProvider.getFlatrate() != null && !countryProvider.getFlatrate().isEmpty()) {
                             streamingProviders = countryProvider.getFlatrate();
 
@@ -217,15 +221,14 @@ public class MovieDetails extends BaseActivity {
         });
     }
 
-
-
-
     private void playTrailer() {
         getLifecycle().addObserver(youTubePlayerView);
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                youTubePlayer.loadVideo(trailerKey, 0);
+                if (!trailerKey.isEmpty()) {
+                    youTubePlayer.loadVideo(trailerKey, 0);
+                }
             }
         });
     }

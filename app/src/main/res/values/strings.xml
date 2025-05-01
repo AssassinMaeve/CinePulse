@@ -71,6 +71,7 @@
     <string name="add_to_watchlistMovieDetails">Add to Watchlist</string>
     <string name="posterimages">PosterImages</string>
     <string name="no_streaming_providers_available">No streaming providers available</string>
+    <string name="no_streaming_providers_availableMovieDetails">No Streaming Providers Available</string>
 
 
 </resources>

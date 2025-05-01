@@ -24,23 +24,30 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // Fullscreen immersive UI
-        enterImmersiveMode();
-
         // Load views
         ImageView imageView = findViewById(R.id.cinepulse);
         TextView textView = findViewById(R.id.swipe);
 
-        // Load and apply fade-in animation
-        Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-        imageView.startAnimation(fadeInAnimation);
-        textView.startAnimation(fadeInAnimation);
+        // Apply fade-in animation to UI elements
+        applyFadeInAnimation(imageView, textView);
 
-        // Gesture detector for swipe
+        // Initialize Gesture Detector
         gestureDetector = new GestureDetector(this, new SwipeGestureDetector());
+
+        // Apply immersive mode once during activity creation
+        enterImmersiveMode();
+    }
+
+    private void applyFadeInAnimation(View... views) {
+        // Load fade-in animation
+        Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        for (View view : views) {
+            view.startAnimation(fadeInAnimation);
+        }
     }
 
     private void enterImmersiveMode() {
+        // Set the UI to immersive mode for fullscreen experience
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -57,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        enterImmersiveMode(); // Reapply immersive mode after returning
+        // Reapply immersive mode if necessary when the activity resumes
+        enterImmersiveMode();
     }
 
     @Override
@@ -65,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
     }
 
-    // Swipe Detection
+    // Gesture handling for swipe detection
     private class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {
         private static final int SWIPE_THRESHOLD = 100;
         private static final int SWIPE_VELOCITY_THRESHOLD = 100;
@@ -75,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             float diffX = e2.getX() - e1.getX();
             if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                 if (diffX < 0) {
-                    // Swipe Left → Go to Login
+                    // Swipe left detected - Go to Login screen
                     startActivity(new Intent(MainActivity.this, Login.class));
                     finish();
                 }

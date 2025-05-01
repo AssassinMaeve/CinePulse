@@ -22,17 +22,19 @@ import java.util.List;
 
 public class StreamingProviderAdapter extends RecyclerView.Adapter<StreamingProviderAdapter.ViewHolder> {
 
-    private Context context;
-    private List<StreamingProvider> streamingProviders;
+    private final Context context;
+    private final List<StreamingProvider> streamingProviders;
 
     public StreamingProviderAdapter(Context context, List<StreamingProvider> streamingProviders) {
         this.context = context;
-        this.streamingProviders = streamingProviders != null ? streamingProviders : new ArrayList<>(); // Prevent NullPointer
+        // Avoid null pointer exception by assigning an empty list if null
+        this.streamingProviders = streamingProviders != null ? streamingProviders : new ArrayList<>();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the streaming provider item layout
         View view = LayoutInflater.from(context).inflate(R.layout.item_streaming, parent, false);
         return new ViewHolder(view);
     }
@@ -40,33 +42,34 @@ public class StreamingProviderAdapter extends RecyclerView.Adapter<StreamingProv
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         StreamingProvider provider = streamingProviders.get(position);
+        if (provider == null) return;
 
-        if (provider != null) {
-            // Set provider logo
-            if (provider.getLogoPath() != null) {
-                Glide.with(context)
-                        .load("https://image.tmdb.org/t/p/w500/" + provider.getLogoPath())
-                        .circleCrop()
-                        .into(holder.providerImage);
-            } else {
-                holder.providerImage.setImageResource(R.drawable.circle_background_foreground);
-            }
+        // Load provider logo using Glide
+        Glide.with(context)
+                .load("https://image.tmdb.org/t/p/w500/" + provider.getLogoPath())
+                .placeholder(R.drawable.circle_background_foreground) // Placeholder while loading
+                .error(R.drawable.circle_background_foreground)       // Fallback image on error
+                .circleCrop()
+                .into(holder.providerImage);
 
-            // Set provider name
-            holder.providerName.setText(provider.getProviderName());
+        // Set provider name
+        holder.providerName.setText(provider.getProviderName());
 
-            // Handle click with manual URL mapping
-            holder.itemView.setOnClickListener(v -> {
-                String url = getProviderUrl(provider.getProviderName());
+        // Set click listener to open provider’s website
+        holder.itemView.setOnClickListener(v -> {
+            String url = getProviderUrl(provider.getProviderName());
 
-                if (url != null) {
+            if (url != null) {
+                try {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     context.startActivity(intent);
-                } else {
-                    Toast.makeText(context, "Website not available", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(context, "Unable to open website", Toast.LENGTH_SHORT).show();
                 }
-            });
-        }
+            } else {
+                Toast.makeText(context, "Website not available", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -74,6 +77,7 @@ public class StreamingProviderAdapter extends RecyclerView.Adapter<StreamingProv
         return streamingProviders.size();
     }
 
+    // ViewHolder pattern for efficient view recycling
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView providerImage;
         TextView providerName;
@@ -85,11 +89,14 @@ public class StreamingProviderAdapter extends RecyclerView.Adapter<StreamingProv
         }
     }
 
-    // Add this method inside the StreamingProviderAdapter class
+    /**
+     * Maps provider names to their official websites.
+     * Prevents hardcoded links scattered across the app.
+     */
     private String getProviderUrl(String providerName) {
         if (providerName == null) return null;
 
-        switch (providerName.toLowerCase()) {
+        switch (providerName.trim().toLowerCase()) {
             case "netflix":
                 return "https://www.netflix.com";
             case "amazon prime video":
@@ -103,12 +110,14 @@ public class StreamingProviderAdapter extends RecyclerView.Adapter<StreamingProv
             case "hulu":
                 return "https://www.hulu.com";
             case "apple tv+":
+            case "apple tv plus":
                 return "https://tv.apple.com";
             case "zee5":
                 return "https://www.zee5.com";
             case "sony liv":
                 return "https://www.sonyliv.com";
             case "jio cinema":
+            case "jiocinema":
                 return "https://www.jiocinema.com";
             case "hotstar":
                 return "https://www.hotstar.com";

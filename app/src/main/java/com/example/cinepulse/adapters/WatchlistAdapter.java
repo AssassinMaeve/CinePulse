@@ -97,12 +97,6 @@ public class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.View
         return itemList.size(); // Return the number of items in the watchlist
     }
 
-    // Method to update the adapter with new items (used when watchlist changes)
-    public void updateData(List<WatchlistItem> newItems) {
-        this.itemList = newItems; // Update the data
-        notifyDataSetChanged(); // Notify the adapter that the data has changed
-    }
-
     // ViewHolder class to hold the views for each item
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView poster; // ImageView to show the movie poster

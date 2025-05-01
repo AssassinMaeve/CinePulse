@@ -27,10 +27,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class Login extends AppCompatActivity {
 
     private GestureDetector gestureDetector;
-
-    EditText username;
-    EditText password;
-    Button loginButton;
+    private EditText username;
+    private EditText password;
+    private Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,26 +66,21 @@ public class Login extends AppCompatActivity {
         // Enable login button only when both fields are filled
         TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String user = username.getText().toString().trim();
                 String pass = password.getText().toString().trim();
 
-                if (!user.isEmpty() && !pass.isEmpty()) {
-                    loginButton.setEnabled(true);
-                    loginButton.setBackgroundTintList(getResources().getColorStateList(R.color.primary_button));
-                } else {
-                    loginButton.setEnabled(false);
-                    loginButton.setBackgroundTintList(getResources().getColorStateList(R.color.grey));
-                }
+                loginButton.setEnabled(!user.isEmpty() && !pass.isEmpty());
+                loginButton.setBackgroundTintList(
+                        getResources().getColorStateList(user.isEmpty() || pass.isEmpty() ? R.color.grey : R.color.primary_button)
+                );
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         };
 
         username.addTextChangedListener(textWatcher);
@@ -97,35 +91,40 @@ public class Login extends AppCompatActivity {
             String user = username.getText().toString().trim();
             String pass = password.getText().toString().trim();
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            // Ensure credentials are valid before making a request
+            if (user.isEmpty() || pass.isEmpty()) {
+                Toast.makeText(Login.this, "Please fill in both fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            // Use Firebase Authentication to sign in with email directly
             db.collection("users")
-                    .whereEqualTo("username", user)  // Query by username field
+                    .whereEqualTo("username", user)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         if (!queryDocumentSnapshots.isEmpty()) {
-                            // Retrieve the email from the first document in the query result
                             String email = queryDocumentSnapshots.getDocuments().get(0).getString("email");
 
-                            assert email != null;
-                            mAuth.signInWithEmailAndPassword(email, pass)
-                                    .addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                            if (firebaseUser != null && firebaseUser.isEmailVerified()) {
-                                                // Proceed to the Home activity if email is verified
-                                                Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                                                startActivity(new Intent(Login.this, Home.class));
-                                                finish();
+                            if (email != null) {
+                                mAuth.signInWithEmailAndPassword(email, pass)
+                                        .addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()) {
+                                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                                if (firebaseUser != null && firebaseUser.isEmailVerified()) {
+                                                    Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                                    startActivity(new Intent(Login.this, Home.class));
+                                                    finish();
+                                                } else {
+                                                    Toast.makeText(Login.this, "Please verify your email before logging in.", Toast.LENGTH_SHORT).show();
+                                                }
                                             } else {
-                                                // If the email is not verified
-                                                Toast.makeText(Login.this, "Please verify your email address before logging in.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(Login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                                             }
-                                        } else {
-                                            Toast.makeText(Login.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                        });
+                            }
                         } else {
                             Toast.makeText(Login.this, "User not found", Toast.LENGTH_SHORT).show();
                         }
@@ -135,16 +134,15 @@ public class Login extends AppCompatActivity {
                     });
         });
 
+        // Handle password reset logic
         TextView forgotPassword = findViewById(R.id.forgotPassword);
-
         forgotPassword.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
             builder.setTitle("Reset Password");
 
-            // Create a vertical layout container
             LinearLayout container = new LinearLayout(Login.this);
             container.setOrientation(LinearLayout.VERTICAL);
-            container.setPadding(50, 40, 50, 10); // Equal padding to match the dialog title
+            container.setPadding(50, 40, 50, 10);
 
             final EditText input = new EditText(Login.this);
             input.setHint("Enter your registered email");
@@ -153,22 +151,20 @@ public class Login extends AppCompatActivity {
             input.setTextColor(Color.WHITE);
             input.setHintTextColor(Color.LTGRAY);
 
-            // Set layout parameters with top margin for spacing
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            params.setMargins(0, 20, 0, 10); // Top and bottom margin for better spacing
+            params.setMargins(0, 20, 0, 10);
             input.setLayoutParams(params);
 
             container.addView(input);
             builder.setView(container);
 
-            builder.setPositiveButton("Send", null); // Override later
+            builder.setPositiveButton("Send", null);
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
             AlertDialog dialog = builder.create();
-
             dialog.setOnShowListener(dlg -> {
                 Button sendButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 sendButton.setOnClickListener(view -> {
@@ -210,7 +206,6 @@ public class Login extends AppCompatActivity {
 
             dialog.show();
         });
-
     }
 
     @Override
@@ -238,6 +233,4 @@ public class Login extends AppCompatActivity {
             return false;
         }
     }
-
-
 }

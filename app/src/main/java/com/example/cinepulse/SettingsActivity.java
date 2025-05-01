@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -22,6 +23,7 @@ import java.util.Map;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    // Declare UI elements
     private EditText editUsername, editEmail, editOldPassword, editNewPassword;
     private Button buttonSaveChanges, buttonToggleTheme;
     private boolean isDarkMode = false; // Flag for theme mode
@@ -31,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        // Initialize UI elements
         editUsername = findViewById(R.id.editUsername);
         editEmail = findViewById(R.id.editEmail);
         editOldPassword = findViewById(R.id.editOldPassword);
@@ -38,48 +41,80 @@ public class SettingsActivity extends AppCompatActivity {
         buttonSaveChanges = findViewById(R.id.buttonSaveChanges);
         buttonToggleTheme = findViewById(R.id.buttonToggleTheme);
 
+        // Fetch and apply the saved theme mode
         SharedPreferences prefs = getSharedPreferences("SettingsPrefs", MODE_PRIVATE);
         isDarkMode = prefs.getBoolean("isDarkMode", false);
+        setAppTheme(isDarkMode);
 
+        // Set the logo according to the current theme
+        setLogoBasedOnTheme();
+
+        // Save user changes
+        buttonSaveChanges.setOnClickListener(v -> saveUserChanges());
+
+        // Toggle between Dark and Light modes
+        buttonToggleTheme.setOnClickListener(v -> toggleTheme(prefs));
+    }
+
+    /**
+     * Set the app theme based on user preference
+     * @param isDarkMode true for dark mode, false for light mode
+     */
+    private void setAppTheme(boolean isDarkMode) {
         AppCompatDelegate.setDefaultNightMode(
                 isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
         );
-
-        ImageView logo = findViewById(R.id.imageView2);
-        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-            logo.setImageResource(R.drawable.cinepulsewhitelogo);
-        } else {
-            logo.setImageResource(R.drawable.cinepulseblacklogo);
-        }
-
-        buttonSaveChanges.setOnClickListener(v -> {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null) {
-                String newUsername = editUsername.getText().toString().trim();
-                String newEmail = editEmail.getText().toString().trim();
-                String oldPassword = editOldPassword.getText().toString();
-                String newPassword = editNewPassword.getText().toString();
-
-                if (!newUsername.isEmpty()) updateUsername(user, newUsername);
-                if (!newEmail.isEmpty()) updateEmail(user, newEmail, oldPassword);
-                if (!oldPassword.isEmpty() && !newPassword.isEmpty())
-                    updatePassword(user, oldPassword, newPassword);
-            }
-        });
-
-        buttonToggleTheme.setOnClickListener(v -> {
-            isDarkMode = !isDarkMode;
-            AppCompatDelegate.setDefaultNightMode(
-                    isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
-            );
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean("isDarkMode", isDarkMode);
-            editor.apply();
-            buttonToggleTheme.postDelayed(() -> recreate(), 100);
-        });
     }
 
+    /**
+     * Set the app logo depending on the theme
+     */
+    private void setLogoBasedOnTheme() {
+        ImageView logo = findViewById(R.id.imageView2);
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        logo.setImageResource(nightModeFlags == Configuration.UI_MODE_NIGHT_YES
+                ? R.drawable.cinepulsewhitelogo : R.drawable.cinepulseblacklogo);
+    }
+
+    /**
+     * Handles saving changes to the user profile
+     */
+    private void saveUserChanges() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String newUsername = editUsername.getText().toString().trim();
+            String newEmail = editEmail.getText().toString().trim();
+            String oldPassword = editOldPassword.getText().toString();
+            String newPassword = editNewPassword.getText().toString();
+
+            // Update username, email, or password if fields are not empty
+            if (!newUsername.isEmpty()) updateUsername(user, newUsername);
+            if (!newEmail.isEmpty()) updateEmail(user, newEmail, oldPassword);
+            if (!oldPassword.isEmpty() && !newPassword.isEmpty())
+                updatePassword(user, oldPassword, newPassword);
+        }
+    }
+
+    /**
+     * Toggle between Dark and Light modes and save preference
+     * @param prefs SharedPreferences to save the mode
+     */
+    private void toggleTheme(SharedPreferences prefs) {
+        isDarkMode = !isDarkMode;
+        setAppTheme(isDarkMode);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("isDarkMode", isDarkMode);
+        editor.apply();
+
+        // Recreate the activity to apply theme change
+        buttonToggleTheme.postDelayed(this::recreate, 100);
+    }
+
+    /**
+     * Update the user's username in Firestore
+     * @param user FirebaseUser instance
+     * @param newUsername New username to set
+     */
     private void updateUsername(FirebaseUser user, String newUsername) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String uid = user.getUid();
@@ -92,17 +127,15 @@ public class SettingsActivity extends AppCompatActivity {
                         Toast.makeText(this, "Username already taken. Please choose another.", Toast.LENGTH_SHORT).show();
                     } else {
                         // Update username in Firestore
-                        db.collection("users")
-                                .whereEqualTo("uid", uid)
-                                .get()
+                        db.collection("users").whereEqualTo("uid", uid).get()
                                 .addOnSuccessListener(querySnapshot -> {
                                     if (!querySnapshot.isEmpty()) {
                                         String currentUsername = querySnapshot.getDocuments().get(0).getId();
                                         Map<String, Object> userData = querySnapshot.getDocuments().get(0).getData();
                                         userData.put("username", newUsername);
 
-                                        db.collection("users").document(newUsername)
-                                                .set(userData)
+                                        // Save the updated username and delete the old one
+                                        db.collection("users").document(newUsername).set(userData)
                                                 .addOnSuccessListener(aVoid -> {
                                                     db.collection("users").document(currentUsername)
                                                             .delete()
@@ -130,6 +163,12 @@ public class SettingsActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Update the user's email after re-authenticating
+     * @param user FirebaseUser instance
+     * @param newEmail New email address
+     * @param oldPassword User's current password for re-authentication
+     */
     private void updateEmail(FirebaseUser user, String newEmail, String oldPassword) {
         if (oldPassword.isEmpty()) {
             Toast.makeText(this, "Please enter your current password", Toast.LENGTH_SHORT).show();
@@ -141,19 +180,17 @@ public class SettingsActivity extends AppCompatActivity {
 
         user.reauthenticate(credential)
                 .addOnSuccessListener(aVoid -> {
-                    // If reauthentication is successful, proceed to update email
+                    // Update email after successful re-authentication
                     user.updateEmail(newEmail)
                             .addOnSuccessListener(aVoid1 -> {
                                 // Send verification email
                                 user.sendEmailVerification()
                                         .addOnSuccessListener(aVoid2 -> {
                                             Toast.makeText(this, "Email updated successfully. Please verify your new email.", Toast.LENGTH_SHORT).show();
-
-                                            // Optional: Log out the user after email change (this forces re-login after verification)
                                             FirebaseAuth.getInstance().signOut();
 
-                                            // Redirect the user to the home page or login screen
-                                            Intent intent = new Intent(SettingsActivity.this, Home.class); // Adjust to your HomeActivity
+                                            // Redirect user to login screen
+                                            Intent intent = new Intent(SettingsActivity.this, Home.class);
                                             startActivity(intent);
                                             finish();
                                         })
@@ -166,16 +203,19 @@ public class SettingsActivity extends AppCompatActivity {
                             });
                 })
                 .addOnFailureListener(e -> {
-                    // If reauthentication fails, notify the user
                     Toast.makeText(this, "Reauthentication failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
-
-
+    /**
+     * Update the user's password after re-authenticating
+     * @param user FirebaseUser instance
+     * @param oldPass User's current password
+     * @param newPass New password to set
+     */
     private void updatePassword(FirebaseUser user, String oldPass, String newPass) {
         if (!isPasswordStrong(newPass)) {
-            Toast.makeText(this, "Weak password. It must contain:\n• At least 8 characters\n• 1 uppercase letter\n• 1 lowercase letter\n• 1 number\n• 1 special character", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Weak password. Ensure it has:\n• At least 8 characters\n• 1 uppercase letter\n• 1 lowercase letter\n• 1 number\n• 1 special character", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -193,12 +233,16 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Validate password strength based on specific rules
+     * @param password The password to validate
+     * @return true if password meets the criteria, false otherwise
+     */
     private boolean isPasswordStrong(String password) {
-        if (password.length() < 8) return false;
-        if (!password.matches(".*[a-z].*")) return false;
-        if (!password.matches(".*[A-Z].*")) return false;
-        if (!password.matches(".*[0-9].*")) return false;
-        if (!password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) return false;
-        return true;
+        return password.length() >= 8
+                && password.matches(".*[a-z].*")
+                && password.matches(".*[A-Z].*")
+                && password.matches(".*[0-9].*")
+                && password.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
     }
 }

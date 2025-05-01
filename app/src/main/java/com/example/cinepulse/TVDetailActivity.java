@@ -58,7 +58,7 @@ public class TVDetailActivity extends BaseActivity {
     private View btnAddToWatchlist;
     private TVDetail currentTVDetail; // Hold the fetched TV details for watchlist use
     private List<StreamingProvider> streamingProviders = new ArrayList<>();
-    private static final String API_KEY = "580b03ff6e8e1d2881e7ecf2dccaf4c3";
+    private static final String API_KEY = BuildConfig.TMDB_API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +137,7 @@ public class TVDetailActivity extends BaseActivity {
 
     private void fetchStreamingProviders(int tvId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getTVStreamingProviders(tvId, API_KEY).enqueue(new Callback<WatchProviderResponse>() {
+        apiService.getTVWatchProviders(tvId, API_KEY).enqueue(new Callback<WatchProviderResponse>() {
             @Override
             public void onResponse(Call<WatchProviderResponse> call, Response<WatchProviderResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {

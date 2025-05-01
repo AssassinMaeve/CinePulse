@@ -34,11 +34,14 @@ public class WatchlistActivity extends BaseActivity
         setContentView(R.layout.activity_watchlist);
 
         initializeViews();
-        setupWatchlist();
         setupBottomNavigation();
+        loadWatchlist();
         setupClearAllButton();
     }
 
+    /**
+     * Initializes all UI components from the layout.
+     */
     private void initializeViews() {
         recyclerView = findViewById(R.id.recyclerWatchlist);
         textNoWatchlist = findViewById(R.id.textNoWatchlist);
@@ -46,13 +49,19 @@ public class WatchlistActivity extends BaseActivity
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
-    private void setupWatchlist() {
+    /**
+     * Loads the watchlist from persistent storage and sets up the RecyclerView.
+     */
+    private void loadWatchlist() {
         watchlist = WatchlistManager.getWatchlist(this);
         adapter = new WatchlistAdapter(this, watchlist, this);
         recyclerView.setAdapter(adapter);
         updateUI();
     }
 
+    /**
+     * Configures bottom navigation bar to switch between activities.
+     */
     private void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_watchlist);
@@ -69,11 +78,10 @@ public class WatchlistActivity extends BaseActivity
                 return true;
             } else if (itemId == R.id.nav_watchlist) {
                 return true;
-
-            }else if (itemId == R.id.nav_populartrailer) {
+            } else if (itemId == R.id.nav_populartrailer) {
                 startActivity(new Intent(this, PopularTrailerActivity.class));
+                finish();
                 return true;
-
             } else if (itemId == R.id.nav_profile) {
                 startActivity(new Intent(this, Profile.class));
                 finish();
@@ -83,42 +91,58 @@ public class WatchlistActivity extends BaseActivity
         });
     }
 
+    /**
+     * Handles the "Clear All" button click to clear the entire watchlist.
+     */
     private void setupClearAllButton() {
         btnClearAll.setOnClickListener(v -> {
-            WatchlistManager.clearWatchlist(this);
-            watchlist.clear();
-            adapter.notifyDataSetChanged();
-            updateUI();
-            Toast.makeText(this, "Watchlist cleared", Toast.LENGTH_SHORT).show();
+            if (watchlist != null && !watchlist.isEmpty()) {
+                WatchlistManager.clearWatchlist(this);
+                int size = watchlist.size();
+                watchlist.clear();
+                adapter.notifyItemRangeRemoved(0, size); // More efficient than notifyDataSetChanged()
+                updateUI();
+                Toast.makeText(this, "Watchlist cleared", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
+    /**
+     * Updates UI visibility based on the state of the watchlist.
+     */
     private void updateUI() {
-        if (watchlist.isEmpty()) {
-            textNoWatchlist.setVisibility(View.VISIBLE);
-            btnClearAll.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            textNoWatchlist.setVisibility(View.GONE);
-            btnClearAll.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
+        boolean isEmpty = watchlist == null || watchlist.isEmpty();
+        textNoWatchlist.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        btnClearAll.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+    }
+
+    /**
+     * Callback method triggered by the adapter when the watchlist is modified.
+     */
+    @Override
+    public void onWatchlistChanged() {
+        List<WatchlistItem> updatedWatchlist = WatchlistManager.getWatchlist(this);
+        if (updatedWatchlist != null) {
+            watchlist.clear();
+            watchlist.addAll(updatedWatchlist);
+            adapter.notifyDataSetChanged();
+            updateUI();
         }
     }
 
-    @Override
-    public void onWatchlistChanged() {
-        // Refresh the watchlist data
-        watchlist = WatchlistManager.getWatchlist(this);
-        adapter.updateData(watchlist);
-        updateUI();
-    }
-
+    /**
+     * Ensures data is refreshed when user returns to this activity.
+     */
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh data when returning to activity
-        watchlist = WatchlistManager.getWatchlist(this);
-        adapter.updateData(watchlist);
-        updateUI();
+        List<WatchlistItem> updatedWatchlist = WatchlistManager.getWatchlist(this);
+        if (updatedWatchlist != null) {
+            watchlist.clear();
+            watchlist.addAll(updatedWatchlist);
+            adapter.notifyDataSetChanged();
+            updateUI();
+        }
     }
 }
