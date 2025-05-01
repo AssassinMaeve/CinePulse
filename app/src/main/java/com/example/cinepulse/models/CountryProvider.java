@@ -5,19 +5,18 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class CountryProvider {
-    @SerializedName("link")
-    private String link;
 
     @SerializedName("flatrate")
-    private List<StreamingProvider> flatrate;
+    private final List<StreamingProvider> flatrate;
 
-    public String getLink() {
-        return link;
+    public CountryProvider(List<StreamingProvider> flatrate) {
+        this.flatrate = flatrate;
     }
 
     public List<StreamingProvider> getFlatrate() {
         return flatrate;
     }
+
 }
 
 
