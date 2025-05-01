@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -118,7 +117,7 @@ public class Home extends BaseActivity {
                     Log.d("API", "Fetched " + movies.size() + " movies.");
 
                     // Update RecyclerView with movies
-                    movieAdapter = new MovieAdapter(Home.this, new ArrayList<>(movies), "movie");
+                    movieAdapter = new MovieAdapter(Home.this, new ArrayList<>(movies));
                     recyclerTrendingMovies.setAdapter(movieAdapter);
                 } else {
                     Log.e("API", "Movie Error: " + response.code());

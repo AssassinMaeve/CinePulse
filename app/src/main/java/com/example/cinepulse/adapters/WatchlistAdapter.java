@@ -23,7 +23,7 @@ import java.util.List;
 public class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.ViewHolder> {
 
     private final Context context; // Context for UI-related operations like inflating views and starting activities
-    private List<WatchlistItem> itemList; // List to hold the watchlist items
+    private final List<WatchlistItem> itemList; // List to hold the watchlist items
     private final OnWatchlistChangeListener listener; // Listener to notify when watchlist changes
 
     // Interface for notifying changes to the watchlist

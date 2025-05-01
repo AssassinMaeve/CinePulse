@@ -6,7 +6,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,7 +67,7 @@ public class GenreMoviesActivity extends BaseActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         // Initialize the adapters
-        movieAdapter = new MovieAdapter(this, new ArrayList<>(movieList), "movie");
+        movieAdapter = new MovieAdapter(this, new ArrayList<>(movieList));
         tvShowAdapter = new TvShowAdapter(this, tvShowList);
 
         // Set the initial adapter to movieAdapter

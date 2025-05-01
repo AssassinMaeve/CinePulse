@@ -1,5 +1,6 @@
 package com.example.cinepulse.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cinepulse.R;
@@ -26,16 +28,18 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     }
 
     // Create a new ViewHolder for each review item
+    @NonNull
     @Override
-    public ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the item_review layout to create a new view
         View view = LayoutInflater.from(context).inflate(R.layout.item_review, parent, false);
         return new ReviewViewHolder(view);
     }
 
     // Bind data to the ViewHolder
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(ReviewViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ReviewViewHolder holder, int position) {
         // Check if the review list is empty
         if (reviewList.isEmpty()) {
             // Display "No reviews available" message if the list is empty
@@ -83,14 +87,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     }
 
     // Method to update the review list and notify the adapter
+    @SuppressLint("NotifyDataSetChanged")
     public void setReviews(List<Review> reviews) {
         this.reviewList = reviews; // Update the review list
         notifyDataSetChanged();    // Refresh the adapter
     }
 
-    // Method to handle the scenario when no reviews are available
-    public void setNoReviewsAvailable() {
-        this.reviewList.clear();  // Clear the review list
-        notifyDataSetChanged();   // Refresh the adapter
-    }
 }

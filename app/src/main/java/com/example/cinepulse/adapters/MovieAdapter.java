@@ -1,5 +1,6 @@
 package com.example.cinepulse.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -24,14 +25,12 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int VIEW_TYPE_MOVIE = 1;
     private static final int VIEW_TYPE_TV_SHOW = 2;
 
-    private Context context;
-    private List<Object> itemList;
-    private String type;
+    private final Context context;
+    private final List<Object> itemList;
 
-    public MovieAdapter(Context context, List<Object> items, String type) {
+    public MovieAdapter(Context context, List<Object> items) {
         this.context = context;
         this.itemList = items;
-        this.type = type;
     }
 
     @NonNull
@@ -123,6 +122,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     // Method to update data
+    @SuppressLint("NotifyDataSetChanged")
     public void updateData(List<Object> newItems) {
         itemList.clear();
         itemList.addAll(newItems);
