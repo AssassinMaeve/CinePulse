@@ -83,18 +83,19 @@
 
         <!-- Streaming Platforms -->
         <TextView
+            android:id="@+id/textNoStreamingProviders"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/available_onMovieDetails"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:text="No Streaming Providers Available"
+            android:textSize="14sp"
             android:paddingStart="20dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="4dp"
-            tools:ignore="RtlSymmetry" />
+            android:paddingEnd="20dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            android:textStyle="italic" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerStreaming"
+            android:id="@+id/recyclerStreamingProviders"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="20dp"
@@ -103,6 +104,7 @@
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never"
             android:scrollbars="none" />
+
 
 
         <!-- Trailer Section -->

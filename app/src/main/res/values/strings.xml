@@ -70,6 +70,7 @@
     <string name="cast_information_is_not_available_for_this_titleMovieDetails">Cast information is not available for this title.</string>
     <string name="add_to_watchlistMovieDetails">Add to Watchlist</string>
     <string name="posterimages">PosterImages</string>
+    <string name="no_streaming_providers_available">No streaming providers available</string>
 
 
 </resources>

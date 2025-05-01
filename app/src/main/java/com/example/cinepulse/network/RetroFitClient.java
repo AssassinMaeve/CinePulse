@@ -35,4 +35,5 @@ public class RetroFitClient {
         // Create and return implementation of the API endpoints interface
         return retrofit.create(TMDbApiService.class);
     }
+
 }

@@ -3,6 +3,7 @@ package com.example.cinepulse;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
@@ -16,10 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.CastAdapter;
+import com.example.cinepulse.adapters.StreamingProviderAdapter;  // Add this import for your adapter
 import com.example.cinepulse.models.CastResponse;
+import com.example.cinepulse.models.CountryProvider;
 import com.example.cinepulse.models.MovieDetail;
+import com.example.cinepulse.models.StreamingProvider;
 import com.example.cinepulse.models.Trailer;
 import com.example.cinepulse.models.TrailerResponse;
+import com.example.cinepulse.models.WatchProviderResponse;
 import com.example.cinepulse.models.WatchlistItem;
 import com.example.cinepulse.network.RetroFitClient;
 import com.example.cinepulse.network.TMDbApiService;
@@ -27,6 +32,9 @@ import com.example.cinepulse.utils.WatchlistManager;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
+
+import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,14 +45,14 @@ public class MovieDetails extends BaseActivity {
     private TextView titleText, overviewText, releaseDateText;
     private ImageView posterImage;
     private YouTubePlayerView youTubePlayerView;
-    private RecyclerView recyclerCast;
-    private TextView textNoCast;
+    private RecyclerView recyclerCast, recyclerStreamingProviders;
+    private TextView textNoCast, textNoStreamingProviders;
     private Button btnAddToWatchlist;
     private static final String API_KEY = "580b03ff6e8e1d2881e7ecf2dccaf4c3";
 
     private String trailerKey = "";
     private MovieDetail currentMovieDetails;
-
+    private List<StreamingProvider> streamingProviders;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +73,14 @@ public class MovieDetails extends BaseActivity {
         posterImage = findViewById(R.id.imagePoster);
         youTubePlayerView = findViewById(R.id.youtubePlayerView);
         recyclerCast = findViewById(R.id.recyclerCast);
+        recyclerStreamingProviders = findViewById(R.id.recyclerStreamingProviders);  // Recycler view for streaming providers
         textNoCast = findViewById(R.id.textNoCast);
+        textNoStreamingProviders = findViewById(R.id.textNoStreamingProviders);  // TextView for no streaming providers
         btnAddToWatchlist = findViewById(R.id.btnAddToWatchlist);
         Button btnViewReviews = findViewById(R.id.btnViewReviews);
 
         recyclerCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerStreamingProviders.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));  // Setup layout for streaming providers
 
         btnViewReviews.setOnClickListener(v -> {
             if (currentMovieDetails != null) {
@@ -86,9 +97,9 @@ public class MovieDetails extends BaseActivity {
         fetchMovieDetails(movieId);
         fetchTrailer(movieId);
         fetchCast(movieId);
+        fetchStreamingProviders(movieId);  // Fetch streaming providers
 
     }
-
 
     private void fetchMovieDetails(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
@@ -168,6 +179,46 @@ public class MovieDetails extends BaseActivity {
             }
         });
     }
+
+    private void fetchStreamingProviders(int movieId) {
+        TMDbApiService apiService = RetroFitClient.getApiService();
+        apiService.getMovieStreamingProviders(movieId, API_KEY).enqueue(new Callback<WatchProviderResponse>() {
+            @Override
+            public void onResponse(Call<WatchProviderResponse> call, Response<WatchProviderResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    WatchProviderResponse watchProviderResponse = response.body();
+                    Map<String, CountryProvider> countryProviders = watchProviderResponse.getResults();
+
+                    Log.d("StreamingProviders", "Received country providers: " + countryProviders);
+
+                    if (countryProviders != null && !countryProviders.isEmpty()) {
+                        CountryProvider countryProvider = countryProviders.get("IN"); // Use "IN" or change as needed
+                        if (countryProvider != null && countryProvider.getFlatrate() != null && !countryProvider.getFlatrate().isEmpty()) {
+                            streamingProviders = countryProvider.getFlatrate();
+
+                            recyclerStreamingProviders.setAdapter(new StreamingProviderAdapter(MovieDetails.this, streamingProviders));
+                            textNoStreamingProviders.setVisibility(View.GONE);
+                        } else {
+                            textNoStreamingProviders.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        textNoStreamingProviders.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    textNoStreamingProviders.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WatchProviderResponse> call, Throwable t) {
+                Log.e("STREAMING_PROVIDERS", "Error fetching streaming providers", t);
+                textNoStreamingProviders.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+
+
 
     private void playTrailer() {
         getLifecycle().addObserver(youTubePlayerView);

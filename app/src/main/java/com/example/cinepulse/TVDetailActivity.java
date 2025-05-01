@@ -16,11 +16,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.cinepulse.ToggleTheme.BaseActivity;
 import com.example.cinepulse.adapters.CastAdapter;
+import com.example.cinepulse.adapters.StreamingProviderAdapter;
 import com.example.cinepulse.models.Cast;
 import com.example.cinepulse.models.CastResponse;
+import com.example.cinepulse.models.CountryProvider;
+import com.example.cinepulse.models.MovieDetail;
+import com.example.cinepulse.models.StreamingProvider;
 import com.example.cinepulse.models.TVDetail;
 import com.example.cinepulse.models.Trailer;
 import com.example.cinepulse.models.TrailerResponse;
+import com.example.cinepulse.models.WatchProviderResponse;
 import com.example.cinepulse.models.WatchlistItem;
 import com.example.cinepulse.network.RetroFitClient;
 import com.example.cinepulse.network.TMDbApiService;
@@ -29,7 +34,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,9 +53,12 @@ public class TVDetailActivity extends BaseActivity {
     private RecyclerView recyclerCast;
     private TextView textNoCast;
     private RecyclerView recyclerStreaming;
+    private TextView textNoStreamingProviders;  // Added this line for the missing TextView reference
     private YouTubePlayerView youtubePlayerView;
     private View btnAddToWatchlist;
     private TVDetail currentTVDetail; // Hold the fetched TV details for watchlist use
+    private List<StreamingProvider> streamingProviders = new ArrayList<>();
+    private static final String API_KEY = "580b03ff6e8e1d2881e7ecf2dccaf4c3";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +67,15 @@ public class TVDetailActivity extends BaseActivity {
 
         // Initialize views
         imagePoster = findViewById(R.id.imagePoster);
+        textNoStreamingProviders = findViewById(R.id.textNoStreamingProviders);
+
         textTitle = findViewById(R.id.textTitle);
         textReleaseDate = findViewById(R.id.textReleaseDate);
         textOverview = findViewById(R.id.textOverview);
         recyclerCast = findViewById(R.id.recyclerCast);
         textNoCast = findViewById(R.id.textNoCast);
         recyclerStreaming = findViewById(R.id.recyclerStreaming);
+        textNoStreamingProviders = findViewById(R.id.textNoStreamingProviders);  // Added this line to initialize the textNoStreamingProviders
         youtubePlayerView = findViewById(R.id.youtubePlayerView);
         btnAddToWatchlist = findViewById(R.id.btnAddToWatchlist);
         View btnReview = findViewById(R.id.btnViewReviews);
@@ -86,12 +99,13 @@ public class TVDetailActivity extends BaseActivity {
             fetchTVShowDetails(tvId);
             fetchTVCast(tvId);
             fetchTVTrailers(tvId);
+            fetchStreamingProviders(tvId);  // Call fetchStreamingProviders here to load streaming data
         }
     }
 
     private void fetchTVShowDetails(int tvId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        Call<TVDetail> call = apiService.getTVDetail(tvId, "580b03ff6e8e1d2881e7ecf2dccaf4c3");
+        Call<TVDetail> call = apiService.getTVDetail(tvId, API_KEY);
 
         call.enqueue(new Callback<TVDetail>() {
             @Override
@@ -121,6 +135,45 @@ public class TVDetailActivity extends BaseActivity {
         });
     }
 
+    private void fetchStreamingProviders(int tvId) {
+        TMDbApiService apiService = RetroFitClient.getApiService();
+        apiService.getTVStreamingProviders(tvId, API_KEY).enqueue(new Callback<WatchProviderResponse>() {
+            @Override
+            public void onResponse(Call<WatchProviderResponse> call, Response<WatchProviderResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    WatchProviderResponse watchProviderResponse = response.body();
+                    Map<String, CountryProvider> countryProviders = watchProviderResponse.getResults();
+
+                    Log.d("StreamingProviders", "Received country providers: " + countryProviders);
+
+                    if (countryProviders != null && !countryProviders.isEmpty()) {
+                        CountryProvider countryProvider = countryProviders.get("IN"); // Change country if needed
+                        if (countryProvider != null && countryProvider.getFlatrate() != null && !countryProvider.getFlatrate().isEmpty()) {
+                            streamingProviders = countryProvider.getFlatrate();
+
+                            recyclerStreaming.setLayoutManager(new LinearLayoutManager(TVDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                            recyclerStreaming.setAdapter(new StreamingProviderAdapter(TVDetailActivity.this, streamingProviders));
+                            textNoStreamingProviders.setVisibility(View.GONE);
+                        } else {
+                            textNoStreamingProviders.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        textNoStreamingProviders.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    textNoStreamingProviders.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WatchProviderResponse> call, Throwable t) {
+                Log.e("STREAMING_PROVIDERS", "Error fetching streaming providers", t);
+                textNoStreamingProviders.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+
     private void updateTVShowUI(TVDetail tvDetail) {
         textTitle.setText(tvDetail.getName());
         textReleaseDate.setText(tvDetail.getFirstAirDate());
@@ -133,7 +186,7 @@ public class TVDetailActivity extends BaseActivity {
 
     private void fetchTVCast(int tvId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        Call<CastResponse> call = apiService.getTVCredits(tvId, "580b03ff6e8e1d2881e7ecf2dccaf4c3");
+        Call<CastResponse> call = apiService.getTVCredits(tvId, API_KEY);
 
         call.enqueue(new Callback<CastResponse>() {
             @Override
@@ -163,7 +216,7 @@ public class TVDetailActivity extends BaseActivity {
 
     private void fetchTVTrailers(int tvId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        Call<TrailerResponse> call = apiService.getTVTrailers(tvId, "580b03ff6e8e1d2881e7ecf2dccaf4c3");
+        Call<TrailerResponse> call = apiService.getTVTrailers(tvId, API_KEY);
 
         call.enqueue(new Callback<TrailerResponse>() {
             @Override

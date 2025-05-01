@@ -8,6 +8,7 @@ import com.example.cinepulse.models.ReviewResponse;
 import com.example.cinepulse.models.TVDetail;
 import com.example.cinepulse.models.TrailerResponse;
 import com.example.cinepulse.models.TvShowResponse;
+import com.example.cinepulse.models.WatchProviderResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -119,5 +120,31 @@ public interface TMDbApiService {
             @Path("id") int id,
             @Query("api_key") String apiKey
     );
+
+    @GET("movie/{movie_id}/watch/providers")
+    Call<WatchProviderResponse> getMovieWatchProviders(
+            @Path("movie_id") int movieId,
+            @Query("api_key") String apiKey
+    );
+
+    @GET("tv/{tv_id}/watch/providers")
+    Call<WatchProviderResponse> getTVWatchProviders(
+            @Path("tv_id") int tvId,
+            @Query("api_key") String apiKey
+    );
+
+    @GET("movie/{movie_id}/watch/providers")
+    Call<WatchProviderResponse> getWatchProviders(
+            @Path("movie_id") int movieId,
+            @Query("api_key") String apiKey
+    );
+
+    @GET("movie/{movie_id}/watch/providers")
+    Call<WatchProviderResponse> getMovieStreamingProviders(
+            @Path("movie_id") int movieId,
+            @Query("api_key") String apiKey
+    );
+    @GET("tv/{tv_id}/watch/providers")
+    Call<WatchProviderResponse> getTVStreamingProviders(@Path("tv_id") int tvId, @Query("api_key") String apiKey);
 
 }
