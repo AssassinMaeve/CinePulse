@@ -11,6 +11,7 @@
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/logo"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
         app:srcCompat="@drawable/cinepulsewhitelogo" />
@@ -19,8 +20,9 @@
         android:id="@+id/editUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:background="@drawable/edittext_border"
-        android:hint="New Username"
+        android:hint="@string/new_username"
         android:inputType="text"
         android:padding="10dp"
         android:textColor="#FFFFFF"
@@ -32,8 +34,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:autofillHints=""
         android:background="@drawable/edittext_border"
-        android:hint="New Email"
+        android:hint="@string/new_email"
         android:inputType="textEmailAddress"
         android:padding="10dp"
         android:textColor="#FFFFFF"
@@ -45,8 +48,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:autofillHints=""
         android:background="@drawable/edittext_border"
-        android:hint="Current Password"
+        android:hint="@string/current_password"
         android:inputType="textPassword"
         android:padding="10dp"
         android:textColor="#FFFFFF"
@@ -58,8 +62,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:autofillHints=""
         android:background="@drawable/edittext_border"
-        android:hint="New Password"
+        android:hint="@string/new_password"
         android:inputType="textPassword"
         android:padding="10dp"
         android:textColor="#FFFFFF"
@@ -72,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="#4CAF50"
-        android:text="Save Changes"
+        android:text="@string/save_changes"
         android:textColor="#FFFFFF" />
 
     <Button
@@ -81,6 +86,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:backgroundTint="#FF9800"
-        android:text="Toggle Theme"
+        android:text="@string/toggle_theme"
         android:textColor="#FFFFFF" />
 </LinearLayout>

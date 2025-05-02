@@ -72,6 +72,23 @@
     <string name="posterimages">PosterImages</string>
     <string name="no_streaming_providers_available">No streaming providers available</string>
     <string name="no_streaming_providers_availableMovieDetails">No Streaming Providers Available</string>
+    <string name="profileuser">profileUser</string>
+    <string name="usernameProfile">Username</string>
+    <string name="email_example_com">email@example.com</string>
+    <string name="new_username">New Username</string>
+    <string name="new_email">New Email</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="toggle_theme">Toggle Theme</string>
+    <string name="logo">Logo</string>
+    <string name="signupbackground">signUpBackground</string>
+    <string name="create_accountSignUp">Create Account</string>
+    <string name="poster">poster</string>
+    <string name="no_streaming_providers_availableTvDetails">No Streaming Providers Available</string>
+    <string name="view_reviewsTvDetails">View Reviews</string>
+    <string name="provider_name">Provider Name</string>
+    <string name="provider">provider</string>
 
 
 </resources>
