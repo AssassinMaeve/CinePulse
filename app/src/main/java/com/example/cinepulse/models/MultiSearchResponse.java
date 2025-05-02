@@ -20,13 +20,4 @@ public final class MultiSearchResponse {
         return results;
     }
 
-    /**
-     * Sets the list of search results in the response.
-     * This setter method can be used during deserialization or testing.
-     *
-     * @param results The list of MediaItem objects to set.
-     */
-    public void setResults(List<MediaItem> results) {
-        this.results = results;
-    }
 }

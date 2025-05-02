@@ -1,6 +1,5 @@
 package com.example.cinepulse;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,8 +7,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -86,9 +85,9 @@ public class ReviewActivity extends BaseActivity {
                 : apiService.getMovieReviews(id, API_KEY);
 
         // Enqueue the API call for reviews
-        call.enqueue(new Callback<ReviewResponse>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
+            public void onResponse(@NonNull Call<ReviewResponse> call, @NonNull Response<ReviewResponse> response) {
                 progressBar.setVisibility(View.GONE);
 
                 // Check if the response is successful
@@ -111,7 +110,7 @@ public class ReviewActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<ReviewResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ReviewResponse> call, @NonNull Throwable t) {
                 // Hide loading indicator and show error message
                 progressBar.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.GONE);

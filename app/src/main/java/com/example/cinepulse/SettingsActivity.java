@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,12 +19,13 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 
     // Declare UI elements
     private EditText editUsername, editEmail, editOldPassword, editNewPassword;
-    private Button buttonSaveChanges, buttonToggleTheme;
+    private Button buttonToggleTheme;
     private boolean isDarkMode = false; // Flag for theme mode
 
     @Override
@@ -38,7 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
         editEmail = findViewById(R.id.editEmail);
         editOldPassword = findViewById(R.id.editOldPassword);
         editNewPassword = findViewById(R.id.editNewPassword);
-        buttonSaveChanges = findViewById(R.id.buttonSaveChanges);
+        Button buttonSaveChanges = findViewById(R.id.buttonSaveChanges);
         buttonToggleTheme = findViewById(R.id.buttonToggleTheme);
 
         // Fetch and apply the saved theme mode
@@ -132,35 +132,24 @@ public class SettingsActivity extends AppCompatActivity {
                                     if (!querySnapshot.isEmpty()) {
                                         String currentUsername = querySnapshot.getDocuments().get(0).getId();
                                         Map<String, Object> userData = querySnapshot.getDocuments().get(0).getData();
+                                        assert userData != null;
                                         userData.put("username", newUsername);
 
                                         // Save the updated username and delete the old one
                                         db.collection("users").document(newUsername).set(userData)
-                                                .addOnSuccessListener(aVoid -> {
-                                                    db.collection("users").document(currentUsername)
-                                                            .delete()
-                                                            .addOnSuccessListener(aVoid2 -> {
-                                                                Toast.makeText(this, "Username updated", Toast.LENGTH_SHORT).show();
-                                                            })
-                                                            .addOnFailureListener(e -> {
-                                                                Toast.makeText(this, "Failed to delete old username", Toast.LENGTH_SHORT).show();
-                                                            });
-                                                })
-                                                .addOnFailureListener(e -> {
-                                                    Toast.makeText(this, "Failed to create new username", Toast.LENGTH_SHORT).show();
-                                                });
+                                                .addOnSuccessListener(aVoid -> db.collection("users").document(currentUsername)
+                                                        .delete()
+                                                        .addOnSuccessListener(aVoid2 -> Toast.makeText(this, "Username updated", Toast.LENGTH_SHORT).show())
+                                                        .addOnFailureListener(e -> Toast.makeText(this, "Failed to delete old username", Toast.LENGTH_SHORT).show()))
+                                                .addOnFailureListener(e -> Toast.makeText(this, "Failed to create new username", Toast.LENGTH_SHORT).show());
                                     } else {
                                         Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show();
                                     }
                                 })
-                                .addOnFailureListener(e -> {
-                                    Toast.makeText(this, "Error fetching user info", Toast.LENGTH_SHORT).show();
-                                });
+                                .addOnFailureListener(e -> Toast.makeText(this, "Error fetching user info", Toast.LENGTH_SHORT).show());
                     }
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to check username availability", Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to check username availability", Toast.LENGTH_SHORT).show());
     }
 
     /**
@@ -176,7 +165,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         // Re-authenticate the user with the old password
-        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), oldPassword);
+        AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(user.getEmail()), oldPassword);
 
         user.reauthenticate(credential)
                 .addOnSuccessListener(aVoid -> {
@@ -194,17 +183,11 @@ public class SettingsActivity extends AppCompatActivity {
                                             startActivity(intent);
                                             finish();
                                         })
-                                        .addOnFailureListener(e -> {
-                                            Toast.makeText(this, "Failed to send verification email: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        });
+                                        .addOnFailureListener(e -> Toast.makeText(this, "Failed to send verification email: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                             })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(this, "Email update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
+                            .addOnFailureListener(e -> Toast.makeText(this, "Email update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Reauthentication failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(this, "Reauthentication failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     /**
@@ -219,18 +202,10 @@ public class SettingsActivity extends AppCompatActivity {
             return;
         }
 
-        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), oldPass);
-        user.reauthenticate(credential).addOnSuccessListener(aVoid -> {
-            user.updatePassword(newPass)
-                    .addOnSuccessListener(task -> {
-                        Toast.makeText(this, "Password updated", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Password update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Reauthentication failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        });
+        AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(user.getEmail()), oldPass);
+        user.reauthenticate(credential).addOnSuccessListener(aVoid -> user.updatePassword(newPass)
+                .addOnSuccessListener(task -> Toast.makeText(this, "Password updated", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(this, "Password update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show())).addOnFailureListener(e -> Toast.makeText(this, "Reauthentication failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     /**

@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +19,6 @@ import com.example.cinepulse.adapters.StreamingProviderAdapter;
 import com.example.cinepulse.models.Cast;
 import com.example.cinepulse.models.CastResponse;
 import com.example.cinepulse.models.CountryProvider;
-import com.example.cinepulse.models.MovieDetail;
 import com.example.cinepulse.models.StreamingProvider;
 import com.example.cinepulse.models.TVDetail;
 import com.example.cinepulse.models.Trailer;
@@ -107,9 +105,9 @@ public class TVDetailActivity extends BaseActivity {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<TVDetail> call = apiService.getTVDetail(tvId, API_KEY);
 
-        call.enqueue(new Callback<TVDetail>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<TVDetail> call, Response<TVDetail> response) {
+            public void onResponse(@NonNull Call<TVDetail> call, @NonNull Response<TVDetail> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     currentTVDetail = response.body();
                     updateTVShowUI(currentTVDetail);
@@ -129,7 +127,7 @@ public class TVDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<TVDetail> call, Throwable t) {
+            public void onFailure(@NonNull Call<TVDetail> call, @NonNull Throwable t) {
                 Log.e(TAG, "Error fetching TV details", t);
             }
         });
@@ -137,9 +135,9 @@ public class TVDetailActivity extends BaseActivity {
 
     private void fetchStreamingProviders(int tvId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getTVWatchProviders(tvId, API_KEY).enqueue(new Callback<WatchProviderResponse>() {
+        apiService.getTVWatchProviders(tvId, API_KEY).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<WatchProviderResponse> call, Response<WatchProviderResponse> response) {
+            public void onResponse(@NonNull Call<WatchProviderResponse> call, @NonNull Response<WatchProviderResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     WatchProviderResponse watchProviderResponse = response.body();
                     Map<String, CountryProvider> countryProviders = watchProviderResponse.getResults();
@@ -166,7 +164,7 @@ public class TVDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<WatchProviderResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<WatchProviderResponse> call, @NonNull Throwable t) {
                 Log.e("STREAMING_PROVIDERS", "Error fetching streaming providers", t);
                 textNoStreamingProviders.setVisibility(View.VISIBLE);
             }
@@ -188,9 +186,9 @@ public class TVDetailActivity extends BaseActivity {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<CastResponse> call = apiService.getTVCredits(tvId, API_KEY);
 
-        call.enqueue(new Callback<CastResponse>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<CastResponse> call, Response<CastResponse> response) {
+            public void onResponse(@NonNull Call<CastResponse> call, @NonNull Response<CastResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Cast> castList = response.body().getCast();
                     if (castList != null && !castList.isEmpty()) {
@@ -202,7 +200,7 @@ public class TVDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<CastResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<CastResponse> call, @NonNull Throwable t) {
                 Log.e(TAG, "Error fetching TV cast", t);
             }
         });
@@ -218,9 +216,9 @@ public class TVDetailActivity extends BaseActivity {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<TrailerResponse> call = apiService.getTVTrailers(tvId, API_KEY);
 
-        call.enqueue(new Callback<TrailerResponse>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
+            public void onResponse(@NonNull Call<TrailerResponse> call, @NonNull Response<TrailerResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Trailer> trailers = response.body().getResults();
                     if (trailers != null && !trailers.isEmpty()) {
@@ -230,7 +228,7 @@ public class TVDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<TrailerResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TrailerResponse> call, @NonNull Throwable t) {
                 Log.e(TAG, "Error fetching TV trailers", t);
             }
         });

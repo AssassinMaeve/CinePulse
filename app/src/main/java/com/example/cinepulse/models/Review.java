@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -10,11 +12,16 @@ public final class Review {
 
     // The author of the review
     @SerializedName("author")
-    private String author;
+    private final String author;
 
     // The content of the review
     @SerializedName("content")
-    private String content;
+    private final String content;
+
+    public Review(String author, String content) {
+        this.author = author;
+        this.content = content;
+    }
 
     /**
      * Returns the name of the author of the review.
@@ -40,6 +47,7 @@ public final class Review {
      *
      * @return A string representation of the review.
      */
+    @NonNull
     @Override
     public String toString() {
         return "Review{" +

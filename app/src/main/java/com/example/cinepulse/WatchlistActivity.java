@@ -1,5 +1,6 @@
 package com.example.cinepulse;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,7 +8,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -120,6 +120,7 @@ public class WatchlistActivity extends BaseActivity
     /**
      * Callback method triggered by the adapter when the watchlist is modified.
      */
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onWatchlistChanged() {
         List<WatchlistItem> updatedWatchlist = WatchlistManager.getWatchlist(this);
@@ -134,6 +135,7 @@ public class WatchlistActivity extends BaseActivity
     /**
      * Ensures data is refreshed when user returns to this activity.
      */
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onResume() {
         super.onResume();

@@ -1,12 +1,13 @@
 package com.example.cinepulse;
 
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,9 +32,8 @@ import retrofit2.Response;
 public class PopularTrailerActivity extends BaseActivity {
 
     private static final String TAG = "PopularTrailerActivity";
-    private RecyclerView recyclerTrailers;
     private TrailerAdapter trailerAdapter;
-    private List<Trailer> popularTrailers = new ArrayList<>();
+    private final List<Trailer> popularTrailers = new ArrayList<>();
     private boolean hasShownDialog = false; // Ensures dialog is shown once per launch
 
     @Override
@@ -47,7 +47,7 @@ public class PopularTrailerActivity extends BaseActivity {
     }
 
     private void initializeViews() {
-        recyclerTrailers = findViewById(R.id.recyclerTrailers);
+        RecyclerView recyclerTrailers = findViewById(R.id.recyclerTrailers);
         recyclerTrailers.setLayoutManager(new LinearLayoutManager(this));
         trailerAdapter = new TrailerAdapter(this, popularTrailers, this::onTrailerClicked);
         recyclerTrailers.setAdapter(trailerAdapter);
@@ -100,6 +100,7 @@ public class PopularTrailerActivity extends BaseActivity {
         });
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private void onTrailerClicked(Trailer trailer) {
         try {
             String youtubeUrl = "https://www.youtube.com/watch?v=" + trailer.getKey();
@@ -124,14 +125,14 @@ public class PopularTrailerActivity extends BaseActivity {
 
         Log.d(TAG, "Fetching popular movies...");
         apiService.getPopularMovies(BuildConfig.TMDB_API_KEY)
-                .enqueue(new Callback<MovieResponse>() {
+                .enqueue(new Callback<>() {
                     @Override
-                    public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                    public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             List<Movie> movies = response.body().getResults();
                             Log.d(TAG, "Got " + movies.size() + " popular movies");
 
-                            if (movies != null && !movies.isEmpty()) {
+                            if (!movies.isEmpty()) {
                                 // Fetch trailers for the top 5 movies
                                 fetchTrailersForMovies(movies.subList(0, Math.min(5, movies.size())));
                             } else {
@@ -143,7 +144,7 @@ public class PopularTrailerActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<MovieResponse> call, Throwable t) {
+                    public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
                         handleNetworkError(t);
                     }
                 });
@@ -155,9 +156,10 @@ public class PopularTrailerActivity extends BaseActivity {
 
         for (Movie movie : movies) {
             apiService.getMovieTrailers(movie.getId(), BuildConfig.TMDB_API_KEY)
-                    .enqueue(new Callback<TrailerResponse>() {
+                    .enqueue(new Callback<>() {
+                        @SuppressLint("NotifyDataSetChanged")
                         @Override
-                        public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
+                        public void onResponse(@NonNull Call<TrailerResponse> call, @NonNull Response<TrailerResponse> response) {
                             if (response.isSuccessful() && response.body() != null) {
                                 List<Trailer> trailers = response.body().getResults();
                                 if (trailers != null && !trailers.isEmpty()) {
@@ -168,7 +170,7 @@ public class PopularTrailerActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<TrailerResponse> call, Throwable t) {
+                        public void onFailure(@NonNull Call<TrailerResponse> call, @NonNull Throwable t) {
                             Log.e(TAG, "Failed to fetch trailers for movie: " + movie.getId(), t);
                         }
                     });

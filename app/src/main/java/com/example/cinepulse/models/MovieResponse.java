@@ -11,7 +11,11 @@ public final class MovieResponse {
 
     // The list of movies returned in the API response
     @SerializedName("results")
-    private List<Movie> results;
+    private final List<Movie> results;
+
+    public MovieResponse(List<Movie> results) {
+        this.results = results;
+    }
 
     /**
      * Returns the list of movies from the API response.
@@ -22,13 +26,4 @@ public final class MovieResponse {
         return results;
     }
 
-    /**
-     * Sets the list of movies in the response.
-     * This setter method may be used when manually deserializing the response or testing.
-     *
-     * @param results The list of Movie objects to set.
-     */
-    public void setResults(List<Movie> results) {
-        this.results = results;
-    }
 }

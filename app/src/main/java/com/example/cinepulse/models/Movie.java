@@ -78,24 +78,6 @@ public final class Movie {
     }
 
     /**
-     * Returns a brief description of the movie.
-     *
-     * @return The movie's overview.
-     */
-    public String getOverview() {
-        return overview;
-    }
-
-    /**
-     * Returns the release date of the movie (or first air date for TV shows).
-     *
-     * @return The release or air date.
-     */
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    /**
      * Optional: Override toString() for easier debugging/logging.
      *
      * @return A string representation of the Movie object.

@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
@@ -11,11 +13,16 @@ public final class TrailerResponse {
 
     // Unique identifier for the trailer response (usually refers to the movie or TV show ID)
     @SerializedName("id")
-    private int id;
+    private final int id;
 
     // List of trailer objects associated with the movie or TV show
     @SerializedName("results")
-    private List<Trailer> results;
+    private final List<Trailer> results;
+
+    public TrailerResponse(int id, List<Trailer> results) {
+        this.id = id;
+        this.results = results;
+    }
 
     // Getter method for the ID of the response
 
@@ -42,6 +49,7 @@ public final class TrailerResponse {
 
     // Optional: Override toString() for better logging or debugging
 
+    @NonNull
     @Override
     public String toString() {
         return "TrailerResponse{" +

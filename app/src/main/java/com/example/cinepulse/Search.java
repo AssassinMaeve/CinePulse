@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,11 +29,8 @@ import retrofit2.Response;
 
 public class Search extends BaseActivity {
 
-    private EditText editTextSearch;
     private RecyclerView recyclerSearchResults;
     private MultiSearchAdapter searchAdapter;
-    // Store API key securely, consider using a more secure approach like environment variables or backend authentication
-    private final String apiKey = BuildConfig.TMDB_API_KEY; // API key from build config to avoid hardcoding
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +38,7 @@ public class Search extends BaseActivity {
         setContentView(R.layout.activity_search);
 
         // Initialize UI elements
-        editTextSearch = findViewById(R.id.editTextSearch);
+        EditText editTextSearch = findViewById(R.id.editTextSearch);
         recyclerSearchResults = findViewById(R.id.recyclerSearchResults);
 
         // Setup RecyclerView
@@ -71,11 +68,14 @@ public class Search extends BaseActivity {
 
     private void searchMovies(String query) {
         TMDbApiService apiService = RetroFitClient.getApiService();
+        // Store API key securely, consider using a more secure approach like environment variables or backend authentication
+        // API key from build config to avoid hardcoding
+        String apiKey = BuildConfig.TMDB_API_KEY;
         Call<MultiSearchResponse> call = apiService.searchMulti(apiKey, query);
 
-        call.enqueue(new Callback<MultiSearchResponse>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<MultiSearchResponse> call, Response<MultiSearchResponse> response) {
+            public void onResponse(@NonNull Call<MultiSearchResponse> call, @NonNull Response<MultiSearchResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<MediaItem> items = response.body().getResults();
                     List<MediaItem> filteredItems = filterSearchResults(items);
@@ -89,7 +89,7 @@ public class Search extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<MultiSearchResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MultiSearchResponse> call, @NonNull Throwable t) {
                 Log.e("Search", "API failure: " + t.getMessage());
                 Toast.makeText(Search.this, "Failed to fetch search results. Please try again later.", Toast.LENGTH_SHORT).show();
             }

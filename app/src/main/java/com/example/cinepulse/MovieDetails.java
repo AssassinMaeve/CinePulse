@@ -1,5 +1,6 @@
 package com.example.cinepulse;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -104,9 +104,10 @@ public class MovieDetails extends BaseActivity {
 
     private void fetchMovieDetails(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getMovieDetail(movieId, API_KEY).enqueue(new Callback<MovieDetail>() {
+        apiService.getMovieDetail(movieId, API_KEY).enqueue(new Callback<>() {
+            @SuppressLint("SetTextI18n")
             @Override
-            public void onResponse(Call<MovieDetail> call, Response<MovieDetail> response) {
+            public void onResponse(@NonNull Call<MovieDetail> call, @NonNull Response<MovieDetail> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     MovieDetail details = response.body();
                     currentMovieDetails = details;
@@ -134,7 +135,7 @@ public class MovieDetails extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<MovieDetail> call, Throwable t) {
+            public void onFailure(@NonNull Call<MovieDetail> call, @NonNull Throwable t) {
                 Log.e("MOVIE_DETAILS", "Error fetching movie details", t);
             }
         });
@@ -142,9 +143,9 @@ public class MovieDetails extends BaseActivity {
 
     private void fetchTrailer(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getMovieTrailers(movieId, API_KEY).enqueue(new Callback<TrailerResponse>() {
+        apiService.getMovieTrailers(movieId, API_KEY).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
+            public void onResponse(@NonNull Call<TrailerResponse> call, @NonNull Response<TrailerResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     for (Trailer trailer : response.body().getResults()) {
                         if ("Trailer".equalsIgnoreCase(trailer.getType())) {
@@ -159,7 +160,7 @@ public class MovieDetails extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<TrailerResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TrailerResponse> call, @NonNull Throwable t) {
                 Log.e("TRAILER", "Error fetching trailer", t);
             }
         });
@@ -167,9 +168,9 @@ public class MovieDetails extends BaseActivity {
 
     private void fetchCast(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getMovieCredits(movieId, API_KEY).enqueue(new Callback<CastResponse>() {
+        apiService.getMovieCredits(movieId, API_KEY).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<CastResponse> call, Response<CastResponse> response) {
+            public void onResponse(@NonNull Call<CastResponse> call, @NonNull Response<CastResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getCast() != null) {
                     recyclerCast.setAdapter(new CastAdapter(MovieDetails.this, response.body().getCast()));
                     textNoCast.setVisibility(TextView.GONE);
@@ -179,7 +180,7 @@ public class MovieDetails extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<CastResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<CastResponse> call, @NonNull Throwable t) {
                 Log.e("CAST", "Error fetching cast", t);
                 textNoCast.setVisibility(TextView.VISIBLE);
             }
@@ -188,9 +189,9 @@ public class MovieDetails extends BaseActivity {
 
     private void fetchStreamingProviders(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getMovieWatchProviders(movieId, API_KEY).enqueue(new Callback<WatchProviderResponse>() {
+        apiService.getMovieWatchProviders(movieId, API_KEY).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<WatchProviderResponse> call, Response<WatchProviderResponse> response) {
+            public void onResponse(@NonNull Call<WatchProviderResponse> call, @NonNull Response<WatchProviderResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     WatchProviderResponse watchProviderResponse = response.body();
                     Map<String, CountryProvider> countryProviders = watchProviderResponse.getResults();
@@ -214,7 +215,7 @@ public class MovieDetails extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<WatchProviderResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<WatchProviderResponse> call, @NonNull Throwable t) {
                 Log.e("STREAMING_PROVIDERS", "Error fetching streaming providers", t);
                 textNoStreamingProviders.setVisibility(View.VISIBLE);
             }

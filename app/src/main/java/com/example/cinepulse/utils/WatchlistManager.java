@@ -11,7 +11,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class WatchlistManager {
 
@@ -41,7 +40,7 @@ public class WatchlistManager {
     }
 
     // Modified to return boolean for success/failure
-    public static boolean removeFromWatchlist(Context context, int itemId) {
+    public static void removeFromWatchlist(Context context, int itemId) {
         try {
             List<WatchlistItem> currentList = getWatchlist(context);
             int initialSize = currentList.size();
@@ -50,12 +49,9 @@ public class WatchlistManager {
             if (currentList.size() != initialSize) {
                 saveWatchlist(context, currentList);
                 Log.d(TAG, "Item removed from watchlist: " + itemId);
-                return true;
             }
-            return false;
         } catch (Exception e) {
             Log.e(TAG, "Error removing from watchlist", e);
-            return false;
         }
     }
 
@@ -101,14 +97,12 @@ public class WatchlistManager {
         return false;
     }
 
-    public static boolean clearWatchlist(Context context) {
+    public static void clearWatchlist(Context context) {
         try {
             SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
             preferences.edit().remove(WATCHLIST_KEY).apply();
-            return true;
         } catch (Exception e) {
             Log.e(TAG, "Error clearing watchlist", e);
-            return false;
         }
     }
 }

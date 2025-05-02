@@ -84,15 +84,6 @@ public final class MovieDetail {
     }
 
     /**
-     * Returns the average rating of the movie.
-     *
-     * @return The movie's rating.
-     */
-    public float getRating() {
-        return rating;
-    }
-
-    /**
      * Returns the path to the movie's poster image.
      *
      * @return The poster path.

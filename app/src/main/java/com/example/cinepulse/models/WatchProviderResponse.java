@@ -5,7 +5,11 @@ import java.util.Map;
 
 public class WatchProviderResponse {
     @SerializedName("results")
-    private Map<String, CountryProvider> results;
+    private final Map<String, CountryProvider> results;
+
+    public WatchProviderResponse(Map<String, CountryProvider> results) {
+        this.results = results;
+    }
 
     public Map<String, CountryProvider> getResults() {
         return results;

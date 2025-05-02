@@ -1,11 +1,13 @@
 package com.example.cinepulse;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,17 +34,17 @@ public class GenreMoviesActivity extends BaseActivity {
     private String genreName;
 
     private TextView title;
-    private ToggleButton toggle;
     private RecyclerView recyclerView;
 
     private MovieAdapter movieAdapter;
     private TvShowAdapter tvShowAdapter;
 
-    private List<Movie> movieList = new ArrayList<>();
-    private List<TvShow> tvShowList = new ArrayList<>();
+    private final List<Movie> movieList = new ArrayList<>();
+    private final List<TvShow> tvShowList = new ArrayList<>();
 
     private String apiKey;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +61,7 @@ public class GenreMoviesActivity extends BaseActivity {
 
         // Initialize UI components
         title = findViewById(R.id.genreTitle);
-        toggle = findViewById(R.id.toggleMovieTv);
+        ToggleButton toggle = findViewById(R.id.toggleMovieTv);
         recyclerView = findViewById(R.id.recyclerByGenre);
 
         // Set the initial genre title (Movies)
@@ -96,9 +98,9 @@ public class GenreMoviesActivity extends BaseActivity {
     private void fetchGenreMovies(int genreId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<MovieResponse> call = apiService.getMoviesByGenre(genreId, apiKey);
-        call.enqueue(new Callback<MovieResponse>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+            public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // Clear the movie list and add fetched movies
                     movieList.clear();
@@ -120,7 +122,7 @@ public class GenreMoviesActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
                 Log.e("GenreMoviesActivity", "Movie fetch error: " + t.getMessage());
                 Toast.makeText(GenreMoviesActivity.this, "Error fetching movies", Toast.LENGTH_SHORT).show();
             }
@@ -131,9 +133,10 @@ public class GenreMoviesActivity extends BaseActivity {
     private void fetchGenreTVShows(int genreId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<TvShowResponse> call = apiService.getTVByGenre(genreId, apiKey);
-        call.enqueue(new Callback<TvShowResponse>() {
+        call.enqueue(new Callback<>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onResponse(Call<TvShowResponse> call, Response<TvShowResponse> response) {
+            public void onResponse(@NonNull Call<TvShowResponse> call, @NonNull Response<TvShowResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // Clear the TV shows list and add fetched shows
                     tvShowList.clear();
@@ -155,7 +158,7 @@ public class GenreMoviesActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<TvShowResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TvShowResponse> call, @NonNull Throwable t) {
                 Log.e("GenreMoviesActivity", "TV show fetch error: " + t.getMessage());
                 Toast.makeText(GenreMoviesActivity.this, "Error fetching TV shows", Toast.LENGTH_SHORT).show();
             }

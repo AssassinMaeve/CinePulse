@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -10,27 +12,36 @@ public final class TvShow {
 
     // Unique identifier for the TV show
     @SerializedName("id")
-    private int id;
+    private final int id;
 
     // Name of the TV show
     @SerializedName("name")
-    private String name;
+    private final String name;
 
     // Path to the poster image for the TV show
     @SerializedName("poster_path")
-    private String posterPath;
+    private final String posterPath;
 
     // Overview or synopsis of the TV show
     @SerializedName("overview")
-    private String overview;
+    private final String overview;
 
     // Average vote rating for the TV show
     @SerializedName("vote_average")
-    private float voteAverage;
+    private final float voteAverage;
 
     // Date when the TV show first aired
     @SerializedName("first_air_date")
-    private String firstAirDate;
+    private final String firstAirDate;
+
+    public TvShow(int id, String name, String posterPath, String overview, float voteAverage, String firstAirDate) {
+        this.id = id;
+        this.name = name;
+        this.posterPath = posterPath;
+        this.overview = overview;
+        this.voteAverage = voteAverage;
+        this.firstAirDate = firstAirDate;
+    }
 
     // Getter method for the unique identifier of the TV show
     /**
@@ -63,36 +74,13 @@ public final class TvShow {
     }
 
     // Getter method for the overview of the TV show
-    /**
-     * Returns the overview or synopsis of the TV show.
-     *
-     * @return The overview of the TV show.
-     */
-    public String getOverview() {
-        return overview;
-    }
 
     // Getter method for the average vote rating of the TV show
-    /**
-     * Returns the average vote rating for the TV show.
-     *
-     * @return The vote average for the TV show.
-     */
-    public float getVoteAverage() {
-        return voteAverage;
-    }
 
     // Getter method for the first air date of the TV show
-    /**
-     * Returns the first air date of the TV show.
-     *
-     * @return The first air date of the TV show.
-     */
-    public String getFirstAirDate() {
-        return firstAirDate;
-    }
 
     // Optional: Override toString() for better logging or debugging
+    @NonNull
     @Override
     public String toString() {
         return "TvShow{" +

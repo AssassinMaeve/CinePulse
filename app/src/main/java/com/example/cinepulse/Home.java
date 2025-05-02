@@ -108,7 +108,7 @@ public class Home extends BaseActivity {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<MovieResponse> call = apiService.getTrendingMovies(apiKey);
 
-        call.enqueue(new Callback<MovieResponse>() {
+        call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                 // Handle successful response
@@ -139,7 +139,7 @@ public class Home extends BaseActivity {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<TvShowResponse> call = apiService.getTrendingTVShows(apiKey);
 
-        call.enqueue(new Callback<TvShowResponse>() {
+        call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<TvShowResponse> call, @NonNull Response<TvShowResponse> response) {
                 // Handle successful response
@@ -167,7 +167,7 @@ public class Home extends BaseActivity {
 
     // Handle API error by providing appropriate feedback to users
     private void handleApiError(int errorCode) {
-        String message = "An error occurred while fetching data.";
+        String message;
         switch (errorCode) {
             case 404:
                 message = "Data not found.";

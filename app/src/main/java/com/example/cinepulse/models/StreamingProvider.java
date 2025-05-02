@@ -3,18 +3,16 @@ package com.example.cinepulse.models;
 import com.google.gson.annotations.SerializedName;
 
 public class StreamingProvider {
-    @SerializedName("provider_id")
-    private int providerId;
 
     @SerializedName("provider_name")
-    private String providerName;
+    private final String providerName;
 
     @SerializedName("logo_path")
-    private String logoPath;
+    private final String logoPath;
 
-    // Getters
-    public int getProviderId() {
-        return providerId;
+    public StreamingProvider(String providerName, String logoPath) {
+        this.providerName = providerName;
+        this.logoPath = logoPath;
     }
 
     public String getProviderName() {

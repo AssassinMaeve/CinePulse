@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
@@ -11,28 +13,38 @@ import java.util.List;
 public final class TVDetail {
 
     // Unique identifier for the TV show
-    private int id;
+    private final int id;
 
     // Name of the TV show
-    private String name;
+    private final String name;
 
     // Date when the TV show first aired
     @SerializedName("first_air_date")
-    private String firstAirDate;
+    private final String firstAirDate;
 
     // Overview or synopsis of the TV show
-    private String overview;
+    private final String overview;
 
     // Path to the poster image for the TV show
     @SerializedName("poster_path")
-    private String posterPath;
+    private final String posterPath;
 
     // Average vote rating for the TV show
     @SerializedName("vote_average")
-    private float voteAverage;
+    private final float voteAverage;
 
     // List of genres associated with the TV show
-    private List<Genre> genres;
+    private final List<Genre> genres;
+
+    public TVDetail(int id, String name, String firstAirDate, String overview, String posterPath, float voteAverage, List<Genre> genres) {
+        this.id = id;
+        this.name = name;
+        this.firstAirDate = firstAirDate;
+        this.overview = overview;
+        this.posterPath = posterPath;
+        this.voteAverage = voteAverage;
+        this.genres = genres;
+    }
 
     // Getter method for the unique identifier of the TV show
     /**
@@ -85,26 +97,11 @@ public final class TVDetail {
     }
 
     // Getter method for the average vote rating of the TV show
-    /**
-     * Returns the average vote rating for the TV show.
-     *
-     * @return The vote average for the TV show.
-     */
-    public float getVoteAverage() {
-        return voteAverage;
-    }
 
     // Getter method for the list of genres associated with the TV show
-    /**
-     * Returns a list of genres associated with the TV show.
-     *
-     * @return The genres of the TV show.
-     */
-    public List<Genre> getGenres() {
-        return genres;
-    }
 
     // Optional: Override toString() for better logging or debugging
+    @NonNull
     @Override
     public String toString() {
         return "TVDetail{" +

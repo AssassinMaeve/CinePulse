@@ -102,24 +102,6 @@ public final class MediaItem {
     }
 
     /**
-     * Returns the release date of the movie.
-     *
-     * @return The release date, or null if not applicable.
-     */
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    /**
-     * Returns the first air date of the TV show.
-     *
-     * @return The first air date, or null if not applicable.
-     */
-    public String getFirstAirDate() {
-        return firstAirDate;
-    }
-
-    /**
      * Optional: Override toString() for easier debugging/logging.
      *
      * @return A string representation of the media item.

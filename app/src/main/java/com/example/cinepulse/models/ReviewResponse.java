@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 /**
@@ -9,7 +11,11 @@ import java.util.List;
 public final class ReviewResponse {
 
     // A list of reviews obtained from the API
-    private List<Review> results;
+    private final List<Review> results;
+
+    public ReviewResponse(List<Review> results) {
+        this.results = results;
+    }
 
     /**
      * Returns the list of reviews.
@@ -26,6 +32,7 @@ public final class ReviewResponse {
      *
      * @return A string representation of the ReviewResponse.
      */
+    @NonNull
     @Override
     public String toString() {
         return "ReviewResponse{" +

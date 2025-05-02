@@ -13,8 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.cinepulse.MovieDetails;
 import com.example.cinepulse.R;
+import com.example.cinepulse.TVDetailActivity;
 import com.example.cinepulse.models.WatchlistItem;
 import com.example.cinepulse.utils.WatchlistManager;
 
@@ -22,18 +24,18 @@ import java.util.List;
 
 public class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.ViewHolder> {
 
-    private final Context context; // Context for UI-related operations like inflating views and starting activities
-    private final List<WatchlistItem> itemList; // List to hold the watchlist items
-    private final OnWatchlistChangeListener listener; // Listener to notify when watchlist changes
+    private final Context context;
+    private final List<WatchlistItem> itemList;
+    private final OnWatchlistChangeListener listener;
 
-    // Interface for notifying changes to the watchlist
+    // Interface to notify external listener when watchlist changes
     public interface OnWatchlistChangeListener {
         void onWatchlistChanged();
     }
 
-    // Constructor to initialize context, item list, and listener
     public WatchlistAdapter(Context context, List<WatchlistItem> itemList, OnWatchlistChangeListener listener) {
-        this.context = context;
+        // Use application context to prevent memory leaks
+        this.context = context.getApplicationContext();
         this.itemList = itemList;
         this.listener = listener;
     }
@@ -41,8 +43,8 @@ public class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the item_movie layout for each movie in the watchlist
-        View view = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+        // Inflate view efficiently
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false);
         return new ViewHolder(view);
     }
 
@@ -50,68 +52,84 @@ public class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WatchlistItem item = itemList.get(position);
 
-        // Set the movie title and poster image using Glide
+        // Set movie/TV title
         holder.title.setText(item.getTitle());
-        Glide.with(context)
-                .load("https://image.tmdb.org/t/p/w500" + item.getPosterPath()) // Construct image URL
-                .into(holder.poster); // Set the image into the ImageView
 
-        // Make the remove button visible since this is the watchlist
+        // Load image with Glide using disk caching and fallbacks
+        Glide.with(holder.itemView.getContext())
+                .load("https://image.tmdb.org/t/p/w500" + item.getPosterPath())
+                .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache both original and resized images
+                .placeholder(R.drawable.circle_background_foreground) // Optional: show while loading
+                .error(R.drawable.circle_background_foreground) // Optional: fallback if failed
+                .into(holder.poster);
+
+        // Show remove button
         holder.removeButton.setVisibility(View.VISIBLE);
 
-        // Set click listeners for opening details and removing from the watchlist
+        // Click listeners
         holder.itemView.setOnClickListener(v -> openDetails(item));
         holder.removeButton.setOnClickListener(v -> removeItem(holder.getAdapterPosition(), item));
     }
 
-    // Method to open the MovieDetails activity with the selected movie's ID and type
+    // Launch the correct activity based on item type
     private void openDetails(WatchlistItem item) {
-        Intent intent = new Intent(context, MovieDetails.class);
-        intent.putExtra("movie_id", item.getId()); // Pass the movie ID
-        intent.putExtra("type", item.getType()); // Pass the movie type
-        context.startActivity(intent); // Start the MovieDetails activity
+        Intent intent;
+
+        switch (item.getType().toLowerCase()) {
+            case "movie":
+                intent = new Intent(context, MovieDetails.class);
+                intent.putExtra("movie_id", item.getId());
+                intent.putExtra("type", "movie");
+                break;
+
+            case "tv":
+                intent = new Intent(context, TVDetailActivity.class);
+                intent.putExtra("tv_id", item.getId());
+                intent.putExtra("type", "tv");
+                break;
+
+            default:
+                Toast.makeText(context, "Unknown type: " + item.getType(), Toast.LENGTH_SHORT).show();
+                return;
+        }
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Required when using application context
+        context.startActivity(intent);
     }
 
-    // Method to remove an item from the watchlist
+    // Remove an item from watchlist safely
     private void removeItem(int position, WatchlistItem item) {
-        if (position != RecyclerView.NO_POSITION) {
-            // Remove from persistent storage (e.g., SharedPreferences, database, etc.)
-            WatchlistManager.removeFromWatchlist(context, item.getId());
+        if (position != RecyclerView.NO_POSITION && item != null) {
+            WatchlistManager.removeFromWatchlist(context, item.getId()); // Persistent removal
+            itemList.remove(position); // Remove from adapter list
+            notifyItemRemoved(position); // Notify adapter
 
-            // Remove from the local list
-            itemList.remove(position);
-            notifyItemRemoved(position); // Notify adapter to update UI
-
-            // Notify the parent activity or fragment that the watchlist has changed
             if (listener != null) {
                 listener.onWatchlistChanged();
             }
 
-            // Show feedback to the user
             Toast.makeText(context, "Removed from watchlist", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size(); // Return the number of items in the watchlist
+        return itemList != null ? itemList.size() : 0;
     }
 
-    // ViewHolder class to hold the views for each item
+    // ViewHolder holds references to the views for one item
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView poster; // ImageView to show the movie poster
-        TextView title; // TextView to show the movie title
-        ImageView removeButton; // Button to remove the item from the watchlist
+        ImageView poster;
+        TextView title;
+        ImageView removeButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            // Initialize the views by finding them in the layout
             poster = itemView.findViewById(R.id.imagePoster);
             title = itemView.findViewById(R.id.textTitle);
             removeButton = itemView.findViewById(R.id.removeButton);
 
-            // Verify that all required views are properly initialized to avoid crashes
+            // Fail-fast check in case view IDs are missing
             if (poster == null || title == null || removeButton == null) {
                 throw new IllegalStateException("Missing required views in layout");
             }

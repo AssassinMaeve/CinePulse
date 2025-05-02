@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
@@ -11,29 +13,28 @@ public final class TvShowResponse {
 
     // Current page number in the response
     @SerializedName("page")
-    private int page;
+    private final int page;
 
     // List of TV shows in the current page
     @SerializedName("results")
-    private List<TvShow> results;
+    private final List<TvShow> results;
 
     // Total number of results available across all pages
     @SerializedName("total_results")
-    private int totalResults;
+    private final int totalResults;
 
     // Total number of pages available for pagination
     @SerializedName("total_pages")
-    private int totalPages;
+    private final int totalPages;
+
+    public TvShowResponse(int page, List<TvShow> results, int totalResults, int totalPages) {
+        this.page = page;
+        this.results = results;
+        this.totalResults = totalResults;
+        this.totalPages = totalPages;
+    }
 
     // Getter method for the current page number
-    /**
-     * Returns the current page number.
-     *
-     * @return The current page number.
-     */
-    public int getPage() {
-        return page;
-    }
 
     // Getter method for the list of TV shows in the current page
     /**
@@ -46,26 +47,11 @@ public final class TvShowResponse {
     }
 
     // Getter method for the total number of results available
-    /**
-     * Returns the total number of TV shows available across all pages.
-     *
-     * @return The total number of TV shows.
-     */
-    public int getTotalResults() {
-        return totalResults;
-    }
 
     // Getter method for the total number of pages available
-    /**
-     * Returns the total number of pages available for pagination.
-     *
-     * @return The total number of pages.
-     */
-    public int getTotalPages() {
-        return totalPages;
-    }
 
     // Optional: Override toString() for logging and debugging
+    @NonNull
     @Override
     public String toString() {
         return "TvShowResponse{" +

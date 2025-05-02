@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -10,23 +12,31 @@ public final class Trailer {
 
     // Unique identifier for the trailer
     @SerializedName("id")
-    private String id;
+    private final String id;
 
     // Key used to fetch the trailer video from the video site (e.g., YouTube)
     @SerializedName("key")
-    private String key;
+    private final String key;
 
     // Name of the trailer (typically used to differentiate multiple trailers)
     @SerializedName("name")
-    private String name;
+    private final String name;
 
     // The site where the trailer is hosted (e.g., YouTube, Vimeo)
     @SerializedName("site")
-    private String site;
+    private final String site;
 
     // Type of the trailer (e.g., "Official", "Teaser")
     @SerializedName("type")
-    private String type;
+    private final String type;
+
+    public Trailer(String id, String key, String name, String site, String type) {
+        this.id = id;
+        this.key = key;
+        this.name = name;
+        this.site = site;
+        this.type = type;
+    }
 
     // Getter methods
 
@@ -58,15 +68,6 @@ public final class Trailer {
     }
 
     /**
-     * Returns the site where the trailer is hosted.
-     *
-     * @return The site name (e.g., YouTube, Vimeo).
-     */
-    public String getSite() {
-        return site;
-    }
-
-    /**
      * Returns the type of the trailer.
      *
      * @return The trailer type (e.g., "Official", "Teaser").
@@ -77,6 +78,7 @@ public final class Trailer {
 
     // Optional: Override toString() for better logging or debugging
 
+    @NonNull
     @Override
     public String toString() {
         return "Trailer{" +

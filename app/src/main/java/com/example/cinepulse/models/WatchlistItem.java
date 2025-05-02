@@ -1,5 +1,7 @@
 package com.example.cinepulse.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 /**
@@ -92,6 +94,7 @@ public final class WatchlistItem {
      *
      * @return A string representation of the watchlist item.
      */
+    @NonNull
     @Override
     public String toString() {
         return "WatchlistItem{" +
