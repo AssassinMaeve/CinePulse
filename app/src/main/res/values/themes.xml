@@ -4,6 +4,14 @@
         <!-- Light mode background -->
         <item name="android:windowBackground">@color/bg_light</item>
 
+        <!-- Set background color -->
+        <item name="windowSplashScreenBackground">#121212</item>
+
+        <!-- Set your logo -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/cinepulsewhitelogo</item>
+
+        <!-- Optional: duration and fade -->
+        <item name="postSplashScreenTheme">@style/Theme.MyApp</item>
 
     </style>
 

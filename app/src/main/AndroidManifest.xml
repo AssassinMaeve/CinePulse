@@ -8,63 +8,49 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CinePulse"
         tools:targetApi="31">
+
+
+        <!-- SplashActivity is now the Launcher Activity -->
         <activity
-            android:name=".SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ReviewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PopularTrailerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".WatchlistActivity"
-            android:exported="false" /> <!-- Activities -->
-        <activity
-            android:name=".TVDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".GenreMoviesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".GenreListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MovieDetails"
-            android:exported="false" />
-        <activity
-            android:name=".Profile"
-            android:exported="false" />
-        <activity
-            android:name=".Search"
-            android:exported="false" />
-        <activity
-            android:name=".Home"
-            android:exported="false" />
-        <activity
-            android:name=".SignUp"
-            android:exported="false" />
-        <activity
-            android:name=".Login"
-            android:exported="true" /> <!-- Launcher Activity -->
-        <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Font Preload Metadata -->
+        </activity>
+
+        <activity android:name=".SettingsActivity" android:exported="false" />
+        <activity android:name=".ReviewActivity" android:exported="false" />
+        <activity android:name=".PopularTrailerActivity" android:exported="false" />
+        <activity android:name=".WatchlistActivity" android:exported="false" />
+        <activity android:name=".TVDetailActivity" android:exported="false" />
+        <activity android:name=".GenreMoviesActivity" android:exported="false" />
+        <activity android:name=".GenreListActivity" android:exported="false" />
+        <activity android:name=".MovieDetails" android:exported="false" />
+        <activity android:name=".Profile" android:exported="false" />
+        <activity android:name=".Search" android:exported="false" />
+        <activity android:name=".Home" android:exported="false" />
+        <activity android:name=".SignUp" android:exported="false" />
+        <activity android:name=".Login" android:exported="false" />
+
+        <!-- MainActivity is now launched *after* SplashActivity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CinePulse" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
+
+
 
 </manifest>

@@ -89,6 +89,7 @@
     <string name="view_reviewsTvDetails">View Reviews</string>
     <string name="provider_name">Provider Name</string>
     <string name="provider">provider</string>
+    <string name="welcome_to_cinepulse">Welcome To CinePulse</string>
 
 
 </resources>
