@@ -61,16 +61,6 @@
             android:text="@string/settings"
             android:textColor="#FFFFFF" />
 
-        <TextView
-            android:id="@+id/textSupport"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autoLink="web"
-            android:linksClickable="true"
-            android:text="@string/need_help_visit_support"
-            android:textColor="#03A9F4"
-            android:textSize="14sp" />
     </LinearLayout>
 
     <!-- Bottom Navigation pinned to the bottom of the activity -->
