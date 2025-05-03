@@ -71,5 +71,6 @@ dependencies {
     implementation (libs.google.exoplayer.core)
 // ExoPlayer UI
     implementation (libs.exoplayer.ui.v2181)
+    implementation (libs.core.splashscreen)
 
 }
