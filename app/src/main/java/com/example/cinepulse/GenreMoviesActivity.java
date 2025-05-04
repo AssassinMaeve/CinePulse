@@ -51,7 +51,8 @@ public class GenreMoviesActivity extends BaseActivity {
         setContentView(R.layout.activity_genre_movies);
 
         // Fetch the API key from resources
-        apiKey = getString(R.string.api_key);
+        apiKey = BuildConfig.TMDB_API_KEY; // ✅ This fetches the key embedded via build.gradle
+
 
         // Retrieve genre information passed from the previous screen
         genreId = getIntent().getIntExtra("genre_id", -1);
