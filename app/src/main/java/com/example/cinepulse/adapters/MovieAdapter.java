@@ -2,7 +2,6 @@ package com.example.cinepulse.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.cinepulse.MovieDetails;
 import com.example.cinepulse.R;
+import com.example.cinepulse.fragments.MovieDetailsFragment;
 import com.example.cinepulse.models.Movie;
 import com.example.cinepulse.models.TvShow;
 
@@ -49,11 +50,9 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == VIEW_TYPE_MOVIE) {
-            Movie movie = (Movie) itemList.get(position);
-            ((MovieViewHolder) holder).bindData(movie);
+            ((MovieViewHolder) holder).bindData((Movie) itemList.get(position));
         } else {
-            TvShow tvShow = (TvShow) itemList.get(position);
-            ((TvShowViewHolder) holder).bindData(tvShow);
+            ((TvShowViewHolder) holder).bindData((TvShow) itemList.get(position));
         }
     }
 
@@ -67,7 +66,6 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return itemList.get(position) instanceof Movie ? VIEW_TYPE_MOVIE : VIEW_TYPE_TV_SHOW;
     }
 
-    // Movie ViewHolder
     class MovieViewHolder extends RecyclerView.ViewHolder {
         ImageView poster;
         TextView title;
@@ -86,15 +84,17 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .into(poster);
 
             itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(context, MovieDetails.class);
-                intent.putExtra("movie_id", movie.getId());
-                intent.putExtra("type", "movie");
-                context.startActivity(intent);
+                Fragment fragment = MovieDetailsFragment.newInstance(movie.getId());
+                ((AppCompatActivity) context)
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
             });
         }
     }
 
-    // TV Show ViewHolder
     class TvShowViewHolder extends RecyclerView.ViewHolder {
         ImageView poster;
         TextView title;
@@ -113,19 +113,21 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .into(poster);
 
             itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(context, MovieDetails.class);
-                intent.putExtra("tv_show_id", tvShow.getId());
-                intent.putExtra("type", "tv");
-                context.startActivity(intent);
+                Fragment fragment = MovieDetailsFragment.newInstance(tvShow.getId());
+                ((AppCompatActivity) context)
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
             });
         }
     }
 
-    // Method to update data
     @SuppressLint("NotifyDataSetChanged")
     public void updateData(List<Object> newItems) {
         itemList.clear();
         itemList.addAll(newItems);
-        notifyDataSetChanged();  // Can consider DiffUtil for more efficient updates
+        notifyDataSetChanged(); // Consider using DiffUtil for optimization
     }
 }
