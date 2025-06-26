@@ -1,8 +1,6 @@
 package com.example.cinepulse.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +9,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cinepulse.BuildConfig;
-import com.example.cinepulse.GenreListActivity;
 import com.example.cinepulse.R;
 import com.example.cinepulse.adapters.MovieAdapter;
 import com.example.cinepulse.adapters.TvShowAdapter;
@@ -61,8 +59,13 @@ public class HomeFragment extends Fragment {
 
         Button btnMovieList = view.findViewById(R.id.btnMovieList);
         btnMovieList.setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), GenreListActivity.class));
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new GenreListFragment())
+                    .addToBackStack(null)  // optional: allows user to go back
+                    .commit();
         });
+
 
         return view;
     }
@@ -74,6 +77,7 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
+                if (!isAdded() || getView() == null) return; // ✅ avoid crash
                 if (response.isSuccessful() && response.body() != null) {
                     List<Movie> movies = response.body().getResults();
                     movieAdapter = new MovieAdapter(requireContext(), new ArrayList<>(movies));
@@ -85,10 +89,12 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return; // ✅ safe check
                 Toast.makeText(requireContext(), "Failed to load movies", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     private void fetchTrendingTVShows() {
         TMDbApiService apiService = RetroFitClient.getApiService();
@@ -97,9 +103,10 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<TvShowResponse> call, @NonNull Response<TvShowResponse> response) {
+                if (!isAdded() || getView() == null) return; // ✅ avoid crash
                 if (response.isSuccessful() && response.body() != null) {
                     List<TvShow> shows = response.body().getResults();
-                    tvShowAdapter = new TvShowAdapter(requireContext(), shows);
+                    tvShowAdapter = new TvShowAdapter((AppCompatActivity) requireContext(), shows);
                     recyclerTrendingTV.setAdapter(tvShowAdapter);
                 } else {
                     handleApiError(response.code());
@@ -108,10 +115,12 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<TvShowResponse> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return; // ✅ safe check
                 Toast.makeText(requireContext(), "Failed to load TV shows", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     private void handleApiError(int errorCode) {
         String message;
