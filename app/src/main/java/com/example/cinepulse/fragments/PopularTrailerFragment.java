@@ -41,14 +41,12 @@ public class PopularTrailerFragment extends Fragment {
     private final List<Trailer> popularTrailers = new ArrayList<>();
     private boolean hasShownDialog = false;
 
-    private RecyclerView recyclerTrailers;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_populartrailer, container, false);
 
-        recyclerTrailers = view.findViewById(R.id.recyclerTrailers);
+        RecyclerView recyclerTrailers = view.findViewById(R.id.recyclerTrailers);
         recyclerTrailers.setLayoutManager(new LinearLayoutManager(getContext()));
         trailerAdapter = new TrailerAdapter(getContext(), popularTrailers, this::onTrailerClicked);
         recyclerTrailers.setAdapter(trailerAdapter);
@@ -99,7 +97,7 @@ public class PopularTrailerFragment extends Fragment {
 
         Log.d(TAG, "Fetching popular movies...");
         apiService.getPopularMovies(BuildConfig.TMDB_API_KEY)
-                .enqueue(new Callback<MovieResponse>() {
+                .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
@@ -129,7 +127,7 @@ public class PopularTrailerFragment extends Fragment {
 
         for (Movie movie : movies) {
             apiService.getMovieTrailers(movie.getId(), BuildConfig.TMDB_API_KEY)
-                    .enqueue(new Callback<TrailerResponse>() {
+                    .enqueue(new Callback<>() {
                         @SuppressLint("NotifyDataSetChanged")
                         @Override
                         public void onResponse(@NonNull Call<TrailerResponse> call, @NonNull Response<TrailerResponse> response) {
