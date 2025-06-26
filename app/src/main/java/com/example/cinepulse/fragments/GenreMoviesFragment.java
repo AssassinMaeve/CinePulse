@@ -2,7 +2,6 @@ package com.example.cinepulse.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,6 +132,7 @@ public class GenreMoviesFragment extends Fragment {
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<TvShowResponse> call = apiService.getTVByGenre(genreId, apiKey);
         call.enqueue(new Callback<>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(@NonNull Call<TvShowResponse> call, @NonNull Response<TvShowResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
