@@ -1,18 +1,22 @@
-package com.example.cinepulse;
+package com.example.cinepulse.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cinepulse.ToggleTheme.BaseActivity;
+import com.example.cinepulse.BuildConfig;
+import com.example.cinepulse.R;
 import com.example.cinepulse.adapters.ReviewAdapter;
 import com.example.cinepulse.models.Review;
 import com.example.cinepulse.models.ReviewResponse;
@@ -27,74 +31,77 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReviewActivity extends BaseActivity {
+public class ReviewFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ReviewAdapter reviewAdapter;
     private ProgressBar progressBar;
     private TextView noReviewsTextView;
 
-    // Use BuildConfig to secure the API key
+    private static final String ARG_MOVIE_ID = "movie_id";
+    private static final String ARG_TYPE = "type";
     private static final String API_KEY = BuildConfig.TMDB_API_KEY;
 
+    public static ReviewFragment newInstance(int movieId, String type) {
+        ReviewFragment fragment = new ReviewFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_MOVIE_ID, movieId);
+        args.putString(ARG_TYPE, type);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_review);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_review, container, false);
+    }
 
-        // Initialize views
-        recyclerView = findViewById(R.id.recyclerReviews);
-        progressBar = findViewById(R.id.progressBar);
-        noReviewsTextView = findViewById(R.id.noReviewsTextView);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        // Set layout manager and adapter for RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);  // Optimization if the list size is fixed
+        recyclerView = view.findViewById(R.id.recyclerReviews);
+        progressBar = view.findViewById(R.id.progressBar);
+        noReviewsTextView = view.findViewById(R.id.noReviewsTextView);
 
-        // Initialize the review adapter
-        reviewAdapter = new ReviewAdapter(this, new ArrayList<>());
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setHasFixedSize(true);
+
+        reviewAdapter = new ReviewAdapter(requireContext(), new ArrayList<>());
         recyclerView.setAdapter(reviewAdapter);
 
-        // Retrieve movieId and type from the intent
-        int movieId = getIntent().getIntExtra("MOVIE_ID", -1);
-        String type = getIntent().getStringExtra("TYPE");
+        Bundle args = getArguments();
+        if (args != null) {
+            int movieId = args.getInt(ARG_MOVIE_ID, -1);
+            String type = args.getString(ARG_TYPE);
 
-        // Validate data and fetch reviews if valid
-        if (movieId != -1 && type != null) {
-            fetchReviews(movieId, type);
-        } else {
-            Toast.makeText(this, "Invalid data passed", Toast.LENGTH_SHORT).show();
+            if (movieId != -1 && type != null) {
+                fetchReviews(movieId, type);
+            } else {
+                Toast.makeText(requireContext(), "Invalid data passed", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    /**
-     * Fetches reviews for the movie or TV show from the TMDb API.
-     * @param id The movie or TV show ID.
-     * @param type The type ("movie" or "tv").
-     */
     private void fetchReviews(int id, String type) {
-        // Show loading indicator and hide the reviews initially
         progressBar.setVisibility(View.VISIBLE);
         noReviewsTextView.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
 
-        // Create API service and make the network call
         TMDbApiService apiService = RetroFitClient.getApiService();
         Call<ReviewResponse> call = type.equalsIgnoreCase("tv")
                 ? apiService.getTVReviews(id, API_KEY)
                 : apiService.getMovieReviews(id, API_KEY);
 
-        // Enqueue the API call for reviews
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<ReviewResponse> call, @NonNull Response<ReviewResponse> response) {
                 progressBar.setVisibility(View.GONE);
 
-                // Check if the response is successful
                 if (response.isSuccessful() && response.body() != null) {
                     List<Review> reviews = response.body().getResults();
 
-                    // If there are reviews, display them, otherwise show "no reviews" message
                     if (reviews != null && !reviews.isEmpty()) {
                         reviewAdapter.setReviews(reviews);
                         recyclerView.setVisibility(View.VISIBLE);
@@ -102,7 +109,7 @@ public class ReviewActivity extends BaseActivity {
                     } else {
                         recyclerView.setVisibility(View.GONE);
                         noReviewsTextView.setVisibility(View.VISIBLE);
-                        Log.e("ReviewActivity", "No reviews found.");
+                        Log.e("ReviewFragment", "No reviews found.");
                     }
                 } else {
                     handleError(response);
@@ -111,30 +118,25 @@ public class ReviewActivity extends BaseActivity {
 
             @Override
             public void onFailure(@NonNull Call<ReviewResponse> call, @NonNull Throwable t) {
-                // Hide loading indicator and show error message
                 progressBar.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.GONE);
                 noReviewsTextView.setVisibility(View.VISIBLE);
-                Toast.makeText(ReviewActivity.this, "Failed to load reviews: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("ReviewActivity", "Network Failure: " + t.getMessage(), t);
+                Toast.makeText(requireContext(), "Failed to load reviews: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("ReviewFragment", "Network Failure: " + t.getMessage(), t);
             }
         });
     }
 
-    /**
-     * Handles errors in the API response.
-     * @param response The response object.
-     */
     private void handleError(Response<ReviewResponse> response) {
         recyclerView.setVisibility(View.GONE);
         noReviewsTextView.setVisibility(View.VISIBLE);
-        Log.e("ReviewActivity", "Error: " + response.code() + " - " + response.message());
+        Log.e("ReviewFragment", "Error: " + response.code() + " - " + response.message());
         try {
             if (response.errorBody() != null) {
-                Log.e("ReviewActivity", "Error Body: " + response.errorBody().string());
+                Log.e("ReviewFragment", "Error Body: " + response.errorBody().string());
             }
         } catch (IOException e) {
-            Log.e("ReviewActivity", "Error parsing response body", e);
+            Log.e("ReviewFragment", "Error parsing response body", e);
         }
     }
 }
