@@ -22,6 +22,7 @@ import com.example.cinepulse.utils.WatchlistManager;
 
 import java.util.List;
 
+/** @noinspection ALL*/
 public class WatchlistAdapter extends RecyclerView.Adapter<WatchlistAdapter.ViewHolder> {
 
     private final AppCompatActivity activity;
