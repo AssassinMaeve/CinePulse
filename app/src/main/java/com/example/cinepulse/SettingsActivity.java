@@ -179,7 +179,7 @@ public class SettingsActivity extends AppCompatActivity {
                                             FirebaseAuth.getInstance().signOut();
 
                                             // Redirect user to login screen
-                                            Intent intent = new Intent(SettingsActivity.this, Home.class);
+                                            Intent intent = new Intent(SettingsActivity.this, NavFrag.class);
                                             startActivity(intent);
                                             finish();
                                         })
