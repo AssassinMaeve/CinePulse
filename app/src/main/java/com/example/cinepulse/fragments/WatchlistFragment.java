@@ -92,6 +92,7 @@ public class WatchlistFragment extends Fragment implements WatchlistAdapter.OnWa
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onResume() {
         super.onResume();
