@@ -1,27 +1,30 @@
-package com.example.cinepulse;
+package com.example.cinepulse.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.cinepulse.ToggleTheme.BaseActivity;
+import com.example.cinepulse.BuildConfig;
+import com.example.cinepulse.R;
 import com.example.cinepulse.adapters.CastAdapter;
-import com.example.cinepulse.adapters.StreamingProviderAdapter;  // Add this import for your adapter
+import com.example.cinepulse.adapters.StreamingProviderAdapter;
 import com.example.cinepulse.models.CastResponse;
 import com.example.cinepulse.models.CountryProvider;
 import com.example.cinepulse.models.MovieDetail;
-import com.example.cinepulse.models.StreamingProvider;
 import com.example.cinepulse.models.Trailer;
 import com.example.cinepulse.models.TrailerResponse;
 import com.example.cinepulse.models.WatchProviderResponse;
@@ -33,93 +36,109 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieDetails extends BaseActivity {
+public class MovieDetailsFragment extends Fragment {
 
-    private TextView titleText, overviewText, releaseDateText;
+    private static final String ARG_MOVIE_ID = "movie_id";
+    private int movieId;
+
+    private TextView titleText, overviewText, releaseDateText, textNoCast, textNoStreamingProviders;
     private ImageView posterImage;
+    private Button btnAddToWatchlist;
     private YouTubePlayerView youTubePlayerView;
     private RecyclerView recyclerCast, recyclerStreamingProviders;
-    private TextView textNoCast, textNoStreamingProviders;
-    private Button btnAddToWatchlist;
-    private static final String API_KEY = BuildConfig.TMDB_API_KEY; // Fetch API key securely from build config
 
     private String trailerKey = "";
     private MovieDetail currentMovieDetails;
-    private List<StreamingProvider> streamingProviders;
+
+    public static MovieDetailsFragment newInstance(int movieId) {
+        MovieDetailsFragment fragment = new MovieDetailsFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_MOVIE_ID, movieId);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_details);
-
-        int movieId = getIntent().getIntExtra("movie_id", -1);
-        if (movieId == -1) {
-            Toast.makeText(this, "Invalid Movie ID", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
+        if (getArguments() != null) {
+            movieId = getArguments().getInt(ARG_MOVIE_ID);
         }
+    }
 
-        // Initialize UI components
-        titleText = findViewById(R.id.textTitle);
-        overviewText = findViewById(R.id.textOverview);
-        releaseDateText = findViewById(R.id.textReleaseDate);
-        posterImage = findViewById(R.id.imagePoster);
-        youTubePlayerView = findViewById(R.id.youtubePlayerView);
-        recyclerCast = findViewById(R.id.recyclerCast);
-        recyclerStreamingProviders = findViewById(R.id.recyclerStreamingProviders);
-        textNoCast = findViewById(R.id.textNoCast);
-        textNoStreamingProviders = findViewById(R.id.textNoStreamingProviders);
-        btnAddToWatchlist = findViewById(R.id.btnAddToWatchlist);
-        Button btnViewReviews = findViewById(R.id.btnViewReviews);
+    @SuppressLint("SetTextI18n")
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
 
-        // Set up layouts
-        recyclerCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerStreamingProviders.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        View view = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
-        // Review button click listener
+        titleText = view.findViewById(R.id.textTitle);
+        overviewText = view.findViewById(R.id.textOverview);
+        releaseDateText = view.findViewById(R.id.textReleaseDate);
+        posterImage = view.findViewById(R.id.imagePoster);
+        youTubePlayerView = view.findViewById(R.id.youtubePlayerView);
+        recyclerCast = view.findViewById(R.id.recyclerCast);
+        recyclerStreamingProviders = view.findViewById(R.id.recyclerStreamingProviders);
+        textNoCast = view.findViewById(R.id.textNoCast);
+        textNoStreamingProviders = view.findViewById(R.id.textNoStreamingProviders);
+        btnAddToWatchlist = view.findViewById(R.id.btnAddToWatchlist);
+        Button btnViewReviews = view.findViewById(R.id.btnViewReviews);
+
+        recyclerCast.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerStreamingProviders.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
         btnViewReviews.setOnClickListener(v -> {
             if (currentMovieDetails != null) {
-                Intent intent = new Intent(MovieDetails.this, ReviewActivity.class);
-                intent.putExtra("MOVIE_ID", currentMovieDetails.getId());
-                intent.putExtra("TYPE", "movie");
-                startActivity(intent);
+                ReviewFragment reviewFragment = ReviewFragment.newInstance(
+                        currentMovieDetails.getId(),
+                        "movie"
+                );
+
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, reviewFragment) // container from activity layout
+                        .addToBackStack(null)
+                        .commit();
             } else {
-                Toast.makeText(this, "Movie details not loaded yet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Movie details not loaded yet", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Fetch movie details and related data
+
         fetchMovieDetails(movieId);
         fetchTrailer(movieId);
         fetchCast(movieId);
         fetchStreamingProviders(movieId);
+
+        return view;
     }
 
     private void fetchMovieDetails(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getMovieDetail(movieId, API_KEY).enqueue(new Callback<>() {
-            @SuppressLint("SetTextI18n")
+        apiService.getMovieDetail(movieId, BuildConfig.TMDB_API_KEY).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<MovieDetail> call, @NonNull Response<MovieDetail> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     MovieDetail details = response.body();
                     currentMovieDetails = details;
+
                     titleText.setText(details.getTitle());
                     overviewText.setText(details.getOverview());
                     releaseDateText.setText("Release Date: " + details.getReleaseDate());
 
-                    Glide.with(MovieDetails.this)
+                    Glide.with(requireContext())
                             .load("https://image.tmdb.org/t/p/w500/" + details.getPosterPath())
                             .into(posterImage);
 
-                    // Add to watchlist
                     btnAddToWatchlist.setOnClickListener(v -> {
                         WatchlistItem item = new WatchlistItem(
                                 details.getId(),
@@ -129,8 +148,6 @@ public class MovieDetails extends BaseActivity {
                         );
                         handleWatchlist(item);
                     });
-                } else {
-                    Log.e("MOVIE_DETAILS", "Failed to load movie details.");
                 }
             }
 
@@ -143,7 +160,7 @@ public class MovieDetails extends BaseActivity {
 
     private void fetchTrailer(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getMovieTrailers(movieId, API_KEY).enqueue(new Callback<>() {
+        apiService.getMovieTrailers(movieId, BuildConfig.TMDB_API_KEY).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<TrailerResponse> call, @NonNull Response<TrailerResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -154,70 +171,12 @@ public class MovieDetails extends BaseActivity {
                             break;
                         }
                     }
-                } else {
-                    Log.e("TRAILER", "Failed to fetch trailer.");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<TrailerResponse> call, @NonNull Throwable t) {
                 Log.e("TRAILER", "Error fetching trailer", t);
-            }
-        });
-    }
-
-    private void fetchCast(int movieId) {
-        TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getMovieCredits(movieId, API_KEY).enqueue(new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<CastResponse> call, @NonNull Response<CastResponse> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().getCast() != null) {
-                    recyclerCast.setAdapter(new CastAdapter(MovieDetails.this, response.body().getCast()));
-                    textNoCast.setVisibility(TextView.GONE);
-                } else {
-                    textNoCast.setVisibility(TextView.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<CastResponse> call, @NonNull Throwable t) {
-                Log.e("CAST", "Error fetching cast", t);
-                textNoCast.setVisibility(TextView.VISIBLE);
-            }
-        });
-    }
-
-    private void fetchStreamingProviders(int movieId) {
-        TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getMovieWatchProviders(movieId, API_KEY).enqueue(new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<WatchProviderResponse> call, @NonNull Response<WatchProviderResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    WatchProviderResponse watchProviderResponse = response.body();
-                    Map<String, CountryProvider> countryProviders = watchProviderResponse.getResults();
-
-                    if (countryProviders != null && !countryProviders.isEmpty()) {
-                        CountryProvider countryProvider = countryProviders.get("IN"); // You can adjust country code as needed
-                        if (countryProvider != null && countryProvider.getFlatrate() != null && !countryProvider.getFlatrate().isEmpty()) {
-                            streamingProviders = countryProvider.getFlatrate();
-
-                            recyclerStreamingProviders.setAdapter(new StreamingProviderAdapter(MovieDetails.this, streamingProviders));
-                            textNoStreamingProviders.setVisibility(View.GONE);
-                        } else {
-                            textNoStreamingProviders.setVisibility(View.VISIBLE);
-                        }
-                    } else {
-                        textNoStreamingProviders.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    textNoStreamingProviders.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<WatchProviderResponse> call, @NonNull Throwable t) {
-                Log.e("STREAMING_PROVIDERS", "Error fetching streaming providers", t);
-                textNoStreamingProviders.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -234,11 +193,61 @@ public class MovieDetails extends BaseActivity {
         });
     }
 
+    private void fetchCast(int movieId) {
+        TMDbApiService apiService = RetroFitClient.getApiService();
+        apiService.getMovieCredits(movieId, BuildConfig.TMDB_API_KEY).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<CastResponse> call, @NonNull Response<CastResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getCast() != null) {
+                    recyclerCast.setAdapter(new CastAdapter(requireContext(), response.body().getCast()));
+                    textNoCast.setVisibility(View.GONE);
+                } else {
+                    textNoCast.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CastResponse> call, @NonNull Throwable t) {
+                Log.e("CAST", "Error fetching cast", t);
+                textNoCast.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void fetchStreamingProviders(int movieId) {
+        TMDbApiService apiService = RetroFitClient.getApiService();
+        apiService.getMovieWatchProviders(movieId, BuildConfig.TMDB_API_KEY).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<WatchProviderResponse> call, @NonNull Response<WatchProviderResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Map<String, CountryProvider> providers = response.body().getResults();
+                    if (providers != null && providers.containsKey("IN")) {
+                        CountryProvider inProvider = providers.get("IN");
+                        if (inProvider.getFlatrate() != null && !inProvider.getFlatrate().isEmpty()) {
+                            recyclerStreamingProviders.setAdapter(new StreamingProviderAdapter(requireContext(), inProvider.getFlatrate()));
+                            textNoStreamingProviders.setVisibility(View.GONE);
+                        } else {
+                            textNoStreamingProviders.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        textNoStreamingProviders.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<WatchProviderResponse> call, @NonNull Throwable t) {
+                Log.e("STREAMING", "Failed to fetch providers", t);
+                textNoStreamingProviders.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
     private void handleWatchlist(WatchlistItem item) {
-        if (WatchlistManager.addToWatchlist(MovieDetails.this, item)) {
-            Toast.makeText(MovieDetails.this, "Added to watchlist!", Toast.LENGTH_SHORT).show();
+        if (WatchlistManager.addToWatchlist(requireContext(), item)) {
+            Toast.makeText(requireContext(), "Added to watchlist!", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(MovieDetails.this, "Already in watchlist!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Already in watchlist!", Toast.LENGTH_SHORT).show();
         }
     }
 }
