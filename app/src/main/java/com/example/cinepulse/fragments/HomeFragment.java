@@ -58,13 +58,11 @@ public class HomeFragment extends Fragment {
         fetchTrendingTVShows();
 
         Button btnMovieList = view.findViewById(R.id.btnMovieList);
-        btnMovieList.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new GenreListFragment())
-                    .addToBackStack(null)  // optional: allows user to go back
-                    .commit();
-        });
+        btnMovieList.setOnClickListener(v -> requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new GenreListFragment())
+                .addToBackStack(null)  // optional: allows user to go back
+                .commit());
 
 
         return view;
