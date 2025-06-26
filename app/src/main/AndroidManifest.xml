@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,8 +16,7 @@
         android:theme="@style/Theme.CinePulse"
         tools:targetApi="31">
 
-
-        <!-- SplashActivity is now the Launcher Activity -->
+        <!-- Launcher -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -26,31 +26,30 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SettingsActivity" android:exported="false" />
-        <activity android:name=".ReviewActivity" android:exported="false" />
-        <activity android:name=".PopularTrailerActivity" android:exported="false" />
-        <activity android:name=".WatchlistActivity" android:exported="false" />
-        <activity android:name=".TVDetailActivity" android:exported="false" />
-        <activity android:name=".GenreMoviesActivity" android:exported="false" />
-        <activity android:name=".GenreListActivity" android:exported="false" />
-        <activity android:name=".MovieDetails" android:exported="false" />
-        <activity android:name=".Profile" android:exported="false" />
-        <activity android:name=".Search" android:exported="false" />
-        <activity android:name=".Home" android:exported="false" />
-        <activity android:name=".SignUp" android:exported="false" />
-        <activity android:name=".Login" android:exported="false" />
-
-        <!-- MainActivity is now launched *after* SplashActivity -->
+        <!-- Main Navigation -->
+        <activity
+            android:name=".NavFrag"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:theme="@style/Theme.CinePulse" />
 
+        <!-- Auth -->
+        <activity android:name=".Login" android:exported="false" />
+        <activity android:name=".SignUp" android:exported="false" />
+
+        <!-- Fragments/Pages as Activities -->
+        <activity android:name=".GenreListActivity" android:exported="false" />
+        <activity android:name=".GenreMoviesActivity" android:exported="false" />
+
+        <!-- Settings -->
+        <activity android:name=".SettingsActivity" android:exported="false" />
+
+        <!-- Preloaded Fonts -->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
     </application>
-
-
-
 </manifest>
