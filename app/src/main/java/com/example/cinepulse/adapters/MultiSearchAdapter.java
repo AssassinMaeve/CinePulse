@@ -1,7 +1,5 @@
 package com.example.cinepulse.adapters;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,30 +7,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.cinepulse.MovieDetails;
 import com.example.cinepulse.R;
-import com.example.cinepulse.TVDetailActivity;
+import com.example.cinepulse.fragments.MovieDetailsFragment;
+import com.example.cinepulse.fragments.TvShowDetailsFragment;
 import com.example.cinepulse.models.MediaItem;
 
 import java.util.List;
 
 public class MultiSearchAdapter extends RecyclerView.Adapter<MultiSearchAdapter.ViewHolder> {
 
-    private final Context context;
+    private final AppCompatActivity activity;
     private final List<MediaItem> mediaItems;
 
-    public MultiSearchAdapter(Context context, List<MediaItem> mediaItems) {
-        this.context = context;
+    public MultiSearchAdapter(AppCompatActivity activity, List<MediaItem> mediaItems) {
+        this.activity = activity;
         this.mediaItems = mediaItems;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+        View view = LayoutInflater.from(activity).inflate(R.layout.item_movie, parent, false);
         return new ViewHolder(view);
     }
 
@@ -47,7 +47,6 @@ public class MultiSearchAdapter extends RecyclerView.Adapter<MultiSearchAdapter.
         return mediaItems.size();
     }
 
-    // ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView posterImageView;
         private final TextView titleTextView;
@@ -61,32 +60,33 @@ public class MultiSearchAdapter extends RecyclerView.Adapter<MultiSearchAdapter.
         public void bind(MediaItem item) {
             titleTextView.setText(item.getDisplayTitle());
 
-            Glide.with(context)
+            Glide.with(activity)
                     .load("https://image.tmdb.org/t/p/w500" + item.getPosterPath())
                     .into(posterImageView);
 
-            // Set the click listener for the item
-            itemView.setOnClickListener(v -> launchDetailsActivity(item));
+            itemView.setOnClickListener(v -> launchDetailsFragment(item));
         }
 
-        // Handle the logic of navigating to the correct details screen
-        private void launchDetailsActivity(MediaItem item) {
-            Intent intent;
+        private void launchDetailsFragment(MediaItem item) {
+            Fragment fragment;
 
             if ("movie".equals(item.getMediaType())) {
-                // Navigate to MovieDetails if it's a movie
-                intent = new Intent(context, MovieDetails.class);
-                intent.putExtra("movie_id", item.getId());
+                fragment = MovieDetailsFragment.newInstance(item.getId());
             } else if ("tv".equals(item.getMediaType())) {
-                // Navigate to TVDetailActivity if it's a TV show
-                intent = new Intent(context, TVDetailActivity.class);
-                intent.putExtra("tv_id", item.getId()); // Pass TV show ID
+                fragment = TvShowDetailsFragment.newInstance(item.getId(), "tv");
             } else {
-                return; // If the media type is not recognized, do nothing
+                return; // Unsupported media type
             }
 
-            intent.putExtra("type", item.getMediaType());
-            context.startActivity(intent);
+            itemView.post(() -> {
+                if (!activity.isFinishing() && !activity.isDestroyed()) {
+                    activity.getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, fragment)
+                            .addToBackStack(null)
+                            .commitAllowingStateLoss();  // avoid crash if state is already saved
+                }
+            });
         }
     }
 }
