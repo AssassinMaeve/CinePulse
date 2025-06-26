@@ -15,14 +15,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class NavFrag extends AppCompatActivity {
 
-    private BottomNavigationView bottomNav;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navfrag); // Make sure this XML has fragment_container & bottomNavigation
 
-        bottomNav = findViewById(R.id.bottomNavigation);
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
 
         // ✅ Set default selected item
         bottomNav.setSelectedItemId(R.id.nav_home);
