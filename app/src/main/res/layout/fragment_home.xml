@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="45dp">
+            android:paddingTop="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -66,9 +66,9 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="32dp"
                 android:backgroundTint="@color/primary_button"
+                android:fontFamily="@font/roboto_bold"
                 android:text="@string/movies_and_tv_shows_genres"
-                android:textColor="#FFFFFF"
-                android:fontFamily="@font/roboto_bold" />
+                android:textColor="#FFFFFF" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
