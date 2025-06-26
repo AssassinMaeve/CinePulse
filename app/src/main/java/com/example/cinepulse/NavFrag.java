@@ -53,8 +53,19 @@ public class NavFrag extends AppCompatActivity {
     }
 
     private void loadFragment(@NonNull Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
+        if (isFinishing() || isDestroyed()) return;
+
+        if (!getSupportFragmentManager().isStateSaved()) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commitAllowingStateLoss();
+        }
     }
+
 }
