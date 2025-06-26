@@ -36,7 +36,6 @@ public class SearchFragment extends Fragment {
 
     private RecyclerView recyclerSearchResults;
     private MultiSearchAdapter searchAdapter;
-    private EditText editTextSearch;
 
     @Nullable
     @Override
@@ -46,7 +45,7 @@ public class SearchFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        editTextSearch = view.findViewById(R.id.editTextSearch);
+        EditText editTextSearch = view.findViewById(R.id.editTextSearch);
         recyclerSearchResults = view.findViewById(R.id.recyclerSearchResults);
 
         recyclerSearchResults.setLayoutManager(new GridLayoutManager(getContext(), 2));
