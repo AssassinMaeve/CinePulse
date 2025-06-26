@@ -33,7 +33,6 @@ import java.util.Objects;
 public class SettingsFragment extends Fragment {
 
     private EditText editUsername, editEmail, editOldPassword, editNewPassword;
-    private Button buttonToggleTheme;
     private boolean isDarkMode = false;
     private SharedPreferences userPrefs;
     private String uid = null;
@@ -49,7 +48,7 @@ public class SettingsFragment extends Fragment {
         editOldPassword = view.findViewById(R.id.editOldPassword);
         editNewPassword = view.findViewById(R.id.editNewPassword);
         Button buttonSaveChanges = view.findViewById(R.id.buttonSaveChanges);
-        buttonToggleTheme = view.findViewById(R.id.buttonToggleTheme);
+        Button buttonToggleTheme = view.findViewById(R.id.buttonToggleTheme);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
