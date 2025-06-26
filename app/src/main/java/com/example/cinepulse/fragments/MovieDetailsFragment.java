@@ -125,6 +125,7 @@ public class MovieDetailsFragment extends Fragment {
     private void fetchMovieDetails(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
         apiService.getMovieDetail(movieId, BuildConfig.TMDB_API_KEY).enqueue(new Callback<>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<MovieDetail> call, @NonNull Response<MovieDetail> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -223,6 +224,7 @@ public class MovieDetailsFragment extends Fragment {
                     Map<String, CountryProvider> providers = response.body().getResults();
                     if (providers != null && providers.containsKey("IN")) {
                         CountryProvider inProvider = providers.get("IN");
+                        assert inProvider != null;
                         if (inProvider.getFlatrate() != null && !inProvider.getFlatrate().isEmpty()) {
                             recyclerStreamingProviders.setAdapter(new StreamingProviderAdapter(requireContext(), inProvider.getFlatrate()));
                             textNoStreamingProviders.setVisibility(View.GONE);
