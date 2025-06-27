@@ -7,7 +7,7 @@
 ## 📲 Download
 
 Grab the latest APK here:  
-👉 
+👉 [Download CinePulse v1.0.0](https://github.com/AssassinMaeve/CinePulse/releases/tag/v1.0.0)
 
 > ⚠️ Enable "Install from unknown sources" in your device settings to install the APK.
 
