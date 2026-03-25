@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+import com.example.cinepulse.utils.UpdateManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Apply immersive mode once during activity creation
         enterImmersiveMode();
+
+        // Check for updates
+        UpdateManager.checkForUpdate(this);
     }
 
     private void applyFadeInAnimation(View... views) {

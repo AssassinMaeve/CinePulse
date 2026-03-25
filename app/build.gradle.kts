@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation("com.google.firebase:firebase-config:21.6.0")
 
     // Retrofit and Gson
     implementation(libs.retrofit)
@@ -77,11 +78,11 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation (libs.recyclerview.v121)
-    // ExoPlayer Core
+    
+    // ExoPlayer
     implementation (libs.google.exoplayer.core)
-// ExoPlayer UI
     implementation (libs.exoplayer.ui.v2181)
+    
     implementation (libs.core.splashscreen)
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-
 }
