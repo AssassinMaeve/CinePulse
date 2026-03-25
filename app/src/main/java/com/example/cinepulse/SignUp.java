@@ -92,7 +92,7 @@ public class SignUp extends AppCompatActivity {
                         && !email.getText().toString().trim().isEmpty();
 
                 signUpButton.setEnabled(allFilled);
-                signUpButton.setBackgroundTintList(getResources().getColorStateList(
+                signUpButton.setBackgroundTintList(androidx.core.content.ContextCompat.getColorStateList(SignUp.this,
                         allFilled ? R.color.primary_button : R.color.grey
                 ));
             }

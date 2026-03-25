@@ -1,7 +1,17 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+val tmdbApiKey = localProperties.getProperty("TMDB_API_KEY") ?: ""
 
 android {
     namespace = "com.example.cinepulse"
@@ -19,7 +29,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "TMDB_API_KEY", "\"580b03ff6e8e1d2881e7ecf2dccaf4c3\"")
+        buildConfigField("String", "TMDB_API_KEY", "\"${tmdbApiKey}\"")
     }
 
     buildTypes {
@@ -72,5 +82,6 @@ dependencies {
 // ExoPlayer UI
     implementation (libs.exoplayer.ui.v2181)
     implementation (libs.core.splashscreen)
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 }

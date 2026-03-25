@@ -1,6 +1,5 @@
 package com.example.cinepulse.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -43,69 +42,84 @@ public class PopularTrailerFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_populartrailer, container, false);
 
         RecyclerView recyclerTrailers = view.findViewById(R.id.recyclerTrailers);
         recyclerTrailers.setLayoutManager(new LinearLayoutManager(getContext()));
+
         trailerAdapter = new TrailerAdapter(getContext(), popularTrailers, this::onTrailerClicked);
         recyclerTrailers.setAdapter(trailerAdapter);
 
         showSpoilerWarningDialog();
-
         return view;
     }
 
     private void showSpoilerWarningDialog() {
         if (!hasShownDialog && getContext() != null) {
             hasShownDialog = true;
+
             new AlertDialog.Builder(getContext())
                     .setTitle("Spoiler Warning")
                     .setMessage("Trailers may contain spoilers. Do you want to continue?")
                     .setCancelable(false)
                     .setPositiveButton("Yes, show me", (dialog, which) -> fetchPopularTrailers())
-                    .setNegativeButton("Cancel", (dialog, which) -> {
-                        dialog.dismiss();
-                        // Do nothing — just stay on the current fragment
-                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                     .show();
         }
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
+    // 🔥 FIXED: no forced YouTube app (prevents 152-15 error)
     private void onTrailerClicked(Trailer trailer) {
-        try {
-            String youtubeUrl = "https://www.youtube.com/watch?v=" + trailer.getKey();
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setPackage("com.google.android.youtube");
+        String videoId = trailer.getKey();
 
-            if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
-                startActivity(intent);
-            } else {
-                intent.setPackage(null);
-                startActivity(intent);
-            }
+        // 1️⃣ Try YouTube app
+        Intent appIntent = new Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("vnd.youtube:" + videoId)
+        );
+
+        // 2️⃣ Fallback to browser
+        Intent webIntent = new Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://www.youtube.com/watch?v=" + videoId)
+        );
+
+        try {
+            startActivity(appIntent);
         } catch (Exception e) {
-            Toast.makeText(getContext(), "Error opening trailer", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "Error opening trailer", e);
+            try {
+                startActivity(webIntent);
+            } catch (Exception ex) {
+                Toast.makeText(
+                        getContext(),
+                        "Trailer not available in your region",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
         }
     }
+
 
     private void fetchPopularTrailers() {
         TMDbApiService apiService = RetroFitClient.getApiService();
 
-        Log.d(TAG, "Fetching popular movies...");
         apiService.getPopularMovies(BuildConfig.TMDB_API_KEY)
-                .enqueue(new Callback<>() {
+                .enqueue(new Callback<MovieResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
+                    public void onResponse(@NonNull Call<MovieResponse> call,
+                                           @NonNull Response<MovieResponse> response) {
+
                         if (response.isSuccessful() && response.body() != null) {
                             List<Movie> movies = response.body().getResults();
-                            Log.d(TAG, "Got " + movies.size() + " popular movies");
 
                             if (!movies.isEmpty()) {
-                                fetchTrailersForMovies(movies.subList(0, Math.min(5, movies.size())));
+                                fetchTrailersForMovies(
+                                        movies.subList(0, Math.min(5, movies.size()))
+                                );
                             } else {
                                 showEmptyState();
                             }
@@ -121,45 +135,86 @@ public class PopularTrailerFragment extends Fragment {
                 });
     }
 
+    // 🔥 FIXED: trailer filtering logic added here
+// 🔥 FINAL: Strong trailer filtering (official first, fallback second)
     private void fetchTrailersForMovies(List<Movie> movies) {
         TMDbApiService apiService = RetroFitClient.getApiService();
         popularTrailers.clear();
 
         for (Movie movie : movies) {
             apiService.getMovieTrailers(movie.getId(), BuildConfig.TMDB_API_KEY)
-                    .enqueue(new Callback<>() {
-                        @SuppressLint("NotifyDataSetChanged")
+                    .enqueue(new Callback<TrailerResponse>() {
                         @Override
-                        public void onResponse(@NonNull Call<TrailerResponse> call, @NonNull Response<TrailerResponse> response) {
+                        public void onResponse(@NonNull Call<TrailerResponse> call,
+                                               @NonNull Response<TrailerResponse> response) {
+
                             if (response.isSuccessful() && response.body() != null) {
                                 List<Trailer> trailers = response.body().getResults();
-                                if (trailers != null && !trailers.isEmpty()) {
-                                    popularTrailers.addAll(trailers);
-                                    trailerAdapter.notifyDataSetChanged();
+                                Trailer selectedTrailer = null;
+
+                                if (trailers != null) {
+
+                                    // 1️⃣ Prefer OFFICIAL trailers
+                                    for (Trailer trailer : trailers) {
+                                        if ("YouTube".equalsIgnoreCase(trailer.getSite())
+                                                && "Trailer".equalsIgnoreCase(trailer.getType())
+                                                && trailer.isOfficial()) {
+
+                                            selectedTrailer = trailer;
+                                            break;
+                                        }
+                                    }
+
+                                    // 2️⃣ Fallback: non-official trailer if needed
+                                    if (selectedTrailer == null) {
+                                        for (Trailer trailer : trailers) {
+                                            if ("YouTube".equalsIgnoreCase(trailer.getSite())
+                                                    && "Trailer".equalsIgnoreCase(trailer.getType())) {
+
+                                                selectedTrailer = trailer;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    // 3️⃣ Add ONLY one valid trailer
+                                    if (selectedTrailer != null) {
+                                        popularTrailers.add(selectedTrailer);
+                                        trailerAdapter.notifyDataSetChanged();
+
+                                        Log.d(TAG, "Added trailer: " + selectedTrailer.getName());
+                                    }
                                 }
                             }
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<TrailerResponse> call, @NonNull Throwable t) {
-                            Log.e(TAG, "Failed to fetch trailers for movie: " + movie.getId(), t);
+                        public void onFailure(@NonNull Call<TrailerResponse> call,
+                                              @NonNull Throwable t) {
+                            Log.e(TAG,
+                                    "Failed to fetch trailer for movie ID: " + movie.getId(),
+                                    t);
                         }
                     });
         }
     }
 
+
     private void handleApiError(int errorCode) {
-        String errorMessage = "API Error: " + errorCode;
-        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-        Log.e(TAG, errorMessage);
+        Toast.makeText(getContext(),
+                "API Error: " + errorCode,
+                Toast.LENGTH_SHORT).show();
     }
 
     private void handleNetworkError(Throwable t) {
-        Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "Network Error", t);
+        Toast.makeText(getContext(),
+                "Network Error",
+                Toast.LENGTH_SHORT).show();
     }
 
     private void showEmptyState() {
-        Toast.makeText(getContext(), "No movies found", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),
+                "No trailers available",
+                Toast.LENGTH_SHORT).show();
     }
 }

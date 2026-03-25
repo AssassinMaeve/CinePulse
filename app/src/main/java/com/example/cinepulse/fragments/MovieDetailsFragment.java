@@ -30,11 +30,10 @@ import com.example.cinepulse.models.TrailerResponse;
 import com.example.cinepulse.models.WatchProviderResponse;
 import com.example.cinepulse.models.WatchlistItem;
 import com.example.cinepulse.network.RetroFitClient;
+import android.content.Intent;
+import android.net.Uri;
 import com.example.cinepulse.network.TMDbApiService;
 import com.example.cinepulse.utils.WatchlistManager;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.Map;
 
@@ -50,7 +49,8 @@ public class MovieDetailsFragment extends Fragment {
     private TextView titleText, overviewText, releaseDateText, textNoCast, textNoStreamingProviders;
     private ImageView posterImage;
     private Button btnAddToWatchlist;
-    private YouTubePlayerView youTubePlayerView;
+    private View youtubeTrailerContainer;
+    private ImageView youtubeThumbnail;
     private RecyclerView recyclerCast, recyclerStreamingProviders;
 
     private String trailerKey = "";
@@ -85,7 +85,8 @@ public class MovieDetailsFragment extends Fragment {
         overviewText = view.findViewById(R.id.textOverview);
         releaseDateText = view.findViewById(R.id.textReleaseDate);
         posterImage = view.findViewById(R.id.imagePoster);
-        youTubePlayerView = view.findViewById(R.id.youtubePlayerView);
+        youtubeTrailerContainer = view.findViewById(R.id.youtubeTrailerContainer);
+        youtubeThumbnail = view.findViewById(R.id.youtubeThumbnail);
         recyclerCast = view.findViewById(R.id.recyclerCast);
         recyclerStreamingProviders = view.findViewById(R.id.recyclerStreamingProviders);
         textNoCast = view.findViewById(R.id.textNoCast);
@@ -105,6 +106,7 @@ public class MovieDetailsFragment extends Fragment {
 
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(R.anim.fade_in_up, R.anim.fade_out, R.anim.fade_in_up, R.anim.fade_out)
                         .replace(R.id.fragment_container, reviewFragment) // container from activity layout
                         .addToBackStack(null)
                         .commit();
@@ -161,38 +163,86 @@ public class MovieDetailsFragment extends Fragment {
 
     private void fetchTrailer(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();
-        apiService.getMovieTrailers(movieId, BuildConfig.TMDB_API_KEY).enqueue(new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<TrailerResponse> call, @NonNull Response<TrailerResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    for (Trailer trailer : response.body().getResults()) {
-                        if ("Trailer".equalsIgnoreCase(trailer.getType())) {
-                            trailerKey = trailer.getKey();
-                            playTrailer();
-                            break;
+        apiService.getMovieTrailers(movieId, BuildConfig.TMDB_API_KEY)
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<TrailerResponse> call,
+                                           @NonNull Response<TrailerResponse> response) {
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            Trailer selectedTrailer = null;
+
+                            // Prefer OFFICIAL YouTube trailers
+                            for (Trailer trailer : response.body().getResults()) {
+                                if ("YouTube".equalsIgnoreCase(trailer.getSite())
+                                        && "Trailer".equalsIgnoreCase(trailer.getType())
+                                        && trailer.isOfficial()) {
+                                    selectedTrailer = trailer;
+                                    break;
+                                }
+                            }
+
+                            // Fallback to any YouTube trailer
+                            if (selectedTrailer == null) {
+                                for (Trailer trailer : response.body().getResults()) {
+                                    if ("YouTube".equalsIgnoreCase(trailer.getSite())
+                                            && "Trailer".equalsIgnoreCase(trailer.getType())) {
+                                        selectedTrailer = trailer;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (selectedTrailer != null) {
+                                trailerKey = selectedTrailer.getKey();
+                                setupTrailerThumbnail();
+                            } else {
+                                Toast.makeText(
+                                        getContext(),
+                                        "Trailer not available",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
                         }
                     }
-                }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<TrailerResponse> call, @NonNull Throwable t) {
-                Log.e("TRAILER", "Error fetching trailer", t);
+                    @Override
+                    public void onFailure(@NonNull Call<TrailerResponse> call,
+                                          @NonNull Throwable t) {
+                        Log.e("TRAILER", "Error fetching trailer", t);
+                        Toast.makeText(
+                                getContext(),
+                                "Failed to load trailer",
+                                Toast.LENGTH_SHORT
+                        ).show();
+                    }
+                });
+    }
+
+
+    private void setupTrailerThumbnail() {
+        if (trailerKey == null || trailerKey.isEmpty()) return;
+        
+        youtubeTrailerContainer.setVisibility(View.VISIBLE);
+        String thumbnailUrl = "https://img.youtube.com/vi/" + trailerKey + "/0.jpg";
+        Glide.with(requireContext()).load(thumbnailUrl).into(youtubeThumbnail);
+        
+        youtubeTrailerContainer.setOnClickListener(v -> {
+            Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailerKey));
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + trailerKey));
+            try {
+                startActivity(appIntent);
+            } catch (Exception e) {
+                try {
+                    startActivity(webIntent);
+                } catch (Exception ex) {
+                    Toast.makeText(getContext(), "Trailer not available", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    private void playTrailer() {
-        getLifecycle().addObserver(youTubePlayerView);
-        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                if (!trailerKey.isEmpty()) {
-                    youTubePlayer.loadVideo(trailerKey, 0);
-                }
-            }
-        });
-    }
+
 
     private void fetchCast(int movieId) {
         TMDbApiService apiService = RetroFitClient.getApiService();

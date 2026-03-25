@@ -22,6 +22,10 @@ public interface TMDbApiService {
     @GET("trending/movie/week")
     Call<MovieResponse> getTrendingMovies(@Query("api_key") String apiKey);
 
+    /** Get now playing movies */
+    @GET("movie/now_playing")
+    Call<MovieResponse> getNowPlayingMovies(@Query("api_key") String apiKey);
+
     /** Get detailed information about a specific movie */
     @GET("movie/{movie_id}")
     Call<MovieDetail> getMovieDetail(
@@ -69,6 +73,10 @@ public interface TMDbApiService {
     /** Get trending TV shows (weekly) */
     @GET("trending/tv/week")
     Call<TvShowResponse> getTrendingTVShows(@Query("api_key") String apiKey);
+
+    /** Get TV shows currently on the air */
+    @GET("tv/on_the_air")
+    Call<TvShowResponse> getOnTheAirTVShows(@Query("api_key") String apiKey);
 
     /** Get detailed information about a specific TV show */
     @GET("tv/{tv_id}")

@@ -3,35 +3,35 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
-        android:title="Home"
+        android:title="@string/nav_home"
         android:orderInCategory="1"
         android:enabled="true" />
 
     <item
         android:id="@+id/nav_search"
         android:icon="@drawable/search"
-        android:title="Search"
+        android:title="@string/nav_search"
         android:orderInCategory="2"
         android:enabled="true" />
 
     <item
         android:id="@+id/nav_watchlist"
         android:icon="@drawable/ic_wishlist"
-        android:title="Wishlist"
+        android:title="@string/nav_wishlist"
         android:orderInCategory="3"
         android:enabled="true" />
 
     <item
         android:id="@+id/nav_populartrailer"
         android:icon="@drawable/ic_populartrailer"
-        android:title="Trailer / Clips"
+        android:title="@string/nav_trailer"
         android:orderInCategory="4"
         android:enabled="true" />
 
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/profile_user"
-        android:title="Profile"
+        android:title="@string/nav_profile"
         android:orderInCategory="5"
         android:enabled="true" />
 

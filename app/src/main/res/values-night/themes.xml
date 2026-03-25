@@ -3,8 +3,12 @@
     <style name="Base.Theme.CinePulse" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Dark mode background -->
         <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="android:statusBarColor">@color/bg_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
 
-
+        <!-- Global Typography -->
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:fontFamily">@font/poppins</item>
     </style>
 
     <!-- Application theme -->

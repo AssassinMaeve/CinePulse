@@ -6,7 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import com.google.android.material.card.MaterialCardView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,7 +56,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             holder.contentTextView.setVisibility(View.VISIBLE);
 
             // Display the review author and content
-            holder.authorTextView.setText("By: " + review.getAuthor());
+            holder.authorTextView.setText(review.getAuthor());
             holder.contentTextView.setText(review.getContent());
 
             // Optional: Limit content length to avoid overflow
@@ -75,13 +76,15 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     public static class ReviewViewHolder extends RecyclerView.ViewHolder {
         TextView authorTextView;  // For displaying the review author
         TextView contentTextView; // For displaying the review content
-        LinearLayout reviewContainer; // Container for review items
+        ImageView authorAvatar; // For displaying the review author avatar
+        MaterialCardView reviewContainer; // Container for review items
 
         // Constructor to initialize the views
         public ReviewViewHolder(View itemView) {
             super(itemView);
             authorTextView = itemView.findViewById(R.id.author_text_view);
             contentTextView = itemView.findViewById(R.id.content_text_view);
+            authorAvatar = itemView.findViewById(R.id.author_avatar);
             reviewContainer = itemView.findViewById(R.id.review_container);
         }
     }

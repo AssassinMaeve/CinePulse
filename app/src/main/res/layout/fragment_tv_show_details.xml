@@ -8,41 +8,71 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?android:attr/windowBackground">
 
-        <!-- Poster -->
-        <ImageView
-            android:id="@+id/imagePoster"
+        <!-- Poster Container -->
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:contentDescription="@string/poster"
-            android:scaleType="centerCrop" />
+            android:layout_height="480dp">
 
-        <!-- Description -->
+            <ImageView
+                android:id="@+id/imagePoster"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/poster"
+                android:scaleType="centerCrop" />
+
+            <!-- Top Gradient (for Status Bar clarity) -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/poster_gradient_top" />
+
+            <!-- Bottom Gradient (for smooth transition) -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/poster_gradient_bottom" />
+
+        </FrameLayout>
+
+        <!-- Description Card (Glassmorphism) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/glass_card_background"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:elevation="4dp">
 
             <TextView
                 android:id="@+id/textTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
+                android:textSize="28sp"
+                android:fontFamily="@font/righteous"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textReleaseDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:fontFamily="@font/poppins"
                 android:layout_marginTop="4dp" />
 
             <TextView
                 android:id="@+id/textOverview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="4dp" />
         </LinearLayout>
 
         <!-- Cast Section -->
@@ -51,10 +81,11 @@
             android:layout_height="wrap_content"
             android:text="@string/cast"
             android:textSize="18sp"
-            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="?android:attr/textColorPrimary"
             android:paddingStart="20dp"
             android:paddingTop="10dp"
-            android:paddingBottom="4dp"
+            android:paddingBottom="8dp"
             tools:ignore="RtlSymmetry" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -86,10 +117,11 @@
             android:layout_height="wrap_content"
             android:text="@string/available_on"
             android:textSize="18sp"
-            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="?android:attr/textColorPrimary"
             android:paddingStart="20dp"
             android:paddingTop="10dp"
-            android:paddingBottom="4dp"
+            android:paddingBottom="8dp"
             tools:ignore="RtlSymmetry" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -118,44 +150,66 @@
 
 
         <!-- Trailer Section -->
-        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-            android:id="@+id/youtubePlayerView"
+        <FrameLayout
+            android:id="@+id/youtubeTrailerContainer"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/youtubeThumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="#000000" />
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:src="@drawable/imageplaybutton"
+                android:contentDescription="@string/play_button" />
+        </FrameLayout>
 
         <!-- Add to Watchlist Button -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAddToWatchlist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/genre_button_background"
-            android:backgroundTint="#E50914"
-            android:fontFamily="@font/roboto_black"
+            android:backgroundTint="@color/primary_blue"
+            android:fontFamily="sans-serif-black"
             android:text="@string/add_to_watchlist"
+            android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:elevation="4dp" />
 
         <!-- View Reviews Button -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnViewReviews"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/genre_button_background"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/glass_card_background"
             android:layout_gravity="center_horizontal"
-            android:fontFamily="@font/roboto_black"
-            android:textColor="#FFFFFF"
+            android:fontFamily="sans-serif-black"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textSize="16sp"
-            android:text="@string/view_reviewsTvDetails" />
+            android:text="@string/view_reviewsTvDetails"
+            android:elevation="0dp" />
 
     </LinearLayout>
 </ScrollView>

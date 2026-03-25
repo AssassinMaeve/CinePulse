@@ -3,18 +3,31 @@
     <style name="Base.Theme.CinePulse" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Light mode background -->
         <item name="android:windowBackground">@color/bg_light</item>
+        <item name="android:statusBarColor">@color/bg_light</item>
+        <item name="android:windowLightStatusBar">true</item>
 
         <!-- Set background color -->
-        <item name="windowSplashScreenBackground">#121212</item>
+        <item name="windowSplashScreenBackground">@color/bg_dark</item>
 
         <!-- Set your logo -->
         <item name="windowSplashScreenAnimatedIcon">@drawable/cinepulsewhitelogo</item>
 
+        <!-- Global Typography -->
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:fontFamily">@font/poppins</item>
+
         <!-- Optional: duration and fade -->
-        <item name="postSplashScreenTheme">@style/Theme.MyApp</item>
+        <item name="postSplashScreenTheme">@style/Theme.CinePulse</item>
 
     </style>
 
     <!-- Application theme -->
     <style name="Theme.CinePulse" parent="Base.Theme.CinePulse"/>
+
+    <!-- Splash Screen theme -->
+    <style name="Theme.CinePulse.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/bg_dark</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/cinepulsewhitelogo</item>
+        <item name="postSplashScreenTheme">@style/Theme.CinePulse</item>
+    </style>
 </resources>

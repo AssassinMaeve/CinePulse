@@ -19,7 +19,11 @@
     <string name="already_a_member_log_in">Already a member? <u>Log in</u></string>
     <string name="create_account">Create Account</string>
 
-    <string name="api_key">580b03ff6e8e1d2881e7ecf2dccaf4c3</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_wishlist">Wishlist</string>
+    <string name="nav_trailer">Trailer / Clips</string>
+    <string name="nav_profile">Profile</string>
     <string name="play_button" />
 
 
@@ -58,6 +62,8 @@
     <string name="trending_movies">Trending Movies</string>
     <string name="trending_tv_shows">Trending TV Shows</string>
     <string name="movies_and_tv_shows_genres">Movies and TV Shows Genres</string>
+    <string name="latest_movies">Latest Movies</string>
+    <string name="latest_series">Latest Series</string>
     <string name="genre_movies">Genre - Movies</string>
     <string name="movies">Movies</string>
     <string name="tv_shows">TV Shows</string>

@@ -29,10 +29,9 @@ import com.example.cinepulse.models.WatchProviderResponse;
 import com.example.cinepulse.models.WatchlistItem;
 import com.example.cinepulse.network.RetroFitClient;
 import com.example.cinepulse.network.TMDbApiService;
+import android.content.Intent;
+import android.net.Uri;
 import com.example.cinepulse.utils.WatchlistManager;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.Map;
 
@@ -51,7 +50,8 @@ public class TvShowDetailsFragment extends Fragment {
     private ImageView imagePoster;
     private TextView textTitle, textReleaseDate, textOverview, textNoCast, textNoStreamingProviders;
     private RecyclerView recyclerCast, recyclerStreaming;
-    private YouTubePlayerView youtubePlayerView;
+    private View youtubeTrailerContainer;
+    private ImageView youtubeThumbnail;
     private View btnAddToWatchlist, btnReview;
 
     public static TvShowDetailsFragment newInstance(int tvId, String type) {
@@ -88,11 +88,10 @@ public class TvShowDetailsFragment extends Fragment {
         textNoCast = view.findViewById(R.id.textNoCast);
         recyclerStreaming = view.findViewById(R.id.recyclerStreaming);
         textNoStreamingProviders = view.findViewById(R.id.textNoStreamingProviders);
-        youtubePlayerView = view.findViewById(R.id.youtubePlayerView);
+        youtubeTrailerContainer = view.findViewById(R.id.youtubeTrailerContainer);
+        youtubeThumbnail = view.findViewById(R.id.youtubeThumbnail);
         btnAddToWatchlist = view.findViewById(R.id.btnAddToWatchlist);
         btnReview = view.findViewById(R.id.btnViewReviews);
-
-        requireActivity().getLifecycle().addObserver(youtubePlayerView);
 
         fetchTVShowDetails(tvId);
         fetchTVCast(tvId);
@@ -129,6 +128,7 @@ public class TvShowDetailsFragment extends Fragment {
 
                             requireActivity().getSupportFragmentManager()
                                     .beginTransaction()
+                                    .setCustomAnimations(R.anim.fade_in_up, R.anim.fade_out, R.anim.fade_in_up, R.anim.fade_out)
                                     .replace(R.id.fragment_container, reviewFragment)
                                     .addToBackStack(null)
                                     .commit();
@@ -230,10 +230,23 @@ public class TvShowDetailsFragment extends Fragment {
     }
 
     private void setupYouTubePlayer(String videoId) {
-        youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                youTubePlayer.loadVideo(videoId, 0);
+        if (videoId == null || videoId.isEmpty()) return;
+        
+        youtubeTrailerContainer.setVisibility(View.VISIBLE);
+        String thumbnailUrl = "https://img.youtube.com/vi/" + videoId + "/0.jpg";
+        Glide.with(this).load(thumbnailUrl).into(youtubeThumbnail);
+        
+        youtubeTrailerContainer.setOnClickListener(v -> {
+            Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId));
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + videoId));
+            try {
+                startActivity(appIntent);
+            } catch (Exception e) {
+                try {
+                    startActivity(webIntent);
+                } catch (Exception ex) {
+                    Toast.makeText(getContext(), "Trailer not available", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -241,6 +254,5 @@ public class TvShowDetailsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        youtubePlayerView.release();
     }
 }

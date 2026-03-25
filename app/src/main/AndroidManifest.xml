@@ -4,6 +4,7 @@
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -18,8 +19,9 @@
 
         <!-- Launcher -->
         <activity
-            android:name=".SplashActivity"
-            android:exported="true">
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.CinePulse.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -30,10 +32,6 @@
         <activity
             android:name=".NavFrag"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.CinePulse" />
 
         <!-- Auth -->
         <activity android:name=".Login" android:exported="false" />

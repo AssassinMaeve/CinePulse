@@ -96,7 +96,7 @@ public class StreamingProviderAdapter extends RecyclerView.Adapter<StreamingProv
     private String getProviderUrl(String providerName) {
         if (providerName == null) return null;
 
-        switch (providerName.trim().toLowerCase()) {
+        switch (providerName.trim().toLowerCase(java.util.Locale.ROOT)) {
             case "netflix":
                 return "https://www.netflix.com";
             case "amazon prime video":
