@@ -75,10 +75,10 @@ public class SettingsFragment extends Fragment {
     private void setupAvatarSelection(RecyclerView recyclerView) {
         List<Integer> avatars = Arrays.asList(
                 R.drawable.profile_user,
-                R.drawable.ic_populartrailer,
-                R.drawable.ic_home,
-                R.drawable.ic_calendar,
-                R.drawable.ic_wishlist
+                R.drawable.vector_avatar_popcorn,
+                R.drawable.vector_avatar_camera,
+                R.drawable.vector_avatar_masks,
+                R.drawable.vector_avatar_reel
         );
 
         AvatarAdapter adapter = new AvatarAdapter(avatars, selectedAvatarResId, (resId, position) -> {

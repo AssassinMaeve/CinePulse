@@ -61,7 +61,7 @@
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textSettingsHeader"
+        app:layout_constraintTop_toBottomOf="@id/recyclerAvatars"
         app:strokeWidth="0dp">
 
         <LinearLayout
