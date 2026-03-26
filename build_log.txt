@@ -1,10 +1,16 @@
 ﻿Initialized native services in: C:\Users\AssassinMaeve\.gradle\native
 Initialized jansi services in: C:\Users\AssassinMaeve\.gradle\native
-The client will now receive all logging from the daemon (pid: 15800). The daemon log file: C:\Users\AssassinMaeve\.gradle\daemon\8.13\daemon-15800.out.log
-Starting 21st build in daemon [uptime: 59 mins 41.233 secs, performance: 98%, GC rate: 0.00/s, heap usage: 0% of 2 GiB]
+Removing 4 daemon stop events from registry
+Starting a Gradle Daemon (subsequent builds will be faster)
+Starting process 'Gradle build daemon'. Working directory: C:\Users\AssassinMaeve\.gradle\daemon\8.13 Command: C:\Program Files\Android\Android Studio\jbr\bin\java.exe --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED -Xmx2048m -Dfile.encoding=UTF-8 -Duser.country=IN -Duser.language=en -Duser.variant -cp C:\Users\AssassinMaeve\.gradle\wrapper\dists\gradle-8.13-bin\5xuhj0ry160q40clulazy9h7d\gradle-8.13\lib\gradle-daemon-main-8.13.jar -javaagent:C:\Users\AssassinMaeve\.gradle\wrapper\dists\gradle-8.13-bin\5xuhj0ry160q40clulazy9h7d\gradle-8.13\lib\agents\gradle-instrumentation-agent-8.13.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 8.13
+Successfully started process 'Gradle build daemon'
+An attempt to start the daemon took 1.283 secs.
+The client will now receive all logging from the daemon (pid: 5736). The daemon log file: C:\Users\AssassinMaeve\.gradle\daemon\8.13\daemon-5736.out.log
+Starting build in new daemon [memory: 2 GiB]
 Using 12 worker leases.
-Now considering [C:\College\Android-Studio-Project\CinePulse] as hierarchies to watch
+Received JVM installation metadata from 'C:\Program Files\Android\Android Studio\jbr': {JAVA_HOME=C:\Program Files\Android\Android Studio\jbr, JAVA_VERSION=21.0.6, JAVA_VENDOR=JetBrains s.r.o., RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=21.0.6+-13391695-b895.109, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=21.0.6+-13391695-b895.109, VM_VENDOR=JetBrains s.r.o., OS_ARCH=amd64}
 Watching the file system is configured to be enabled if available
+Now considering [C:\College\Android-Studio-Project\CinePulse] as hierarchies to watch
 File system watching is active
 Starting Build
 Settings evaluated using settings file 'C:\College\Android-Studio-Project\CinePulse\settings.gradle.kts'.
@@ -26,132 +32,132 @@ Task name matched 'assembleDebug'
 Selected primary task 'assembleDebug' from project :
 Tasks to be executed: [task ':app:preBuild', task ':app:preDebugBuild', task ':app:mergeDebugNativeDebugMetadata', task ':app:generateDebugBuildConfig', task ':app:javaPreCompileDebug', task ':app:checkDebugAarMetadata', task ':app:generateDebugResValues', task ':app:processDebugGoogleServices', task ':app:mapDebugSourceSetPaths', task ':app:generateDebugResources', task ':app:mergeDebugResources', task ':app:packageDebugResources', task ':app:parseDebugLocalResources', task ':app:createDebugCompatibleScreenManifests', task ':app:extractDeepLinksDebug', task ':app:processDebugMainManifest', task ':app:processDebugManifest', task ':app:processDebugManifestForPackage', task ':app:processDebugResources', task ':app:compileDebugJavaWithJavac', task ':app:mergeDebugShaders', task ':app:compileDebugShaders', task ':app:generateDebugAssets', task ':app:mergeDebugAssets', task ':app:compressDebugAssets', task ':app:processDebugJavaRes', task ':app:mergeDebugJavaResource', task ':app:checkDebugDuplicateClasses', task ':app:desugarDebugFileDependencies', task ':app:mergeExtDexDebug', task ':app:mergeLibDexDebug', task ':app:dexBuilderDebug', task ':app:mergeProjectDexDebug', task ':app:mergeDebugJniLibFolders', task ':app:mergeDebugNativeLibs', task ':app:stripDebugDebugSymbols', task ':app:validateSigningDebug', task ':app:writeDebugAppMetadata', task ':app:writeDebugSigningConfigVersions', task ':app:packageDebug', task ':app:createDebugApkListingFileRedirect', task ':app:assembleDebug']
 Tasks that were excluded: []
-Resolve mutations for :app:preBuild (Thread[#1956,Execution worker,5,main]) started.
-:app:preBuild (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:preBuild (Thread[#94,Execution worker Thread 4,5,main]) started.
+:app:preBuild (Thread[#94,Execution worker Thread 4,5,main]) started.
 
 > Task :app:preBuild UP-TO-DATE
 Skipping task ':app:preBuild' as it has no actions.
-Resolve mutations for :app:preDebugBuild (Thread[#1956,Execution worker,5,main]) started.
-:app:preDebugBuild (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:preDebugBuild (Thread[#94,Execution worker Thread 4,5,main]) started.
+:app:preDebugBuild (Thread[#94,Execution worker Thread 4,5,main]) started.
 
 > Task :app:preDebugBuild UP-TO-DATE
 Skipping task ':app:preDebugBuild' as it has no actions.
-Resolve mutations for :app:mergeDebugNativeDebugMetadata (Thread[#1956,Execution worker,5,main]) started.
-:app:mergeDebugNativeDebugMetadata (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:mergeDebugNativeDebugMetadata (Thread[#94,Execution worker Thread 4,5,main]) started.
+:app:mergeDebugNativeDebugMetadata (Thread[#94,Execution worker Thread 4,5,main]) started.
 
 > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
 Skipping task ':app:mergeDebugNativeDebugMetadata' as it has no source files and no previous output files.
-Resolve mutations for :app:generateDebugBuildConfig (Thread[#1956,Execution worker,5,main]) started.
-:app:generateDebugBuildConfig (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:generateDebugBuildConfig (Thread[#94,Execution worker Thread 4,5,main]) started.
+:app:generateDebugBuildConfig (Thread[#94,Execution worker Thread 4,5,main]) started.
 
 > Task :app:generateDebugBuildConfig UP-TO-DATE
 Caching disabled for task ':app:generateDebugBuildConfig' because:
   Build cache is disabled
 Skipping task ':app:generateDebugBuildConfig' as it is up-to-date.
-Resolve mutations for :app:javaPreCompileDebug (Thread[#1956,Execution worker,5,main]) started.
-:app:javaPreCompileDebug (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:javaPreCompileDebug (Thread[#94,Execution worker Thread 4,5,main]) started.
+:app:javaPreCompileDebug (Thread[#94,Execution worker Thread 4,5,main]) started.
 
 > Task :app:javaPreCompileDebug UP-TO-DATE
 Caching disabled for task ':app:javaPreCompileDebug' because:
   Build cache is disabled
 Skipping task ':app:javaPreCompileDebug' as it is up-to-date.
-Resolve mutations for :app:checkDebugAarMetadata (Thread[#1956,Execution worker,5,main]) started.
-:app:checkDebugAarMetadata (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:checkDebugAarMetadata (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:checkDebugAarMetadata (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:checkDebugAarMetadata UP-TO-DATE
 Caching disabled for task ':app:checkDebugAarMetadata' because:
   Build cache is disabled
   Caching has been disabled for the task
 Skipping task ':app:checkDebugAarMetadata' as it is up-to-date.
-Resolve mutations for :app:generateDebugResValues (Thread[#1956,Execution worker,5,main]) started.
-:app:generateDebugResValues (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:generateDebugResValues (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:generateDebugResValues (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:generateDebugResValues UP-TO-DATE
 Caching disabled for task ':app:generateDebugResValues' because:
   Build cache is disabled
 Skipping task ':app:generateDebugResValues' as it is up-to-date.
-Resolve mutations for :app:processDebugGoogleServices (Thread[#1956,Execution worker,5,main]) started.
-:app:processDebugGoogleServices (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:processDebugGoogleServices (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:processDebugGoogleServices (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:processDebugGoogleServices UP-TO-DATE
 Caching disabled for task ':app:processDebugGoogleServices' because:
   Build cache is disabled
 Skipping task ':app:processDebugGoogleServices' as it is up-to-date.
-Resolve mutations for :app:mapDebugSourceSetPaths (Thread[#1956,Execution worker,5,main]) started.
-:app:mapDebugSourceSetPaths (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:mapDebugSourceSetPaths (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:mapDebugSourceSetPaths (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:mapDebugSourceSetPaths UP-TO-DATE
 Caching disabled for task ':app:mapDebugSourceSetPaths' because:
   Build cache is disabled
   Caching has been disabled for the task
 Skipping task ':app:mapDebugSourceSetPaths' as it is up-to-date.
-Resolve mutations for :app:generateDebugResources (Thread[#1956,Execution worker,5,main]) started.
-:app:generateDebugResources (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:generateDebugResources (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:generateDebugResources (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:generateDebugResources UP-TO-DATE
 Caching disabled for task ':app:generateDebugResources' because:
   Build cache is disabled
 Skipping task ':app:generateDebugResources' as it is up-to-date.
-Resolve mutations for :app:mergeDebugResources (Thread[#1956,Execution worker,5,main]) started.
-:app:mergeDebugResources (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:mergeDebugResources (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:mergeDebugResources (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:mergeDebugResources UP-TO-DATE
 Caching disabled for task ':app:mergeDebugResources' because:
   Build cache is disabled
 Skipping task ':app:mergeDebugResources' as it is up-to-date.
-Resolve mutations for :app:packageDebugResources (Thread[#1956,Execution worker,5,main]) started.
-:app:packageDebugResources (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:packageDebugResources (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:packageDebugResources (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:packageDebugResources UP-TO-DATE
 Caching disabled for task ':app:packageDebugResources' because:
   Build cache is disabled
 Skipping task ':app:packageDebugResources' as it is up-to-date.
-Resolve mutations for :app:parseDebugLocalResources (Thread[#1956,Execution worker,5,main]) started.
-:app:parseDebugLocalResources (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:parseDebugLocalResources (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:parseDebugLocalResources (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:parseDebugLocalResources UP-TO-DATE
 Caching disabled for task ':app:parseDebugLocalResources' because:
   Build cache is disabled
 Skipping task ':app:parseDebugLocalResources' as it is up-to-date.
-Resolve mutations for :app:createDebugCompatibleScreenManifests (Thread[#1956,Execution worker,5,main]) started.
-:app:createDebugCompatibleScreenManifests (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:createDebugCompatibleScreenManifests (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:createDebugCompatibleScreenManifests (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
 Caching disabled for task ':app:createDebugCompatibleScreenManifests' because:
   Build cache is disabled
   Caching has been disabled for the task
 Skipping task ':app:createDebugCompatibleScreenManifests' as it is up-to-date.
-Resolve mutations for :app:extractDeepLinksDebug (Thread[#1956,Execution worker,5,main]) started.
-:app:extractDeepLinksDebug (Thread[#1956,Execution worker,5,main]) started.
+Resolve mutations for :app:extractDeepLinksDebug (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:extractDeepLinksDebug (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:extractDeepLinksDebug UP-TO-DATE
 Caching disabled for task ':app:extractDeepLinksDebug' because:
   Build cache is disabled
 Skipping task ':app:extractDeepLinksDebug' as it is up-to-date.
-Resolve mutations for :app:processDebugMainManifest (Thread[#1956,Execution worker,5,main]) started.
-:app:processDebugMainManifest (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Resolve mutations for :app:processDebugMainManifest (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:processDebugMainManifest (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:processDebugMainManifest UP-TO-DATE
 Caching disabled for task ':app:processDebugMainManifest' because:
   Build cache is disabled
 Skipping task ':app:processDebugMainManifest' as it is up-to-date.
-Resolve mutations for :app:processDebugManifest (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:processDebugManifest (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Resolve mutations for :app:processDebugManifest (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:processDebugManifest (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:processDebugManifest UP-TO-DATE
 Caching disabled for task ':app:processDebugManifest' because:
   Build cache is disabled
 Skipping task ':app:processDebugManifest' as it is up-to-date.
-Resolve mutations for :app:processDebugManifestForPackage (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:processDebugManifestForPackage (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Resolve mutations for :app:processDebugManifestForPackage (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:processDebugManifestForPackage (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:processDebugManifestForPackage UP-TO-DATE
 Custom actions are attached to task ':app:processDebugManifestForPackage'.
 Caching disabled for task ':app:processDebugManifestForPackage' because:
   Build cache is disabled
 Skipping task ':app:processDebugManifestForPackage' as it is up-to-date.
-Resolve mutations for :app:processDebugResources (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:processDebugResources (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Resolve mutations for :app:processDebugResources (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:processDebugResources (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:processDebugResources UP-TO-DATE
 Registered task dependencies: app:debugCompileClasspath
@@ -161,60 +167,60 @@ Starting dependency analysis
 Caching disabled for task ':app:processDebugResources' because:
   Build cache is disabled
 Skipping task ':app:processDebugResources' as it is up-to-date.
-Resolve mutations for :app:compileDebugJavaWithJavac (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:compileDebugJavaWithJavac (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Resolve mutations for :app:compileDebugJavaWithJavac (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:compileDebugJavaWithJavac (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:compileDebugJavaWithJavac
 Custom actions are attached to task ':app:compileDebugJavaWithJavac'.
 Caching disabled for task ':app:compileDebugJavaWithJavac' because:
   Build cache is disabled
 Task ':app:compileDebugJavaWithJavac' is not up-to-date because:
-  Task has failed previously.
-The input changes require a full rebuild for incremental task ':app:compileDebugJavaWithJavac'.
+  Input property 'stableSources' file C:\College\Android-Studio-Project\CinePulse\app\src\main\java\com\example\cinepulse\utils\WatchlistManager.java has changed.
 Compilation mode: in-process compilation
-Full recompilation is required because no incremental change information is available. This is usually caused by clean builds or changing compiler arguments.
+Created classpath snapshot for incremental compilation in 0.148 secs.
+file or directory 'C:\College\Android-Studio-Project\CinePulse\app\src\debug\java', not found
 Compiling with toolchain 'C:\Program Files\Android\Android Studio\jbr'.
 file or directory 'C:\College\Android-Studio-Project\CinePulse\app\src\debug\java', not found
 Compiling with JDK Java compiler API.
-Class dependency analysis for incremental compilation took 0.013 secs.
-Created classpath snapshot for incremental compilation in 0.087 secs.
-Resolve mutations for :app:mergeDebugShaders (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:mergeDebugShaders (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Incremental compilation of 16 classes completed in 1.692 secs.
+Class dependency analysis for incremental compilation took 0.043 secs.
+Resolve mutations for :app:mergeDebugShaders (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:mergeDebugShaders (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:mergeDebugShaders UP-TO-DATE
 Caching disabled for task ':app:mergeDebugShaders' because:
   Build cache is disabled
   Simple merging task
 Skipping task ':app:mergeDebugShaders' as it is up-to-date.
-Resolve mutations for :app:compileDebugShaders (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:compileDebugShaders (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Resolve mutations for :app:compileDebugShaders (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:compileDebugShaders (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:compileDebugShaders NO-SOURCE
 Skipping task ':app:compileDebugShaders' as it has no source files and no previous output files.
-Resolve mutations for :app:generateDebugAssets (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:generateDebugAssets (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Resolve mutations for :app:generateDebugAssets (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:generateDebugAssets (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:generateDebugAssets UP-TO-DATE
 Skipping task ':app:generateDebugAssets' as it has no actions.
-Resolve mutations for :app:mergeDebugAssets (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:mergeDebugAssets (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Resolve mutations for :app:mergeDebugAssets (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:mergeDebugAssets (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:mergeDebugAssets UP-TO-DATE
 Caching disabled for task ':app:mergeDebugAssets' because:
   Build cache is disabled
   Simple merging task
 Skipping task ':app:mergeDebugAssets' as it is up-to-date.
-Resolve mutations for :app:compressDebugAssets (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:compressDebugAssets (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Resolve mutations for :app:compressDebugAssets (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:compressDebugAssets (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:compressDebugAssets UP-TO-DATE
 Caching disabled for task ':app:compressDebugAssets' because:
   Build cache is disabled
 Skipping task ':app:compressDebugAssets' as it is up-to-date.
-Resolve mutations for :app:processDebugJavaRes (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:processDebugJavaRes (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Resolve mutations for :app:processDebugJavaRes (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:processDebugJavaRes (Thread[#96,Execution worker Thread 6,5,main]) started.
 
-> Task :app:processDebugJavaRes
+> Task :app:processDebugJavaRes UP-TO-DATE
 file or directory 'C:\College\Android-Studio-Project\CinePulse\app\src\main\resources', not found
 file or directory 'C:\College\Android-Studio-Project\CinePulse\app\src\debug\resources', not found
 file or directory 'C:\College\Android-Studio-Project\CinePulse\app\src\main\resources', not found
@@ -222,114 +228,109 @@ file or directory 'C:\College\Android-Studio-Project\CinePulse\app\src\debug\res
 Caching disabled for task ':app:processDebugJavaRes' because:
   Build cache is disabled
   Caching has been disabled for the task
-Task ':app:processDebugJavaRes' is not up-to-date because:
-  Output property 'destinationDir' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\java_res\debug\processDebugJavaRes\out has been removed.
-  Output property 'destinationDir' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\java_res\debug\processDebugJavaRes\out\com has been removed.
-  Output property 'destinationDir' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\java_res\debug\processDebugJavaRes\out\com\example has been removed.
-  and more...
-file or directory 'C:\College\Android-Studio-Project\CinePulse\app\src\main\resources', not found
-file or directory 'C:\College\Android-Studio-Project\CinePulse\app\src\debug\resources', not found
-file or directory 'C:\College\Android-Studio-Project\CinePulse\app\src\main\resources', not found
-file or directory 'C:\College\Android-Studio-Project\CinePulse\app\src\debug\resources', not found
-Resolve mutations for :app:mergeDebugJavaResource (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:mergeDebugJavaResource (Thread[#1958,Execution worker Thread 3,5,main]) started.
-Resolve mutations for :app:checkDebugDuplicateClasses (Thread[#1955,included builds,5,main]) started.
-:app:checkDebugDuplicateClasses (Thread[#1955,included builds,5,main]) started.
+Skipping task ':app:processDebugJavaRes' as it is up-to-date.
+Resolve mutations for :app:mergeDebugJavaResource (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:mergeDebugJavaResource (Thread[#96,Execution worker Thread 6,5,main]) started.
+
+> Task :app:mergeDebugJavaResource UP-TO-DATE
+Caching disabled for task ':app:mergeDebugJavaResource' because:
+  Build cache is disabled
+  Caching has been disabled for the task
+Skipping task ':app:mergeDebugJavaResource' as it is up-to-date.
+Resolve mutations for :app:checkDebugDuplicateClasses (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:checkDebugDuplicateClasses (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:checkDebugDuplicateClasses UP-TO-DATE
 Caching disabled for task ':app:checkDebugDuplicateClasses' because:
   Build cache is disabled
   Caching has been disabled for the task
 Skipping task ':app:checkDebugDuplicateClasses' as it is up-to-date.
-Resolve mutations for :app:desugarDebugFileDependencies (Thread[#1955,included builds,5,main]) started.
-:app:desugarDebugFileDependencies (Thread[#1955,included builds,5,main]) started.
+Resolve mutations for :app:desugarDebugFileDependencies (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:desugarDebugFileDependencies (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:desugarDebugFileDependencies UP-TO-DATE
 Caching disabled for task ':app:desugarDebugFileDependencies' because:
   Build cache is disabled
 Skipping task ':app:desugarDebugFileDependencies' as it is up-to-date.
-Resolve mutations for :app:mergeExtDexDebug (Thread[#1955,included builds,5,main]) started.
-:app:mergeExtDexDebug (Thread[#1955,included builds,5,main]) started.
+Resolve mutations for :app:mergeExtDexDebug (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:mergeExtDexDebug (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:mergeExtDexDebug UP-TO-DATE
 Caching disabled for task ':app:mergeExtDexDebug' because:
   Build cache is disabled
 Skipping task ':app:mergeExtDexDebug' as it is up-to-date.
-Resolve mutations for :app:mergeLibDexDebug (Thread[#1955,included builds,5,main]) started.
-:app:mergeLibDexDebug (Thread[#1955,included builds,5,main]) started.
+Resolve mutations for :app:mergeLibDexDebug (Thread[#96,Execution worker Thread 6,5,main]) started.
+:app:mergeLibDexDebug (Thread[#96,Execution worker Thread 6,5,main]) started.
 
 > Task :app:mergeLibDexDebug UP-TO-DATE
 Caching disabled for task ':app:mergeLibDexDebug' because:
   Build cache is disabled
 Skipping task ':app:mergeLibDexDebug' as it is up-to-date.
-Resolve mutations for :app:dexBuilderDebug (Thread[#1955,included builds,5,main]) started.
-:app:dexBuilderDebug (Thread[#1955,included builds,5,main]) started.
+Resolve mutations for :app:dexBuilderDebug (Thread[#95,Execution worker Thread 5,5,main]) started.
+:app:dexBuilderDebug (Thread[#95,Execution worker Thread 5,5,main]) started.
 
 > Task :app:dexBuilderDebug
 Caching disabled for task ':app:dexBuilderDebug' because:
   Build cache is disabled
 Task ':app:dexBuilderDebug' is not up-to-date because:
-  Output property 'externalLibsFromArtifactTransformsOutputs.dex' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\external_libs_dex_archive_with_artifact_transforms\debug\dexBuilderDebug\out has been removed.
-  Output property 'externalLibsOutputs.dex' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\external_libs_dex_archive\debug\dexBuilderDebug\out has been removed.
-  Output property 'mixedScopeOutputs.dex' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\mixed_scope_dex_archive\debug\dexBuilderDebug\out has been removed.
-  and more...
-The input changes require a full rebuild for incremental task ':app:dexBuilderDebug'.
-Dex builder is incremental : false 
+  Input property 'projectClasses' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes\com\example\cinepulse\utils\WatchlistManager$1.class has changed.
+  Input property 'projectClasses' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes\com\example\cinepulse\utils\WatchlistManager.class has changed.
+Dex builder is incremental : true 
 Processing input C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes
 Dexing C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes
-Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out'
-Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out'
-Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out'
 Processing input C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\debug\processDebugResources\R.jar
 Dexing C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\debug\processDebugResources\R.jar
 Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out'
 Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out'
 Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out'
+Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out'
+Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out'
+Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\javac\debug\compileDebugJavaWithJavac\classes' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out'
 Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\debug\processDebugResources\R.jar' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_0.jar'
 Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\debug\processDebugResources\R.jar' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_1.jar'
-Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\debug\processDebugResources\R.jar' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_4.jar'
 Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\debug\processDebugResources\R.jar' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_2.jar'
-Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\debug\processDebugResources\R.jar' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_3.jar'
 Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\debug\processDebugResources\R.jar' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_5.jar'
+Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\debug\processDebugResources\R.jar' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_4.jar'
+Dexing 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\compile_and_runtime_not_namespaced_r_class_jar\debug\processDebugResources\R.jar' to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_3.jar'
 Done with all dex archive conversions
-Resolve mutations for :app:mergeProjectDexDebug (Thread[#1955,included builds,5,main]) started.
-:app:mergeProjectDexDebug (Thread[#1955,included builds,5,main]) started.
-Resolve mutations for :app:mergeDebugJniLibFolders (Thread[#1965,Execution worker Thread 10,5,main]) started.
-:app:mergeDebugJniLibFolders (Thread[#1965,Execution worker Thread 10,5,main]) started.
+Resolve mutations for :app:mergeProjectDexDebug (Thread[#95,Execution worker Thread 5,5,main]) started.
+:app:mergeProjectDexDebug (Thread[#95,Execution worker Thread 5,5,main]) started.
+Resolve mutations for :app:mergeDebugJniLibFolders (Thread[#94,Execution worker Thread 4,5,main]) started.
+:app:mergeDebugJniLibFolders (Thread[#94,Execution worker Thread 4,5,main]) started.
 
 > Task :app:mergeDebugJniLibFolders UP-TO-DATE
 Caching disabled for task ':app:mergeDebugJniLibFolders' because:
   Build cache is disabled
   Simple merging task
 Skipping task ':app:mergeDebugJniLibFolders' as it is up-to-date.
-Resolve mutations for :app:mergeDebugNativeLibs (Thread[#1965,Execution worker Thread 10,5,main]) started.
-:app:mergeDebugNativeLibs (Thread[#1965,Execution worker Thread 10,5,main]) started.
+Resolve mutations for :app:mergeDebugNativeLibs (Thread[#94,Execution worker Thread 4,5,main]) started.
+:app:mergeDebugNativeLibs (Thread[#94,Execution worker Thread 4,5,main]) started.
 
 > Task :app:mergeDebugNativeLibs NO-SOURCE
 Skipping task ':app:mergeDebugNativeLibs' as it has no source files and no previous output files.
-Resolve mutations for :app:stripDebugDebugSymbols (Thread[#1965,Execution worker Thread 10,5,main]) started.
-:app:stripDebugDebugSymbols (Thread[#1965,Execution worker Thread 10,5,main]) started.
+Resolve mutations for :app:stripDebugDebugSymbols (Thread[#94,Execution worker Thread 4,5,main]) started.
+:app:stripDebugDebugSymbols (Thread[#94,Execution worker Thread 4,5,main]) started.
 
 > Task :app:stripDebugDebugSymbols NO-SOURCE
 Skipping task ':app:stripDebugDebugSymbols' as it has no source files and no previous output files.
-Resolve mutations for :app:validateSigningDebug (Thread[#1965,Execution worker Thread 10,5,main]) started.
-:app:validateSigningDebug (Thread[#1965,Execution worker Thread 10,5,main]) started.
+Resolve mutations for :app:validateSigningDebug (Thread[#94,Execution worker Thread 4,5,main]) started.
+:app:validateSigningDebug (Thread[#94,Execution worker Thread 4,5,main]) started.
 
 > Task :app:validateSigningDebug UP-TO-DATE
 Caching disabled for task ':app:validateSigningDebug' because:
   Build cache is disabled
   Caching has been disabled for the task
 Skipping task ':app:validateSigningDebug' as it is up-to-date.
-Resolve mutations for :app:writeDebugAppMetadata (Thread[#1965,Execution worker Thread 10,5,main]) started.
-:app:writeDebugAppMetadata (Thread[#1965,Execution worker Thread 10,5,main]) started.
+Resolve mutations for :app:writeDebugAppMetadata (Thread[#94,Execution worker Thread 4,5,main]) started.
+:app:writeDebugAppMetadata (Thread[#94,Execution worker Thread 4,5,main]) started.
 
 > Task :app:writeDebugAppMetadata UP-TO-DATE
 Caching disabled for task ':app:writeDebugAppMetadata' because:
   Build cache is disabled
   Caching has been disabled for the task
 Skipping task ':app:writeDebugAppMetadata' as it is up-to-date.
-Resolve mutations for :app:writeDebugSigningConfigVersions (Thread[#1965,Execution worker Thread 10,5,main]) started.
-:app:writeDebugSigningConfigVersions (Thread[#1965,Execution worker Thread 10,5,main]) started.
+Resolve mutations for :app:writeDebugSigningConfigVersions (Thread[#94,Execution worker Thread 4,5,main]) started.
+:app:writeDebugSigningConfigVersions (Thread[#94,Execution worker Thread 4,5,main]) started.
 
 > Task :app:writeDebugSigningConfigVersions UP-TO-DATE
 Caching disabled for task ':app:writeDebugSigningConfigVersions' because:
@@ -341,30 +342,11 @@ Skipping task ':app:writeDebugSigningConfigVersions' as it is up-to-date.
 Caching disabled for task ':app:mergeProjectDexDebug' because:
   Build cache is disabled
 Task ':app:mergeProjectDexDebug' is not up-to-date because:
-  Output property 'outputDir' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\dex\debug\mergeProjectDexDebug has been removed.
-  Output property 'outputDir' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\dex\debug\mergeProjectDexDebug\0 has been removed.
-  Output property 'outputDir' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\dex\debug\mergeProjectDexDebug\0\classes.dex has been removed.
-  and more...
-The input changes require a full rebuild for incremental task ':app:mergeProjectDexDebug'.
+  Input property 'dexDirs' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\com\example\cinepulse\utils\WatchlistManager$1.dex has changed.
+  Input property 'dexDirs' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\com\example\cinepulse\utils\WatchlistManager.dex has changed.
 Merging to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\dex\debug\mergeProjectDexDebug\2' with D8 from all or a subset of dex files in C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, and from all global synthetics files in 
-Merging to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\dex\debug\mergeProjectDexDebug\7' with D8 from all or a subset of dex files in C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, and from all global synthetics files in 
-Merging to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\dex\debug\mergeProjectDexDebug\13' with D8 from all or a subset of dex files in C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, and from all global synthetics files in 
-Merging to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\dex\debug\mergeProjectDexDebug\0' with D8 from all or a subset of dex files in C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_0.jar, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_1.jar, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_2.jar, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_3.jar, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_4.jar, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out\284c0b875b6d787c86971db3574e5defbd73bcd7f0ea806142fa988d9370c6d0_5.jar, and from all global synthetics files in 
-Merging to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\dex\debug\mergeProjectDexDebug\8' with D8 from all or a subset of dex files in C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, and from all global synthetics files in 
-Merging to 'C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\dex\debug\mergeProjectDexDebug\9' with D8 from all or a subset of dex files in C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\project_dex_archive\debug\dexBuilderDebug\out, and from all global synthetics files in 
-
-> Task :app:mergeDebugJavaResource
-Caching disabled for task ':app:mergeDebugJavaResource' because:
-  Build cache is disabled
-  Caching has been disabled for the task
-Task ':app:mergeDebugJavaResource' is not up-to-date because:
-  Output property 'cacheDir' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\incremental\debug-mergeJavaRes\zip-cache has been removed.
-  Output property 'cacheDir' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\incremental\debug-mergeJavaRes\zip-cache\+nvJAr3tBbyFrinToG4FJYCnvmM= has been removed.
-  Output property 'cacheDir' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\incremental\debug-mergeJavaRes\zip-cache\0+Xzvz3KnU_0uvK3cxOWEtR5+SQ= has been removed.
-  and more...
-The input changes require a full rebuild for incremental task ':app:mergeDebugJavaResource'.
-Resolve mutations for :app:packageDebug (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:packageDebug (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Resolve mutations for :app:packageDebug (Thread[#95,Execution worker Thread 5,5,main]) started.
+:app:packageDebug (Thread[#95,Execution worker Thread 5,5,main]) started.
 
 > Task :app:packageDebug
 Custom actions are attached to task ':app:packageDebug'.
@@ -372,28 +354,23 @@ Caching disabled for task ':app:packageDebug' because:
   Build cache is disabled
   Caching has been disabled for the task
 Task ':app:packageDebug' is not up-to-date because:
-  Output property 'ideModelOutputFile' file C:\College\Android-Studio-Project\CinePulse\app\build\outputs\apk\debug\output-metadata.json has been removed.
-  Output property 'incrementalFolder' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\incremental\packageDebug\tmp has been removed.
-  Output property 'incrementalFolder' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\incremental\packageDebug\tmp\debug has been removed.
-  and more...
-The input changes require a full rebuild for incremental task ':app:packageDebug'.
-Resolve mutations for :app:createDebugApkListingFileRedirect (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:createDebugApkListingFileRedirect (Thread[#1958,Execution worker Thread 3,5,main]) started.
+  Input property 'dexFolders' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\dex\debug\mergeProjectDexDebug\2\classes.dex has changed.
+Resolve mutations for :app:createDebugApkListingFileRedirect (Thread[#95,Execution worker Thread 5,5,main]) started.
+:app:createDebugApkListingFileRedirect (Thread[#95,Execution worker Thread 5,5,main]) started.
 
-> Task :app:createDebugApkListingFileRedirect
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
 Caching disabled for task ':app:createDebugApkListingFileRedirect' because:
   Build cache is disabled
   Caching has been disabled for the task
-Task ':app:createDebugApkListingFileRedirect' is not up-to-date because:
-  Output property 'redirectFile' file C:\College\Android-Studio-Project\CinePulse\app\build\intermediates\apk_ide_redirect_file\debug\createDebugApkListingFileRedirect\redirect.txt has been removed.
-Resolve mutations for :app:assembleDebug (Thread[#1958,Execution worker Thread 3,5,main]) started.
-:app:assembleDebug (Thread[#1958,Execution worker Thread 3,5,main]) started.
+Skipping task ':app:createDebugApkListingFileRedirect' as it is up-to-date.
+Resolve mutations for :app:assembleDebug (Thread[#95,Execution worker Thread 5,5,main]) started.
+:app:assembleDebug (Thread[#95,Execution worker Thread 5,5,main]) started.
 
 > Task :app:assembleDebug
 Skipping task ':app:assembleDebug' as it has no actions.
 
 [Incubating] Problems report is available at: file:///C:/College/Android-Studio-Project/CinePulse/build/reports/problems/problems-report.html
 
-BUILD SUCCESSFUL in 3s
-34 actionable tasks: 7 executed, 27 up-to-date
+BUILD SUCCESSFUL in 15s
+34 actionable tasks: 4 executed, 30 up-to-date
 Watched directory hierarchies: [C:\College\Android-Studio-Project\CinePulse]

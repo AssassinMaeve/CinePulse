@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.cinepulse.models.WatchlistItem;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -14,16 +16,21 @@ import java.util.List;
 
 public class WatchlistManager {
 
-    private static final String PREF_NAME = "cinepulse_watchlist";
+    private static final String PREF_PREFIX = "cinepulse_watchlist_";
     private static final String WATCHLIST_KEY = "watchlist_items";
-    private static final String TAG = "WatchlistManager"; // For logging
+    private static final String TAG = "WatchlistManager";
 
-    // Modified to return boolean for success/failure
+    private static String getPrefName() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            return PREF_PREFIX + user.getUid();
+        }
+        return PREF_PREFIX + "guest";
+    }
+
     public static boolean addToWatchlist(Context context, WatchlistItem item) {
         try {
             List<WatchlistItem> currentList = getWatchlist(context);
-
-            // Check if item already exists (using isInWatchlist for better reliability)
             if (!isInWatchlist(context, item.getId())) {
                 currentList.add(item);
                 saveWatchlist(context, currentList);
@@ -39,7 +46,6 @@ public class WatchlistManager {
         }
     }
 
-    // Modified to return boolean for success/failure
     public static void removeFromWatchlist(Context context, int itemId) {
         try {
             List<WatchlistItem> currentList = getWatchlist(context);
@@ -56,7 +62,7 @@ public class WatchlistManager {
     }
 
     public static List<WatchlistItem> getWatchlist(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences prefs = context.getSharedPreferences(getPrefName(), Context.MODE_PRIVATE);
         String json = prefs.getString(WATCHLIST_KEY, null);
 
         if (json == null) {
@@ -75,7 +81,7 @@ public class WatchlistManager {
 
     private static void saveWatchlist(Context context, List<WatchlistItem> list) {
         try {
-            SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+            SharedPreferences prefs = context.getSharedPreferences(getPrefName(), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
 
             Gson gson = new Gson();
@@ -99,10 +105,10 @@ public class WatchlistManager {
 
     public static void clearWatchlist(Context context) {
         try {
-            SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+            SharedPreferences preferences = context.getSharedPreferences(getPrefName(), Context.MODE_PRIVATE);
             preferences.edit().remove(WATCHLIST_KEY).apply();
         } catch (Exception e) {
             Log.e(TAG, "Error clearing watchlist", e);
         }
     }
-}
+}
