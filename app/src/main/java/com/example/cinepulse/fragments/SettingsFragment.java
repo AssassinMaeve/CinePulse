@@ -30,8 +30,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -42,7 +40,6 @@ public class SettingsFragment extends Fragment {
     private SharedPreferences userPrefs;
     private String uid = null;
     private boolean isToggling = false;
-    private int selectedAvatarResId = R.drawable.profile_user;
 
     @Nullable
     @Override
@@ -55,39 +52,18 @@ public class SettingsFragment extends Fragment {
         editNewPassword = view.findViewById(R.id.editNewPassword);
         Button buttonSaveChanges = view.findViewById(R.id.buttonSaveChanges);
         Button buttonToggleTheme = view.findViewById(R.id.buttonToggleTheme);
-        RecyclerView recyclerAvatars = view.findViewById(R.id.recyclerAvatars);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uid = user.getUid();
             userPrefs = requireContext().getSharedPreferences("UserThemePrefs", Context.MODE_PRIVATE);
             isDarkMode = userPrefs.getBoolean(uid + "_isDarkMode", false);
-            selectedAvatarResId = userPrefs.getInt(uid + "_avatarResId", R.drawable.profile_user);
-            setupAvatarSelection(recyclerAvatars);
         }
 
         buttonSaveChanges.setOnClickListener(v -> saveUserChanges());
         buttonToggleTheme.setOnClickListener(v -> toggleTheme());
 
         return view;
-    }
-
-    private void setupAvatarSelection(RecyclerView recyclerView) {
-        List<Integer> avatars = Arrays.asList(
-                R.drawable.profile_user,
-                R.drawable.vector_avatar_popcorn,
-                R.drawable.vector_avatar_camera,
-                R.drawable.vector_avatar_masks,
-                R.drawable.vector_avatar_reel
-        );
-
-        AvatarAdapter adapter = new AvatarAdapter(avatars, selectedAvatarResId, (resId, position) -> {
-            selectedAvatarResId = resId;
-            if (uid != null && userPrefs != null) {
-                userPrefs.edit().putInt(uid + "_avatarResId", resId).apply();
-            }
-        });
-        recyclerView.setAdapter(adapter);
     }
 
     private void toggleTheme() {

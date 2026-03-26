@@ -21,47 +21,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textChooseAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/poppins"
-        android:text="Choose your Style"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textSettingsHeader" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerAvatars"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:clipToPadding="false"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textChooseAvatar"
-        tools:listitem="@layout/item_avatar" />
-
     <!-- Glassmorphism Container -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardSettingsForm"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="24dp"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerAvatars"
+        app:layout_constraintTop_toBottomOf="@id/textSettingsHeader"
         app:strokeWidth="0dp">
 
         <LinearLayout
